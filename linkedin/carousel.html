@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Cyber Outlook 2027 Carousel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root {
+  --paper: #f3f6f5;
+  --ink: #15222b;
+  --muted: #56656d;
+  --accent: #0d5b60;
+  --signal: #c68a0c;
+  --rule: #c7d1d0;
+  --night: #0e161b;
+  --night-ink: #e2e9e9;
+  --night-muted: #9aa9ae;
+  --night-accent: #62b8b5;
+  --night-signal: #e6b043;
+  --head: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --body: "Source Serif 4", Georgia, serif;
+  --ui: "IBM Plex Sans", "Segoe UI", sans-serif;
+}
+@page { size: 1080px 1350px; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #888; }
+.slide {
+  width: 1080px; height: 1350px; position: relative; overflow: hidden;
+  background: var(--paper); color: var(--ink);
+  padding: 96px 88px 150px; display: flex; flex-direction: column;
+  page-break-after: always; break-after: page;
+}
+.slide.dark { background: var(--night); color: var(--night-ink); }
+.dark .kicker { color: var(--night-accent); }
+.dark .muted, .dark .foot { color: var(--night-muted); }
+.dark .gold { color: var(--night-signal); }
+.dark .teal { color: var(--night-accent); }
+.dark .foot { border-color: #2b3a42; }
+
+.kicker { font-family: var(--ui); font-weight: 600; font-size: 26px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 0 0 36px; }
+h1, h2 { font-family: var(--head); font-weight: 700; text-transform: uppercase; line-height: 0.92; margin: 0; letter-spacing: -0.005em; }
+h1 { font-size: 150px; }
+h2 { font-size: 108px; }
+.lede { font-family: var(--body); font-size: 44px; line-height: 1.3; margin: 44px 0 0; max-width: 21ch; }
+p.body { font-family: var(--body); font-size: 40px; line-height: 1.35; margin: 36px 0 0; }
+.muted { color: var(--muted); }
+.gold { color: var(--signal); }
+.teal { color: var(--accent); }
+
+.big { font-family: var(--head); font-weight: 700; font-size: 300px; line-height: 0.85; letter-spacing: -0.01em; }
+.big-label { font-family: var(--body); font-size: 44px; line-height: 1.3; margin-top: 18px; }
+
+.foot {
+  position: absolute; left: 88px; right: 88px; bottom: 56px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 2px solid var(--rule); padding-top: 26px;
+  font-family: var(--ui); font-size: 24px; color: var(--muted); letter-spacing: 0.04em;
+}
+.foot .swipe { font-weight: 600; color: inherit; }
+.src { font-family: var(--ui); font-size: 22px; color: var(--muted); margin-top: auto; padding-top: 28px; line-height: 1.4; }
+.dark .src { color: var(--night-muted); }
+
+.isobars { display: block; margin: auto -88px 0; width: calc(100% + 176px); height: 150px; flex-shrink: 0; }
+.isobars path { fill: none; stroke: var(--night-accent); stroke-width: 2.2; opacity: 0.5; }
+.isobars path.hot { stroke: var(--night-signal); opacity: 0.95; stroke-width: 3; }
+
+.logo { width: 240px; height: 240px; border-radius: 10px; display: block; }
+
+/* Two-stat row */
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; margin-top: 56px; }
+.pair .n { font-family: var(--head); font-weight: 700; font-size: 190px; line-height: 0.85; }
+.pair .upto { font-family: var(--ui); font-weight: 600; font-size: 26px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.pair .l { font-family: var(--body); font-size: 36px; line-height: 1.3; margin-top: 14px; }
+
+/* Theme list */
+.themes { list-style: none; padding: 0; margin: 44px 0 0; display: grid; gap: 22px; }
+.themes li { display: grid; grid-template-columns: 110px 1fr; align-items: baseline; border-top: 2px solid var(--rule); padding-top: 20px; }
+.themes .num { font-family: var(--head); font-weight: 700; font-size: 84px; line-height: 1; color: var(--accent); }
+.themes .t { font-family: var(--head); font-weight: 700; font-size: 56px; line-height: 1; text-transform: uppercase; }
+.themes .d { font-family: var(--body); font-size: 30px; line-height: 1.3; margin-top: 10px; color: var(--muted); grid-column: 2; }
+.themes li.plus .num { color: var(--signal); }
+
+/* Checklist */
+.todo { list-style: none; counter-reset: t; padding: 0; margin: 52px 0 0; display: grid; gap: 30px; }
+.todo li { counter-increment: t; display: grid; grid-template-columns: 92px 1fr; font-family: var(--body); font-size: 38px; line-height: 1.3; }
+.todo li::before { content: counter(t); font-family: var(--head); font-weight: 700; font-size: 76px; line-height: 0.9; color: var(--accent); }
+
+.quote { font-family: var(--body); font-style: italic; font-size: 50px; line-height: 1.25; border-left: 8px solid var(--signal); padding-left: 36px; margin: 52px 0 0; }
+
+.cta-url { font-family: var(--head); font-weight: 700; font-size: 96px; line-height: 1; color: var(--night-signal); margin-top: 28px; text-transform: lowercase; }
+.cta-box { margin-top: 64px; border-top: 2px solid #2b3a42; padding-top: 40px; display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: center; }
+.cta-box img { width: 220px; height: 220px; border-radius: 8px; }
+.cta-box p { font-family: var(--ui); font-size: 32px; line-height: 1.4; margin: 0; }
+</style>
+</head>
+<body>
+
+<!-- 1. Cover -->
+<section class="slide dark">
+  <img class="logo" src="logo.jpg" alt="The Small Business Cyber Security Guy logo">
+  <h1 style="margin-top:56px; font-size:138px">UK Small<br>Business<br>Cyber Outlook<br><span class="gold">2027</span></h1>
+  <p class="lede" style="max-width:26ch; margin-top:36px">Three themes, the rules that change, and a plan that fits on one sheet of A4.</p>
+  <svg class="isobars" viewBox="0 -14 520 112" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 70 C 80 40, 160 85, 250 55 S 420 20, 520 45"/>
+    <path d="M0 52 C 90 22, 170 70, 255 38 S 410 6, 520 28"/>
+    <path class="hot" d="M0 34 C 95 6, 175 54, 262 22 S 400 -6, 520 12"/>
+    <path d="M0 86 C 70 60, 150 98, 245 72 S 430 36, 520 62"/>
+  </svg>
+  <div class="foot"><span>For UK firms with 5 to 50 staff</span><span class="swipe">Swipe →</span></div>
+</section>
+
+<!-- 2. The 43% problem -->
+<section class="slide">
+  <p class="kicker">The number on every vendor slide</p>
+  <div class="big">43%</div>
+  <p class="big-label">of UK businesses "identified a breach or attack" last year.</p>
+  <p class="body">It counts phishing emails that arrived and did nothing. Nobody clicked. Nothing was lost.</p>
+  <p class="body"><strong>The honest number is 1 in 5.</strong> Take phishing out and it's 1 in 33.</p>
+  <p class="src">Cyber Security Breaches Survey 2025/26 (DSIT)</p>
+  <div class="foot"><span>02 / 10</span><span class="swipe">Swipe →</span></div>
+</section>
+
+<!-- 3. Overview -->
+<section class="slide">
+  <p class="kicker">What shapes 2027</p>
+  <h2 style="font-size:96px">Three themes.<br>One rulebook.</h2>
+  <ul class="themes">
+    <li><span class="num">1</span><div><div class="t">Other people's problems become yours</div><div class="d">Suppliers, IT providers and big customers are now your attack surface.</div></div></li>
+    <li><span class="num">2</span><div><div class="t">AI in the back office</div><div class="d">Tools nobody approved, tricked by what they read.</div></div></li>
+    <li><span class="num">3</span><div><div class="t">Crime gets cheaper and faster</div><div class="d">Convincing scams cost less. Flaws are exploited in days.</div></div></li>
+    <li class="plus"><span class="num">+</span><div><div class="t">The rules change</div><div class="d">Cyber Essentials tightens. IT providers come into regulation.</div></div></li>
+  </ul>
+  <div class="foot"><span>03 / 10</span><span class="swipe">Swipe →</span></div>
+</section>
+
+<!-- 4. Theme 1 -->
+<section class="slide">
+  <p class="kicker">Theme 1 · Other people's problems</p>
+  <h2>The attack that stops you may start somewhere else</h2>
+  <div class="pair">
+    <div><div class="upto">Up to</div><div class="n teal">5,000</div><div class="l">organisations hit by the Jaguar Land Rover attack, mainly through the supply chain</div></div>
+    <div><div class="upto" aria-hidden="true">&nbsp;</div><div class="n gold">12%</div><div class="l">of micro firms have reviewed the cyber risk from their immediate suppliers</div></div>
+  </div>
+  <p class="src">Prolific North, Oct 2025 · Cyber Security Breaches Survey 2025/26</p>
+  <div class="foot"><span>04 / 10</span><span class="swipe">Swipe →</span></div>
+</section>
+
+<!-- 5. Theme 2 -->
+<section class="slide">
+  <p class="kicker">Theme 2 · AI in the back office</p>
+  <h2>AI is already in your inbox. Who decided that?</h2>
+  <div class="pair">
+    <div><div class="n teal">31%</div><div class="l">of businesses are using, adopting or considering AI</div></div>
+    <div><div class="n gold">24%</div><div class="l">of those have any practice in place to manage the risk</div></div>
+  </div>
+  <p class="quote">Prompt injection "may never be totally mitigated."</p>
+  <p class="src">Cyber Security Breaches Survey 2025/26 · NCSC, Dec 2025</p>
+  <div class="foot"><span>05 / 10</span><span class="swipe">Swipe →</span></div>
+</section>
+
+<!-- 6. Theme 3 -->
+<section class="slide">
+  <p class="kicker">Theme 3 · Crime gets cheaper and faster</p>
+  <div class="big">£576m</div>
+  <p class="big-label">lost to authorised push payment fraud in the UK in 2025. <strong>Up 19%.</strong></p>
+  <p class="body">The gap between a flaw being published and a criminal using it is now days, and the NCSC expects AI to shrink it further.</p>
+  <p class="src">UK Finance via Fintech Futures · NCSC, May 2025</p>
+  <div class="foot"><span>06 / 10</span><span class="swipe">Swipe →</span></div>
+</section>
+
+<!-- 7. Rules -->
+<section class="slide">
+  <p class="kicker">Plus · The rules change</p>
+  <h2>The contract will get you before the regulator does</h2>
+  <p class="body"><strong>Cyber Essentials</strong> now fails any applicant without multi-factor authentication on cloud services where it's available.</p>
+  <p class="body"><strong>The Cyber Security and Resilience Bill</strong> brings medium and large IT providers into regulation, with 24-hour incident reporting.</p>
+  <p class="body muted">Expect both in your customers' supplier questionnaires during 2027.</p>
+  <p class="src">IASME, Feb 2026 · UK Parliament bill page</p>
+  <div class="foot"><span>07 / 10</span><span class="swipe">Swipe →</span></div>
+</section>
+
+<!-- 8. Preparation gap -->
+<section class="slide">
+  <p class="kicker">The figures that worry me most</p>
+  <h2>The bar is low. That's the opportunity.</h2>
+  <div class="pair">
+    <div><div class="n gold">21%</div><div class="l">of micro firms have a formal incident response plan</div></div>
+    <div><div class="n gold">29%</div><div class="l">have an owner or board member named as responsible for cyber</div></div>
+  </div>
+  <p class="body">Formal cyber policies in small businesses fell from <strong>59% to 52%</strong> in a year.</p>
+  <p class="src">Cyber Security Breaches Survey 2025/26</p>
+  <div class="foot"><span>08 / 10</span><span class="swipe">Swipe →</span></div>
+</section>
+
+<!-- 9. Five things -->
+<section class="slide">
+  <p class="kicker">No big budget needed</p>
+  <h2>Five things to do before January</h2>
+  <ol class="todo">
+    <li><span>Switch on multi-factor authentication for every cloud service, starting with email.</span></li>
+    <li><span>Agree a call-back rule for any change to bank details or urgent payment.</span></li>
+    <li><span>Ask your IT provider four questions (they're in the report).</span></li>
+    <li><span>List your five key suppliers, five key customers and the AI tools your staff use.</span></li>
+    <li><span>Fill in the one-page plan and print it.</span></li>
+  </ol>
+  <div class="foot"><span>09 / 10</span><span class="swipe">Swipe →</span></div>
+</section>
+
+<!-- 10. CTA -->
+<section class="slide dark">
+  <p class="kicker">Free to read · No sign-up</p>
+  <h2>Read the full outlook</h2>
+  <div class="cta-url">cyberoutlook.sbcsg.uk</div>
+  <p class="lede" style="max-width:24ch">The four questions for your IT provider, the one-page plan, and a 90-day start for 2027.</p>
+  <div class="cta-box">
+    <img src="logo.jpg" alt="">
+    <p><strong>Noel Bradford</strong><br>The Small Business Cyber Security Guy<br><span class="muted">Nine podcast episodes, Mondays from 2 November 2026</span></p>
+  </div>
+  <div class="foot"><span>10 / 10</span><span>Link in the comments</span></div>
+</section>
+
+</body>
+</html>
