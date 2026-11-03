@@ -1436,6 +1436,18 @@ window.addEventListener('afterprint', function () { document.body.classList.remo
     tools.appendChild(note);
   }
 })();
+(function () {
+  var tools = document.querySelector('.plan-tools'), cells = document.querySelectorAll('.a4 td.fill');
+  if (!tools || !cells.length) return;
+  var b = document.createElement('button');
+  b.type = 'button'; b.className = 'tool'; b.textContent = 'Clear';
+  b.addEventListener('click', function () {
+    cells.forEach(function (td) { td.textContent = ''; });
+    try { localStorage.removeItem('cv-plan-contacts'); } catch (e) {}
+    window.cvToast && window.cvToast('Contacts cleared');
+  });
+  tools.insertBefore(b, tools.querySelector('.plan-note'));
+})();
 </script>
 </body>
 </html>
