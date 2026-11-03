@@ -347,6 +347,8 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
 .to-top:hover { background: var(--accent); }
 @media (prefers-reduced-motion: reduce) { .to-top { transition: none; } }
 
+#title:focus { outline: none; }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -397,7 +399,7 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
     </div>
     <div class="cover-grid">
       <div>
-        <h1>UK Small Business Cyber Outlook <span class="yr">2027</span></h1>
+        <h1 tabindex="-1" id="title">UK Small Business Cyber Outlook <span class="yr">2027</span></h1>
         <p class="dek">Three themes, the rules that change, and a plan that fits on one sheet of A4. Written for UK firms with five to 50 staff.</p>
         <svg class="isobars" viewBox="0 -14 520 112" aria-hidden="true" focusable="false">
           <path d="M0 70 C 80 40, 160 85, 250 55 S 420 20, 520 45"/>
@@ -1237,6 +1239,17 @@ window.cvToast = (function () {
   function vis() { b.classList.toggle('show', window.scrollY > 1200); }
   window.addEventListener('scroll', vis, { passive: true });
   vis();
+})();
+(function () {
+  var b = document.querySelector('.to-top');
+  if (!b) return;
+  b.addEventListener('click', function (e) {
+    e.preventDefault();
+    var smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+    var h = document.getElementById('title'); if (h) h.focus({ preventScroll: true });
+    history.replaceState(null, '', location.pathname + location.search);
+  });
 })();
 </script>
 </body>
