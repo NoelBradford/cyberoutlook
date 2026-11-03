@@ -354,6 +354,10 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
 .toc a.passed span { color: var(--accent); }
 .toc a.passed span::after { content: " ✓"; font-size: 0.75em; }
 
+.toc-toggle { font: 600 0.82rem var(--font-ui); color: var(--accent); background: transparent; border: 1px solid var(--rule); border-radius: 2px; padding: 0.5rem 0.8rem; margin: 0 0 0.8rem; cursor: pointer; }
+.toc-toggle:hover { border-color: var(--accent); }
+.toc.collapsed ol { display: none; }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -447,7 +451,8 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
 <div class="layout">
   <nav class="toc" aria-labelledby="toc-h">
     <h2 id="toc-h" tabindex="-1">Contents</h2>
-    <ol>
+    <button type="button" class="toc-toggle" aria-expanded="true" aria-controls="toc-list" hidden>Hide contents</button>
+    <ol id="toc-list">
       <li><a href="#foreword"><span>01</span>Pull up a chair</a></li>
       <li><a href="#how-to-read"><span>02</span>How to read this report</a></li>
       <li><a href="#summary"><span>03</span>Executive summary</a></li>
@@ -1296,6 +1301,17 @@ window.cvToast = (function () {
     var r = a.getBoundingClientRect(), t = toc.getBoundingClientRect();
     if (r.top < t.top + 40 || r.bottom > t.bottom - 40) toc.scrollTop += r.top - t.top - t.height / 2;
   });
+})();
+(function () {
+  var toc = document.querySelector('.toc'), btn = toc && toc.querySelector('.toc-toggle');
+  if (!btn) return;
+  var mq = window.matchMedia('(max-width: 1099px)');
+  function set(open) { toc.classList.toggle('collapsed', !open); btn.setAttribute('aria-expanded', open ? 'true' : 'false'); btn.textContent = open ? 'Hide contents' : 'Show all 14 sections'; }
+  function apply() { btn.hidden = !mq.matches; set(!mq.matches); }
+  btn.addEventListener('click', function () { set(toc.classList.contains('collapsed')); });
+  toc.addEventListener('click', function (e) { if (mq.matches && e.target.closest('a')) set(false); });
+  if (mq.addEventListener) mq.addEventListener('change', apply);
+  apply();
 })();
 </script>
 </body>
