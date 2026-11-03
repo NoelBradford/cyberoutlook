@@ -7,4 +7,5 @@ Publisher: SBCSG Enterprises Ltd
 /* SITE */
 Last update: 2026/11/03
 Language: English (UK)
-Standards: HTML, CSS
+Standards: HTML, CSS, JavaScript (no frameworks, no tracking)
+Interactive layer: src/ (see src/README.md)

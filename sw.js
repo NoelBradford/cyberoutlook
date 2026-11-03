@@ -1,6 +1,6 @@
 /* CyberOutlook service worker: network first, cached copy when offline. Same-origin files only. */
-const CACHE = 'cyberoutlook-v1';
-const CORE = ['./', 'index.html', 'assets/app.js', 'assets/app.css', 'assets/icon-192.png', 'favicon.ico'];
+const CACHE = 'cyberoutlook-v2';
+const CORE = ['./', 'index.html', 'assets/app.js', 'assets/app.css', 'assets/icon-192.png', 'favicon.ico', 'assets/UK-Small-Business-Cyber-Outlook-2027.pdf', 'linkedin/CyberOutlook2027_LinkedIn_Carousel.pdf'];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE)).then(() => self.skipWaiting()));
 });
