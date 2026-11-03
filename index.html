@@ -421,6 +421,7 @@ main [id] { scroll-margin-top: 1.25rem; }
   .tools { display: none !important; }
   .screen-only { display: none !important; }
   .print-only { display: block !important; font-family: var(--font-ui); font-size: 9pt; color: var(--muted); margin-top: 0.8rem; }
+  @page { @bottom-right { content: counter(page); font-family: "IBM Plex Sans", sans-serif; font-size: 8pt; color: #4a5960; } }
 }
 </style>
 </head>
