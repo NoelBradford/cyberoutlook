@@ -446,6 +446,8 @@ html { scrollbar-color: var(--rule) var(--paper); }
 .cover-side { display: grid; gap: 0.9rem; align-content: end; border-top: 1px solid var(--rule); padding-top: 1rem; }
 .cover-side .cover-meta { border-top: 0; padding-top: 0; }
 
+.prose h3.label { font-family: var(--font-ui); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); margin: 1.8rem 0 0.5rem; text-rendering: auto; }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -613,9 +615,9 @@ html { scrollbar-color: var(--rule) var(--paper); }
   <p class="sec-num">Section 02</p>
   <h2 id="h-how">How to read this report</h2>
   <div class="prose">
-    <h4>Who it's for</h4>
+    <h3 class="label">Who it's for</h3>
     <p>Owners and managers of UK businesses with roughly five to 50 staff. If you're the person who signs off the IT provider's invoice, approves payments, or gets the phone call when the email stops working, this is for you. You don't need a technical background. Where a technical term is unavoidable, I explain it the first time it appears.</p>
-    <h4>Facts and forecasts are kept apart</h4>
+    <h3 class="label">Facts and forecasts are kept apart</h3>
     <p>Everything presented as fact carries a numbered source, listed in section 13 with a link and a date. I've leaned on UK government sources first: the Department for Science, Innovation and Technology (DSIT), the National Cyber Security Centre (NCSC), and the Information Commissioner's Office (ICO). After that come named researchers, then reputable journalism. Where a figure comes from a security vendor's own data, I say so in the text, because vendors have something to sell.</p>
     <p>Forecasts look different. They sit in amber-edged panels marked <strong>Our call</strong>. Those are my judgement about how 2027 will play out for small firms, based on the evidence in the same section. Treat them as an informed opinion rather than gospel, and argue with them.</p>
   </div>
@@ -624,7 +626,7 @@ html { scrollbar-color: var(--rule) var(--paper); }
     <p>Panels like this one carry forecasts. No source can prove a forecast in advance, so none is offered. The evidence sits around it.</p>
   </aside>
   <div class="prose">
-    <h4>How each theme is built</h4>
+    <h3 class="label">How each theme is built</h3>
     <ol>
       <li><strong>The 2027 forecast:</strong> one sentence you can repeat in a meeting.</li>
       <li><strong>What we already know:</strong> sourced facts from the last 18 months.</li>
@@ -632,11 +634,11 @@ html { scrollbar-color: var(--rule) var(--paper); }
       <li><strong>A worked example:</strong> a real-feeling business walked through a what-if.</li>
       <li><strong>What to do:</strong> an action table with spend and effort, so you can pick by budget and time.</li>
     </ol>
-    <h4>About the businesses in the examples</h4>
+    <h3 class="label">About the businesses in the examples</h3>
     <p>Gary Mott runs Mott and Son Building Contractors in Essex and has appeared on the podcast. His example is framed as "picture this happening to Gary", because it hasn't. Dave Kessler, Rachel Osei, Alexis Alisandru, and Mick Walsh are illustrative examples of the kinds of firms this report is written for. Their stories are illustrations.</p>
-    <h4>Spend and effort, in plain terms</h4>
+    <h3 class="label">Spend and effort, in plain terms</h3>
     <p><span class="chip none">None</span> means no new money: settings, a conversation, or a habit. <span class="chip modest">Modest</span> means a few hundred pounds a year or a few hours of paid help. <span class="chip planned">Planned</span> means something you'd put in next year's budget.</p>
-    <h4>The podcast series</h4>
+    <h3 class="label">The podcast series</h3>
     <p>A nine-part series on The Small Business Cyber Security Guy podcast follows this report, every Monday from 2 November to 28 December 2026. Each theme section tells you which episodes cover it.</p>
   </div>
 </section>
@@ -1182,12 +1184,12 @@ html { scrollbar-color: var(--rule) var(--paper); }
   <p class="sec-num">Section 12</p>
   <h2 id="h-method">Methodology and limitations</h2>
   <div class="prose">
-    <h4>How this report was put together</h4>
+    <h3 class="label">How this report was put together</h3>
     <p>The structure takes its inspiration from the Information Security Forum's Threat Horizon 2028 Executive View, published in January 2026: three themes, threats under each, and actions for leaders.<sup class="cite"><a href="#s25" aria-label="Source 25">[25]</a></sup> The text, the themes as framed here, and every forecast are my own. The ISF has not reviewed or endorsed this report.</p>
     <p>Facts were checked between 28 and 31 October 2026, and links between 28 October and 1 November 2026. Each one traces to a named source in section 13. The order of preference was UK government sources first, then named researchers, then reputable journalism. Figures that come only from a security vendor are labelled as vendor figures. Anything I couldn't verify was cut.</p>
-    <h4>What "Our call" means</h4>
+    <h3 class="label">What "Our call" means</h3>
     <p>Each "Our call" panel is a judgement about 2027, based on the evidence in the same section and on what I see in small firms week to week. I haven't attached probabilities, because a number would suggest a precision these forecasts don't have.</p>
-    <h4>Limitations</h4>
+    <h3 class="label">Limitations</h3>
     <ul>
       <li><strong>Self-reported data.</strong> The Cyber Security Breaches Survey relies on what owners and managers tell interviewers. People under-report what they don't detect, and the cost figures are owners' own estimates.</li>
       <li><strong>Size bands.</strong> The survey defines micro businesses as one to nine staff and small businesses as ten to 49. This report's audience, five to 50 staff, straddles both. Where a figure is given for all businesses, it includes medium and large firms too.</li>
