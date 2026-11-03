@@ -308,6 +308,13 @@ ol.sources a { word-break: break-all; }
 
 abbr[title] { text-decoration: underline dotted; text-underline-offset: 0.2em; cursor: help; }
 
+@media (forced-colors: active) {
+  .c-bar, .c-bar2 { fill: Highlight; }
+  .c-track { fill: Canvas; stroke: CanvasText; stroke-width: 0.5; }
+  .chip, .flag { border: 1px solid CanvasText; forced-color-adjust: none; color: CanvasText; background: Canvas; }
+  .isobars { display: none; }
+}
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
