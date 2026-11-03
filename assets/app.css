@@ -107,3 +107,7 @@ tr.in-plan td:first-child { box-shadow: inset 4px 0 0 var(--accent); padding-lef
 .plan-assign .cv-input { min-height: 40px; padding: 0.4rem 0.55rem; font-size: 0.9rem; }
 .plan-actions { padding: 0.2rem 0; }
 @media (max-width: 520px) { .plan-assign { grid-template-columns: 1fr; } }
+
+/* --- src/features/111-check-to-plan.css --- */
+.qz-plan { display: flex; flex-wrap: wrap; gap: 0.8rem 1.2rem; align-items: center; justify-content: space-between; padding: 0.9rem 1rem; border: 2px solid var(--ink); border-radius: 3px; }
+.qz-plan p { margin: 0; }
