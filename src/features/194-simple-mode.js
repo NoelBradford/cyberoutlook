@@ -3,7 +3,8 @@
 CV.ready(function () {
   var on = CV.store.get('simple', false);
   function set(v, quiet) {
-    on = v; CV.store.set('simple', v);
+    if (v !== on || CV.store.get('simple', null) !== null) CV.store.set('simple', v);
+    on = v;
     document.documentElement.classList.toggle('simple', v);
     if (item) item.setAttribute('aria-checked', v ? 'true' : 'false');
     if (!quiet) CV.toast(v ? 'Simple mode on: just the report' : 'All the tools are back');

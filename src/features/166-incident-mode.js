@@ -28,7 +28,7 @@ CV.ready(function () {
     el.appendChild(CV.h('div', { class: 'inc-log' }, CV.h('p', { class: 'inc-k' }, 'Incident log'), CV.h('div', { class: 'inc-add' }, note, CV.button('Add', function () { if (note.value.trim()) add(note.value.trim()); }, 'primary')),
       log.length ? CV.h('ul', null, log.slice().reverse().map(function (l) { return CV.h('li', null, CV.h('time', null, l.t), ' ', l.x); })) : CV.h('p', { class: 'inc-miss' }, 'Everything you add is time-stamped. Your insurer and the ICO may ask for this.'),
       CV.h('div', { class: 'cv-row' }, log.length ? CV.button('Download the log', function () { CV.download('incident-log.txt', 'text/plain', 'INCIDENT LOG\n\n' + log.map(function (l) { return l.t + '  ' + l.x; }).join('\n')); }) : null, log.length ? CV.button('Clear the log', function () { log = []; CV.store.set('inclog', log); render(); }) : null)));
-    setTimeout(function () { (CV.$('.inc-call', el) || close).focus(); }, 30);
+    setTimeout(function () { var h = CV.$('#inc-h', el); h.setAttribute('tabindex', '-1'); el.scrollTop = 0; h.focus({ preventScroll: true }); }, 30);
   }
   var last;
   function open() { last = document.activeElement; render(); el.hidden = false; document.documentElement.classList.add('cv-modal-open'); if (!log.length) add('Incident mode opened'); }

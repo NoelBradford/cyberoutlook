@@ -572,7 +572,9 @@ CV.ready(function () {
       '\n\nWe’d like to keep your answers on file with our incident plan. A reply within two weeks would be great.\n\nThanks,\n' + (who.value.trim() || '[Your name]') + (firm.value.trim() ? '\n' + firm.value.trim() : '');
   }
   function subject() { return 'Cyber security questions for 2027' + (firm.value.trim() ? ' (' + firm.value.trim() + ')' : ''); }
-  function refresh() { pre.textContent = 'Subject: ' + subject() + '\n\n' + body(); saved = { prov: prov.value, who: who.value, firm: firm.value, b: inclB.checked }; CV.store.set('itmail', saved); }
+  var touched = false;
+  function refresh() { pre.textContent = 'Subject: ' + subject() + '\n\n' + body(); if (!touched) return; saved = { prov: prov.value, who: who.value, firm: firm.value, b: inclB.checked }; CV.store.set('itmail', saved); }
+  [prov, who, firm, inclB].forEach(function (i) { i.addEventListener('input', function () { touched = true; }, true); i.addEventListener('change', function () { touched = true; }, true); });
   [prov, who, firm, inclB].forEach(function (i) { i.addEventListener('input', refresh); i.addEventListener('change', refresh); });
   var mail = CV.h('a', { class: 'tool', href: '#' }, 'Open in my email app');
   mail.addEventListener('click', function () { mail.href = 'mailto:?subject=' + encodeURIComponent(subject()) + '&body=' + encodeURIComponent(body()); });
@@ -623,7 +625,9 @@ CV.ready(function () {
       CV.h('p', { class: 'pst-src' }, 'From the UK Small Business Cyber Outlook 2027 · cyberoutlook.sbcsg.uk'));
   }
   var prev = CV.h('div', { class: 'pst-preview', 'aria-hidden': 'true' });
-  function refresh() { saved = { firm: firm.value, who: who.value, word: word.checked }; CV.store.set('poster', saved); prev.innerHTML = ''; prev.appendChild(build()); }
+  var touched = false;
+  [firm, who, word].forEach(function (i) { i.addEventListener('input', function () { touched = true; }, true); i.addEventListener('change', function () { touched = true; }, true); });
+  function refresh() { if (touched) { saved = { firm: firm.value, who: who.value, word: word.checked }; CV.store.set('poster', saved); } prev.innerHTML = ''; prev.appendChild(build()); }
   [firm, who, word].forEach(function (i) { i.addEventListener('input', refresh); i.addEventListener('change', refresh); });
   d.body.appendChild(CV.h('div', { class: 'cv-grid2' }, CV.field('Business name', firm), CV.field('Who to ask if unsure', who)));
   d.body.appendChild(CV.h('div', { class: 'qz-opt-inline' }, word, CV.h('label', { for: 'pst-word' }, 'We also use a code word for urgent payment requests')));
@@ -1367,7 +1371,7 @@ CV.ready(function () {
     root.classList.toggle('rs-on', s.size > 0 || s.space > 0 || s.font !== 'default');
     root.dataset.font = s.font;
     if (s.font === 'easy' && !document.getElementById('cv-easy-font')) document.head.appendChild(CV.h('link', { rel: 'stylesheet', id: 'cv-easy-font', href: 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap' }));
-    CV.store.set('read', s);
+    if (s.size || s.space || s.font !== 'default' || CV.store.get('read', null)) CV.store.set('read', s);
   }
   function seg(label, key, opts) {
     var g = CV.h('div', { class: 'rs-seg', role: 'radiogroup', 'aria-label': label });
@@ -1812,7 +1816,8 @@ CV.ready(function () {
     seg.appendChild(b);
   });
   function set(k) {
-    role = k; CV.store.set('role', k);
+    if (k !== role || CV.store.get('role', null) !== null) CV.store.set('role', k);
+    role = k;
     CV.$$('.rp-opt', seg).forEach(function (b) { b.setAttribute('aria-checked', b.dataset.k === k ? 'true' : 'false'); });
     route.innerHTML = ''; box.classList.toggle('open', !!k);
     if (!k) return;
@@ -2322,7 +2327,9 @@ CV.ready(function () {
     L.push('Q: When did you last test restoring from backup?\nA: ' + (f.restore.value ? CV.fmtDate(CV.parseDate(f.restore.value)) + '.' : '[date]'));
     return L.join('\n\n');
   }
-  function refresh() { Object.keys(f).forEach(function (k) { s[k] = f[k].value; }); CV.store.set('sq', s); out.textContent = text(); }
+  var touched = false;
+  Object.keys(f).forEach(function (k) { f[k].addEventListener('input', function () { touched = true; }, true); f[k].addEventListener('change', function () { touched = true; }, true); });
+  function refresh() { Object.keys(f).forEach(function (k) { s[k] = f[k].value; }); if (touched) CV.store.set('sq', s); out.textContent = text(); }
   Object.keys(f).forEach(function (k) { f[k].addEventListener('input', refresh); f[k].addEventListener('change', refresh); });
   var d = CV.dialog({ id: 'sq', title: 'Questionnaire answers', wide: true, note: 'Only answer "yes" where it’s true. The 24-hour line matches the notification window customers are starting to ask for; change it if your contract says otherwise.' });
   d.body.appendChild(CV.h('div', { class: 'cv-grid2' }, CV.field('Cyber Essentials', f.ce), CV.field('Certificate details', f.cert), CV.field('Multi-factor authentication', f.mfa), CV.field('Incident plan', f.plan), CV.field('Incident contact', f.who), CV.field('Contact details', f.tel), CV.field('Last restore test', f.restore)));
@@ -2363,7 +2370,7 @@ CV.ready(function () {
     el.appendChild(CV.h('div', { class: 'inc-log' }, CV.h('p', { class: 'inc-k' }, 'Incident log'), CV.h('div', { class: 'inc-add' }, note, CV.button('Add', function () { if (note.value.trim()) add(note.value.trim()); }, 'primary')),
       log.length ? CV.h('ul', null, log.slice().reverse().map(function (l) { return CV.h('li', null, CV.h('time', null, l.t), ' ', l.x); })) : CV.h('p', { class: 'inc-miss' }, 'Everything you add is time-stamped. Your insurer and the ICO may ask for this.'),
       CV.h('div', { class: 'cv-row' }, log.length ? CV.button('Download the log', function () { CV.download('incident-log.txt', 'text/plain', 'INCIDENT LOG\n\n' + log.map(function (l) { return l.t + '  ' + l.x; }).join('\n')); }) : null, log.length ? CV.button('Clear the log', function () { log = []; CV.store.set('inclog', log); render(); }) : null)));
-    setTimeout(function () { (CV.$('.inc-call', el) || close).focus(); }, 30);
+    setTimeout(function () { var h = CV.$('#inc-h', el); h.setAttribute('tabindex', '-1'); el.scrollTop = 0; h.focus({ preventScroll: true }); }, 30);
   }
   var last;
   function open() { last = document.activeElement; render(); el.hidden = false; document.documentElement.classList.add('cv-modal-open'); if (!log.length) add('Incident mode opened'); }
@@ -3018,7 +3025,8 @@ CV.ready(function () {
 CV.ready(function () {
   var on = CV.store.get('simple', false);
   function set(v, quiet) {
-    on = v; CV.store.set('simple', v);
+    if (v !== on || CV.store.get('simple', null) !== null) CV.store.set('simple', v);
+    on = v;
     document.documentElement.classList.toggle('simple', v);
     if (item) item.setAttribute('aria-checked', v ? 'true' : 'false');
     if (!quiet) CV.toast(v ? 'Simple mode on: just the report' : 'All the tools are back');

@@ -20,7 +20,9 @@ CV.ready(function () {
       '\n\nWe’d like to keep your answers on file with our incident plan. A reply within two weeks would be great.\n\nThanks,\n' + (who.value.trim() || '[Your name]') + (firm.value.trim() ? '\n' + firm.value.trim() : '');
   }
   function subject() { return 'Cyber security questions for 2027' + (firm.value.trim() ? ' (' + firm.value.trim() + ')' : ''); }
-  function refresh() { pre.textContent = 'Subject: ' + subject() + '\n\n' + body(); saved = { prov: prov.value, who: who.value, firm: firm.value, b: inclB.checked }; CV.store.set('itmail', saved); }
+  var touched = false;
+  function refresh() { pre.textContent = 'Subject: ' + subject() + '\n\n' + body(); if (!touched) return; saved = { prov: prov.value, who: who.value, firm: firm.value, b: inclB.checked }; CV.store.set('itmail', saved); }
+  [prov, who, firm, inclB].forEach(function (i) { i.addEventListener('input', function () { touched = true; }, true); i.addEventListener('change', function () { touched = true; }, true); });
   [prov, who, firm, inclB].forEach(function (i) { i.addEventListener('input', refresh); i.addEventListener('change', refresh); });
   var mail = CV.h('a', { class: 'tool', href: '#' }, 'Open in my email app');
   mail.addEventListener('click', function () { mail.href = 'mailto:?subject=' + encodeURIComponent(subject()) + '&body=' + encodeURIComponent(body()); });

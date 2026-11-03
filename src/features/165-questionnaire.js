@@ -24,7 +24,9 @@ CV.ready(function () {
     L.push('Q: When did you last test restoring from backup?\nA: ' + (f.restore.value ? CV.fmtDate(CV.parseDate(f.restore.value)) + '.' : '[date]'));
     return L.join('\n\n');
   }
-  function refresh() { Object.keys(f).forEach(function (k) { s[k] = f[k].value; }); CV.store.set('sq', s); out.textContent = text(); }
+  var touched = false;
+  Object.keys(f).forEach(function (k) { f[k].addEventListener('input', function () { touched = true; }, true); f[k].addEventListener('change', function () { touched = true; }, true); });
+  function refresh() { Object.keys(f).forEach(function (k) { s[k] = f[k].value; }); if (touched) CV.store.set('sq', s); out.textContent = text(); }
   Object.keys(f).forEach(function (k) { f[k].addEventListener('input', refresh); f[k].addEventListener('change', refresh); });
   var d = CV.dialog({ id: 'sq', title: 'Questionnaire answers', wide: true, note: 'Only answer "yes" where it’s true. The 24-hour line matches the notification window customers are starting to ask for; change it if your contract says otherwise.' });
   d.body.appendChild(CV.h('div', { class: 'cv-grid2' }, CV.field('Cyber Essentials', f.ce), CV.field('Certificate details', f.cert), CV.field('Multi-factor authentication', f.mfa), CV.field('Incident plan', f.plan), CV.field('Incident contact', f.who), CV.field('Contact details', f.tel), CV.field('Last restore test', f.restore)));

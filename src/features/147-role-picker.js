@@ -18,7 +18,8 @@ CV.ready(function () {
     seg.appendChild(b);
   });
   function set(k) {
-    role = k; CV.store.set('role', k);
+    if (k !== role || CV.store.get('role', null) !== null) CV.store.set('role', k);
+    role = k;
     CV.$$('.rp-opt', seg).forEach(function (b) { b.setAttribute('aria-checked', b.dataset.k === k ? 'true' : 'false'); });
     route.innerHTML = ''; box.classList.toggle('open', !!k);
     if (!k) return;

@@ -12,7 +12,7 @@ CV.ready(function () {
     root.classList.toggle('rs-on', s.size > 0 || s.space > 0 || s.font !== 'default');
     root.dataset.font = s.font;
     if (s.font === 'easy' && !document.getElementById('cv-easy-font')) document.head.appendChild(CV.h('link', { rel: 'stylesheet', id: 'cv-easy-font', href: 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap' }));
-    CV.store.set('read', s);
+    if (s.size || s.space || s.font !== 'default' || CV.store.get('read', null)) CV.store.set('read', s);
   }
   function seg(label, key, opts) {
     var g = CV.h('div', { class: 'rs-seg', role: 'radiogroup', 'aria-label': label });

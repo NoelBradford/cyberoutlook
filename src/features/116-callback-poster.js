@@ -29,7 +29,9 @@ CV.ready(function () {
       CV.h('p', { class: 'pst-src' }, 'From the UK Small Business Cyber Outlook 2027 · cyberoutlook.sbcsg.uk'));
   }
   var prev = CV.h('div', { class: 'pst-preview', 'aria-hidden': 'true' });
-  function refresh() { saved = { firm: firm.value, who: who.value, word: word.checked }; CV.store.set('poster', saved); prev.innerHTML = ''; prev.appendChild(build()); }
+  var touched = false;
+  [firm, who, word].forEach(function (i) { i.addEventListener('input', function () { touched = true; }, true); i.addEventListener('change', function () { touched = true; }, true); });
+  function refresh() { if (touched) { saved = { firm: firm.value, who: who.value, word: word.checked }; CV.store.set('poster', saved); } prev.innerHTML = ''; prev.appendChild(build()); }
   [firm, who, word].forEach(function (i) { i.addEventListener('input', refresh); i.addEventListener('change', refresh); });
   d.body.appendChild(CV.h('div', { class: 'cv-grid2' }, CV.field('Business name', firm), CV.field('Who to ask if unsure', who)));
   d.body.appendChild(CV.h('div', { class: 'qz-opt-inline' }, word, CV.h('label', { for: 'pst-word' }, 'We also use a code word for urgent payment requests')));
