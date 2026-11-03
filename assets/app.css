@@ -726,3 +726,6 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
 .tour p { margin: 0; font-size: 0.92rem; line-height: 1.45; }
 @media (prefers-reduced-motion: reduce) { .tour-ring { transition: none; } }
 @media print { .tour, .tour-ring { display: none !important; } }
+
+/* --- src/features/159-full-pdf.css --- */
+@media print { .sec-num { break-after: avoid; page-break-after: avoid; } .section > h2 { break-before: avoid; } }
