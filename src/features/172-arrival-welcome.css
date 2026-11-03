@@ -1,0 +1,4 @@
+.aw { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; justify-content: space-between; padding: 0.8rem 0.9rem; border-radius: 3px; background: var(--signal); color: var(--ink); font: 400 0.95rem/1.4 var(--font-ui); }
+.aw p { margin: 0; flex: 1 1 280px; }
+.aw .tool.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.aw .wb-x { color: var(--ink); }
