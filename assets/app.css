@@ -316,3 +316,12 @@ p.listen-src { position: absolute; left: -9999px; width: 1px; height: 1px; overf
 .wn-card.primary .tool { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .wn-five { font: 500 0.9rem var(--font-ui); margin: 0.2rem 0 0; color: color-mix(in srgb, var(--paper) 80%, transparent); }
 .wn-five a { color: var(--signal); }
+
+/* --- src/features/126-stat-cards.css --- */
+.stat { position: relative; }
+.sc-btn { margin-top: 0.5rem; font: 600 0.7rem var(--font-ui); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: transparent; border: 1px solid var(--rule); border-radius: 2px; padding: 0.3rem 0.55rem; min-height: 30px; cursor: pointer; }
+.sc-btn:hover, .sc-btn:focus-visible { border-color: var(--accent); }
+.sc-btn::before { content: "\2197  "; }
+@media (hover: hover) { .stat .sc-btn { opacity: 0; transition: opacity 0.15s; } .stat:hover .sc-btn, .stat .sc-btn:focus-visible { opacity: 1; } }
+.sc-img { width: 100%; max-width: 420px; height: auto; border-radius: 3px; justify-self: center; border: 1px solid var(--rule); }
+@media print { .sc-btn { display: none; } }
