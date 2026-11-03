@@ -1046,3 +1046,10 @@ figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em;
 /* --- src/features/188-forecast-cards.css --- */
 .fc-b.fc-share { margin-left: auto; border-style: dashed; }
 .fc-b.fc-share::before { content: "\2197  "; }
+
+/* --- src/features/189-hire-check.css --- */
+.hr-steps { display: grid; gap: 0.5rem; padding: 0.7rem 0.8rem; border: 1px solid var(--rule); border-radius: 3px; }
+.hr-recs { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; }
+.hr-recs li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.4rem 1rem; padding: 0.5rem 0.7rem; border-left: 4px solid var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--paper)); }
+.hr-recs li.open { border-left-color: var(--signal); background: color-mix(in srgb, var(--signal) 10%, var(--paper)); }
+.hr-recs span { font-size: 0.82rem; color: var(--muted); }
