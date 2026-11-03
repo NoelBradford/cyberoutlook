@@ -149,8 +149,8 @@ sup.cite a { text-decoration: none; }
 }
 .cover-inner { max-width: 1240px; margin: 0 auto; padding: 2.25rem 0 2.75rem; position: relative; }
 .cover-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; font-family: var(--font-ui); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-.theme-toggle { font: 500 0.78rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); background: transparent; border: 1px solid var(--rule); padding: 0.45rem 0.8rem; border-radius: 2px; cursor: pointer; }
-.theme-toggle:hover { border-color: var(--ink); }
+.theme-toggle, .tool { font: 500 0.78rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); background: transparent; border: 1px solid var(--rule); padding: 0.45rem 0.8rem; border-radius: 2px; cursor: pointer; }
+.theme-toggle:hover, .tool:hover { border-color: var(--ink); }
 .cover-grid { display: grid; gap: 2rem; margin-top: 3rem; }
 .cover h1 { font-size: clamp(2.7rem, 9vw, 6.4rem); line-height: 0.92; text-transform: uppercase; letter-spacing: -0.005em; }
 .cover h1 .yr { color: var(--accent); display: block; }
@@ -373,6 +373,9 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
 
 main [id] { scroll-margin-top: 1.25rem; }
 
+.tools { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.tool { text-decoration: none; display: inline-flex; align-items: center; }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -408,6 +411,7 @@ main [id] { scroll-margin-top: 1.25rem; }
   .progress { display: none !important; }
   .to-top { display: none !important; }
   .next-sec { display: none !important; }
+  .tools { display: none !important; }
 }
 </style>
 </head>
@@ -420,7 +424,10 @@ main [id] { scroll-margin-top: 1.25rem; }
   <div class="cover-inner">
     <div class="cover-top">
       <span>The Small Business Cyber Security Guy &middot; SBCSG Enterprises Ltd &middot; Professional edition</span>
-      <button class="theme-toggle" type="button" id="themeToggle">Dark mode</button>
+      <span class="tools">
+        <button class="tool" type="button" id="printBtn">Print or save PDF</button>
+        <button class="theme-toggle" type="button" id="themeToggle">Dark mode</button>
+      </span>
     </div>
     <div class="cover-grid">
       <div>
@@ -1353,6 +1360,7 @@ window.cvToast = (function () {
     nav.appendChild(a);
   });
 })();
+document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
 </script>
 </body>
 </html>
