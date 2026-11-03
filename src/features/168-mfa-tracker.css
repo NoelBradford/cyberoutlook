@@ -1,0 +1,8 @@
+.mfa-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
+.mfa-list li { display: grid; grid-template-columns: 14px minmax(0, 1fr) minmax(0, 13rem) 44px; gap: 0.5rem; align-items: center; }
+.mfa-list .cv-input { min-height: 40px; padding: 0.35rem 0.5rem; }
+.mfa-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--rule); }
+.mfa-sms .mfa-dot { background: var(--signal); }
+.mfa-app .mfa-dot { background: var(--accent); }
+.mfa-key .mfa-dot { background: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent); }
+@media (max-width: 560px) { .mfa-list li { grid-template-columns: 14px minmax(0, 1fr) 44px; } .mfa-list select { grid-column: 2 / 3; } }
