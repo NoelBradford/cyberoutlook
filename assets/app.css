@@ -1015,3 +1015,9 @@ figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em;
 .colophon .bio.auth-orig { display: none; }
 @media (max-width: 560px) { .auth { grid-template-columns: 1fr; } .auth img { width: 120px; height: 120px; } }
 @media print { .colophon .bio.auth-orig { display: grid !important; } }
+
+/* --- src/features/185-episode-chip.css --- */
+.ep-chip { display: inline-flex; align-items: center; gap: 0.4rem; flex: 0 0 auto; padding: 0.3rem 0.6rem; border-radius: 999px; border: 1px solid var(--rule); font: 600 0.74rem var(--font-ui); color: var(--ink); text-decoration: none; white-space: nowrap; }
+.ep-chip:hover { border-color: var(--signal); }
+.ep-chip-k { background: var(--signal); color: var(--ink); border-radius: 999px; padding: 0.05rem 0.45rem; }
+@media (max-width: 1100px) { .ep-chip { display: none; } }
