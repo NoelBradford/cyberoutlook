@@ -351,6 +351,9 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
 
 .toc a[aria-current] { color: var(--accent); font-weight: 600; box-shadow: inset 3px 0 0 var(--accent); padding-left: 0.5rem; margin-left: -0.5rem; }
 
+.toc a.passed span { color: var(--accent); }
+.toc a.passed span::after { content: " ✓"; font-size: 0.75em; }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -1275,6 +1278,13 @@ window.cvToast = (function () {
   }
   window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
   update();
+})();
+(function () {
+  var order = Array.prototype.map.call(document.querySelectorAll('.toc a[href^="#"]'), function (a) { return a; });
+  document.addEventListener('cv:section', function (e) {
+    var idx = order.findIndex(function (a) { return a.getAttribute('href') === '#' + e.detail; });
+    order.forEach(function (a, i) { a.classList.toggle('passed', idx > -1 && i < idx); });
+  });
 })();
 </script>
 </body>
