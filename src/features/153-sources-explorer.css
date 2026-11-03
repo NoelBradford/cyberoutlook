@@ -1,0 +1,13 @@
+.src-tools { display: grid; gap: 0.6rem; max-width: 80ch; margin: 0 0 1.2rem; }
+.src-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.src-n { font-weight: 400; opacity: 0.75; }
+.src-q { max-width: 360px; }
+.src-status { margin: 0; font: 500 0.82rem var(--font-ui); color: var(--muted); }
+.src-status:empty { display: none; }
+.src-meta { display: flex; flex-wrap: wrap; gap: 0.3rem 0.7rem; align-items: center; margin-top: 0.3rem; font: 500 0.72rem var(--font-ui); color: var(--muted); }
+.src-k { font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.1rem 0.4rem; border-radius: 2px; border: 1px solid var(--rule); }
+.src-k.k-official { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.src-k.k-ours { color: var(--signal); border-color: color-mix(in srgb, var(--signal) 50%, transparent); }
+.src-copy { font: 600 0.72rem var(--font-ui); color: var(--accent); background: none; border: 0; padding: 0.2rem 0.3rem; cursor: pointer; text-decoration: underline; min-height: 28px; }
+ol.sources li[hidden] { display: none; }
+@media print { .src-meta { display: none; } }
