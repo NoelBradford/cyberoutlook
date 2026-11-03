@@ -615,3 +615,16 @@ figure.bt-fig { max-width: 100%; margin: 1.6rem 0 2rem; display: grid; gap: 0.7r
 .rp-step:hover, .rp-step:focus-visible { border-color: var(--signal); }
 .rp-step span { flex: 0 0 auto; display: grid; place-items: center; width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--signal); color: var(--ink); font: 700 1rem var(--font-head); }
 @media (max-width: 560px) { .rp { grid-template-columns: 1fr; } }
+
+/* --- src/features/148-like-yours.css --- */
+.ly { display: grid; gap: 0.6rem; margin: 1rem 0 1.8rem; }
+.ly-grid { display: grid; gap: 0.6rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.ly-card { display: grid; grid-template-columns: auto 1fr auto; gap: 0.7rem; align-items: center; padding: 0.8rem 0.85rem; border: 1px solid var(--rule); border-radius: 3px; text-decoration: none; color: var(--ink); background: color-mix(in srgb, var(--accent) 5%, var(--paper)); font-family: var(--font-ui); }
+.ly-card:hover, .ly-card:focus-visible { border-color: var(--accent); }
+.ly-av { display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 50%; background: var(--accent); color: var(--paper); font: 700 1.4rem var(--font-head); }
+.ly-main { display: grid; gap: 0.1rem; min-width: 0; }
+.ly-main b { font-size: 0.95rem; }
+.ly-where { font-size: 0.78rem; color: var(--muted); }
+.ly-hook { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+.ly-go { color: var(--accent); font-weight: 600; }
+@media print { .ly { display: none; } }
