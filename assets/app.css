@@ -247,3 +247,21 @@ figure.wf { max-width: 760px; margin: 2rem 0 2.4rem; padding: 1.2rem; border: 2p
 @media (max-width: 600px) { .wf-body { grid-template-columns: 1fr; } .wf-grid { max-width: 260px; } .wf-tabs { grid-template-columns: 1fr; } .wf-tab { grid-template-columns: auto 1fr; gap: 0.6rem; align-items: baseline; } }
 @media (prefers-reduced-motion: reduce) { .wf-grid span { transition: none; } }
 @media print { .wf-tabs { display: none; } figure.wf { break-inside: avoid; } }
+
+/* --- src/features/121-episode-guide.css --- */
+.ep-guide { margin: 1.2rem 0 1.8rem; padding: 1.1rem 1.1rem 1.2rem; background: var(--ink); color: var(--paper); border-radius: 3px; display: grid; gap: 0.9rem; font-family: var(--font-ui); }
+.ep-guide .cv-kicker { color: var(--signal); }
+.ep-title { font: 700 1.6rem/1 var(--font-head) !important; text-transform: uppercase; margin: 0.2rem 0 0 !important; }
+.ep-list { list-style: none; padding: 0 !important; margin: 0 !important; display: grid; gap: 0; }
+.ep { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; gap: 0.6rem; align-items: center; padding: 0.55rem 0; border-top: 1px solid color-mix(in srgb, var(--paper) 18%, transparent); margin: 0 !important; }
+.ep-n { font: 700 1.5rem var(--font-head); color: color-mix(in srgb, var(--paper) 55%, transparent); text-align: center; }
+.ep.out .ep-n, .ep.next .ep-n { color: var(--signal); }
+.ep-main { display: grid; gap: 0.1rem; min-width: 0; }
+.ep-main b { font-weight: 600; font-size: 0.95rem; }
+.ep-meta { font-size: 0.78rem; color: color-mix(in srgb, var(--paper) 70%, transparent); }
+.ep-meta a { color: inherit; }
+.ep-state { font: 600 0.66rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.45rem; border-radius: 2px; border: 1px solid color-mix(in srgb, var(--paper) 30%, transparent); white-space: nowrap; }
+.ep.out .ep-state { background: var(--signal); color: var(--ink); border-color: var(--signal); }
+.ep.next .ep-state { border-color: var(--signal); color: var(--signal); }
+.ep-guide .tool { color: var(--paper); border-color: color-mix(in srgb, var(--paper) 35%, transparent); }
+.ep-guide .tool.primary { background: var(--signal); color: var(--ink); border-color: var(--signal); }
