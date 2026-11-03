@@ -331,6 +331,10 @@ ol.sources li:target { background: #f6ecd5; background: color-mix(in srgb, var(-
 
 sup.cite a:target { background: color-mix(in srgb, var(--signal) 30%, transparent); border-radius: 2px; outline: 2px solid var(--signal); }
 
+.h-anchor { margin-left: 0.35em; font-family: var(--font-ui); font-weight: 500; font-size: 0.6em; color: var(--muted); text-decoration: none; opacity: 0; transition: opacity 0.15s; vertical-align: middle; }
+h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+@media (hover: none) { .h-anchor { opacity: 0.45; } }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -361,6 +365,7 @@ sup.cite a:target { background: color-mix(in srgb, var(--signal) 30%, transparen
   ol.sources a { text-decoration: underline; }
   .c-track { fill: #e6e6e6; }
   .backrefs { display: none; }
+  .h-anchor { display: none !important; }
 }
 </style>
 </head>
@@ -1167,6 +1172,17 @@ sup.cite a:target { background: color-mix(in srgb, var(--signal) 30%, transparen
     });
     li.appendChild(document.createTextNode(' '));
     li.appendChild(span);
+  });
+})();
+(function () {
+  document.querySelectorAll('main h2[id], main h3[id]').forEach(function (h) {
+    if (h.closest('.a4')) return;
+    var a = document.createElement('a');
+    a.className = 'h-anchor';
+    a.href = '#' + h.id;
+    a.textContent = '#';
+    a.setAttribute('aria-label', 'Link to this section: ' + h.textContent.trim());
+    h.appendChild(a);
   });
 })();
 </script>
