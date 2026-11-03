@@ -128,3 +128,8 @@ tr.in-plan td:first-child { box-shadow: inset 4px 0 0 var(--accent); padding-lef
   .plan-print td:first-child { font-size: 14pt; width: 8mm; }
   .plan-print tr { break-inside: avoid; }
 }
+
+/* --- src/features/113-plan-share-link.css --- */
+.imp-list { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.5rem; }
+.imp-list li::marker { color: var(--accent); }
+.imp-meta { display: block; font-size: 0.82rem; color: var(--muted); }
