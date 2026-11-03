@@ -1,0 +1,5 @@
+.cw { display: grid; gap: 0.4rem; padding: 0.8rem 0.9rem; border: 2px dashed var(--accent); border-radius: 3px; }
+.cw[hidden] { display: none; }
+.cw p { margin: 0; }
+.cw-s { font-size: 0.82rem; color: var(--muted); }
+.cw-out { font: 700 clamp(1.6rem, 5vw, 2.2rem)/1.1 var(--font-head); letter-spacing: 0.02em; color: var(--accent); word-break: break-word; }

@@ -841,3 +841,10 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
 .mfa-app .mfa-dot { background: var(--accent); }
 .mfa-key .mfa-dot { background: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent); }
 @media (max-width: 560px) { .mfa-list li { grid-template-columns: 14px minmax(0, 1fr) 44px; } .mfa-list select { grid-column: 2 / 3; } }
+
+/* --- src/features/169-code-word.css --- */
+.cw { display: grid; gap: 0.4rem; padding: 0.8rem 0.9rem; border: 2px dashed var(--accent); border-radius: 3px; }
+.cw[hidden] { display: none; }
+.cw p { margin: 0; }
+.cw-s { font-size: 0.82rem; color: var(--muted); }
+.cw-out { font: 700 clamp(1.6rem, 5vw, 2.2rem)/1.1 var(--font-head); letter-spacing: 0.02em; color: var(--accent); word-break: break-word; }
