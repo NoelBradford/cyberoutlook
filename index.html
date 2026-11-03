@@ -1197,6 +1197,14 @@ window.cvToast = (function () {
   var t;
   return function (msg) { el.textContent = msg; el.classList.add('show'); clearTimeout(t); t = setTimeout(function () { el.classList.remove('show'); }, 2400); };
 })();
+(function () {
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('.h-anchor');
+    if (!a || !navigator.clipboard || location.protocol === 'file:') return;
+    var url = location.href.split('#')[0] + a.getAttribute('href');
+    navigator.clipboard.writeText(url).then(function () { window.cvToast && window.cvToast('Link to this section copied'); }, function () {});
+  });
+})();
 </script>
 </body>
 </html>
