@@ -993,3 +993,13 @@ figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em;
 :root[data-theme="dark"] .cover { background: radial-gradient(1200px 500px at 85% 20%, rgba(98,184,181,0.10), transparent 60%); }
 :root[data-theme="dark"] .cta-card, :root[data-theme="dark"] .nudge { box-shadow: 6px 6px 0 rgba(230,176,67,0.45); }
 @media print { body { background-image: none !important; } }
+
+/* --- src/features/183-slim-start.css --- */
+.ss { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; justify-content: space-between; color: var(--paper); font: 400 0.95rem var(--font-ui); }
+.ss p { margin: 0; }
+.ss b { color: var(--signal); }
+.ss .tool { color: var(--paper); border-color: color-mix(in srgb, var(--paper) 35%, transparent); }
+.ss .tool.primary { background: var(--signal); color: var(--ink); border-color: var(--signal); }
+.start.slim { padding-top: 1rem; padding-bottom: 1rem; }
+.start.slim .start-inner > *:not(.ss):not(.aw) { display: none; }
+.start:not(.slim) .ss { padding-bottom: 1rem; border-bottom: 1px solid color-mix(in srgb, var(--paper) 18%, transparent); }
