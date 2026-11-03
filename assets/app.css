@@ -181,3 +181,23 @@ tr.in-plan td:first-child { box-shadow: inset 4px 0 0 var(--accent); padding-lef
   .cv-sheet .pst-who { font-size: 15pt; padding: 5mm 6mm; }
   .cv-sheet .pst-src { font-size: 9pt; margin-top: auto; }
 }
+
+/* --- src/features/117-five-and-five.css --- */
+.ff-sets { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); }
+.ff-set { border: 0; margin: 0; padding: 0; display: grid; gap: 0.45rem; }
+.ff-set legend { font: 700 1.2rem var(--font-head); text-transform: uppercase; margin-bottom: 0.4rem; padding: 0; }
+.ff-row { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr) minmax(0, 0.9fr); gap: 0.35rem; }
+.ff-row .cv-input { min-height: 40px; padding: 0.35rem 0.5rem; font-size: 0.88rem; }
+.ff-empty, .ff-sum { color: var(--muted); }
+.ff-sum b { color: var(--ink); }
+.ff-grid { list-style: none; margin: 0.5rem 0 0; padding: 0; display: grid; gap: 0.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); }
+.ff-tile { display: grid; gap: 0.2rem; align-content: start; padding: 0.7rem 0.75rem; border-radius: 3px; border: 1px solid var(--rule); font-size: 0.85rem; }
+.ff-tile b { font: 700 1.1rem/1.1 var(--font-head); }
+.ff-kind { font: 600 0.66rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.ff-lv { font-weight: 600; font-size: 0.75rem; margin-top: 0.2rem; }
+.ff-tile.lv1 { border-color: var(--accent); }
+.ff-tile.lv2 { background: color-mix(in srgb, var(--signal) 18%, var(--paper)); border-color: var(--signal); }
+.ff-tile.lv3 { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.ff-tile.lv3 .ff-kind, .ff-tile.lv3 .ff-lv { color: var(--signal); }
+@media (max-width: 560px) { .ff-row { grid-template-columns: 1fr 1fr; } .ff-row .cv-input:nth-child(2) { grid-column: 1 / -1; order: 3; } }
+@media print { .cv-sheet.ff-sheet { display: block !important; font-family: var(--font-ui); } .ff-sheet h2 { font: 700 26pt var(--font-head); text-transform: uppercase; margin: 0 0 2mm; } .ff-sheet .ff-tile.lv3 { background: #000 !important; color: #fff !important; } }
