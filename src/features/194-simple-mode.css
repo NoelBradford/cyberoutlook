@@ -1,0 +1,10 @@
+html.simple .start, html.simple .ab, html.simple .cta-card, html.simple .listen, html.simple .lnx, html.simple .ep-guide, html.simple .what-next, html.simple .nudge, html.simple .wb, html.simple .plan-add, html.simple .sc-btn, html.simple .tts-start, html.simple .ss-wrap, html.simple .fc-vote, html.simple .pl-btn, html.simple .sn, html.simple .lens-bar, html.simple .src-tools, html.simple .src-meta, html.simple .ly, html.simple .ft, html.simple .tp-min, html.simple .tp-ring, html.simple .next-sec, html.simple .sp-sum, html.simple .nd-tools, html.simple .plan-tools, html.simple .five-foot, html.simple .five-note, html.simple .h-anchor, html.simple .cs, html.simple .cs-src, html.simple .tour, html.simple .tour-ring, html.simple .ep-chip, html.simple .auth, html.simple .rp, html.simple .aw { display: none !important; }
+html.simple .colophon .bio.auth-orig { display: grid !important; }
+html.simple .cover .tools > *:not(#themeToggle):not(.sm-exit) { display: none !important; }
+html.simple .gl-term { text-decoration: none; cursor: text; pointer-events: none; }
+html.simple *, html.simple *::before, html.simple *::after { animation: none !important; transition: none !important; }
+html.simple .isobars.pm-replaced { display: block !important; }
+html.simple canvas.pm { display: none !important; }
+.sm-exit[hidden] { display: none !important; }
+.sm-link { font: 500 0.8rem var(--font-ui); color: color-mix(in srgb, var(--paper) 75%, transparent); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; flex-basis: 100%; text-align: left; }
+.sm-link:hover { color: var(--signal); }
