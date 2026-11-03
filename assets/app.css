@@ -212,3 +212,17 @@ tr.in-plan td:first-child { box-shadow: inset 4px 0 0 var(--accent); padding-lef
 .ai-warn { font-size: 0.86rem; margin: 0; }
 .ai-sum { font-weight: 600; }
 @media print { .cv-sheet.ai-sheet { display: block !important; font-family: var(--font-ui); } .ai-sheet h2 { font: 700 26pt var(--font-head); text-transform: uppercase; margin: 0 0 4mm; } .ai-sheet table { width: 100%; border-collapse: collapse; font-size: 10pt; } .ai-sheet th, .ai-sheet td { border-bottom: 0.5pt solid #999; padding: 2.5mm 2mm 2.5mm 0; text-align: left; } .ai-sheet td { height: 9mm; } }
+
+/* --- src/features/119-wallet-card.css --- */
+.wc { display: none; }
+@media print {
+  .cv-sheet.wc-sheet { display: grid !important; grid-template-columns: repeat(2, 85.6mm); gap: 6mm 8mm; justify-content: center; align-content: start; padding-top: 4mm; }
+  .wc { display: grid !important; width: 85.6mm; height: 54mm; box-sizing: border-box; border: 0.6pt dashed #777; padding: 3mm 3.5mm; font-family: var(--font-ui); color: #15222b; align-content: start; gap: 1.2mm; overflow: hidden; break-inside: avoid; }
+  .wc-head { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1pt solid #15222b; padding-bottom: 1mm; }
+  .wc-head b { font: 700 12pt var(--font-head); text-transform: uppercase; }
+  .wc-head span { font-size: 6pt; letter-spacing: 0.08em; text-transform: uppercase; color: #0d5b60; }
+  .wc ol { margin: 0; padding-left: 3.5mm; font-size: 6.4pt; line-height: 1.25; display: grid; gap: 0.5mm; }
+  .wc li { display: grid; grid-template-columns: 1fr 1.1fr; gap: 1.5mm; border-bottom: 0.3pt solid #ccc; }
+  .wc-who { font-weight: 600; }
+  .wc-foot { margin: 0; font-size: 6pt; font-weight: 600; color: #8a5f00; }
+}
