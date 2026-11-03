@@ -719,14 +719,6 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
 .md-confirm p { flex: 1 1 260px; margin: 0; }
 .tool.md-danger { background: #9b2c1d; border-color: #9b2c1d; color: #fff; }
 
-/* --- src/features/158-tour.css --- */
-.tour-ring { position: fixed; z-index: 34; border: 3px solid var(--signal); border-radius: 6px; box-shadow: 0 0 0 9999px rgba(14, 22, 27, 0.45); pointer-events: none; transition: all 0.25s; }
-.tour { position: fixed; z-index: 35; background: var(--paper); color: var(--ink); border: 2px solid var(--ink); border-radius: 3px; padding: 0.9rem 1rem 1rem; display: grid; gap: 0.5rem; font-family: var(--font-ui); box-shadow: 0 18px 40px rgba(0,0,0,0.35); }
-.tour h2 { font: 700 1.5rem/1.05 var(--font-head); text-transform: uppercase; margin: 0; }
-.tour p { margin: 0; font-size: 0.92rem; line-height: 1.45; }
-@media (prefers-reduced-motion: reduce) { .tour-ring { transition: none; } }
-@media print { .tour, .tour-ring { display: none !important; } }
-
 /* --- src/features/159-full-pdf.css --- */
 @media print { .sec-num { break-after: avoid; page-break-after: avoid; } .section > h2 { break-before: avoid; } }
 
@@ -1122,9 +1114,6 @@ html.simple canvas.pm { display: none !important; }
 .off-note.off { color: #e6b043 !important; }
 
 /* --- src/features/196-speed.css --- */
-/* Tour pieces are positioned with transforms (no layout shift) from the top-left corner. */
-.tour-ring, .tour { left: 0; top: 0; will-change: transform; }
-.tour-ring { transition: transform 0.25s, width 0.25s, height 0.25s; }
 /* Reserve the toolbar's final height so buttons arriving after load don't push the cover down. */
 .cover .tools { min-height: 36px; }
 @media (max-width: 560px) { .cover .tools { min-height: 84px; align-content: flex-start; } }
