@@ -299,3 +299,20 @@ p.listen-src { position: absolute; left: -9999px; width: 1px; height: 1px; overf
 .sq-b:hover, .sq-b:focus-visible { background: color-mix(in srgb, var(--paper) 15%, transparent); }
 .sq-b:first-child { color: var(--signal); }
 @media print { .sq { display: none !important; } }
+
+/* --- src/features/125-what-next.css --- */
+.what-next { margin: 3rem 0 0; padding: 2rem clamp(1rem, 3vw, 2rem) 2rem; background: var(--ink); color: var(--paper); border-radius: 3px; display: grid; gap: 1rem; }
+.what-next h2 { font: 700 clamp(2.2rem, 6vw, 3.4rem)/0.95 var(--font-head); text-transform: uppercase; color: var(--paper); margin: 0; }
+.wn-lead { font: 400 1.15rem var(--font-body); margin: 0; color: color-mix(in srgb, var(--paper) 85%, transparent); }
+.wn-grid { display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+.wn-card { display: grid; gap: 0.4rem; align-content: start; padding: 1rem; border: 1px solid color-mix(in srgb, var(--paper) 22%, transparent); border-radius: 3px; font-family: var(--font-ui); }
+.wn-card .cv-kicker { color: var(--signal); }
+.wn-card p { margin: 0; }
+.wn-t { font: 700 1.5rem/1.05 var(--font-head); text-transform: uppercase; }
+.wn-s { font-size: 0.9rem; color: color-mix(in srgb, var(--paper) 78%, transparent); }
+.wn-card .tool { justify-self: start; margin-top: 0.4rem; color: var(--paper); border-color: color-mix(in srgb, var(--paper) 40%, transparent); }
+.wn-card.primary { background: var(--signal); color: var(--ink); border-color: var(--signal); }
+.wn-card.primary .cv-kicker, .wn-card.primary .wn-s { color: var(--ink); }
+.wn-card.primary .tool { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.wn-five { font: 500 0.9rem var(--font-ui); margin: 0.2rem 0 0; color: color-mix(in srgb, var(--paper) 80%, transparent); }
+.wn-five a { color: var(--signal); }
