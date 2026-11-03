@@ -689,3 +689,9 @@ body[data-lens="calls"] .lens-call, body[data-lens="both"] .lens-call { outline:
 body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] main .prose p:not(.lead) { opacity: 0.55; }
 @media (max-width: 900px) { .lens-bar { position: static; } }
 @media print { body[data-lens] .lens-fact { background: none; box-shadow: none; } }
+
+/* --- src/features/155-shortcuts.css --- */
+.ks { margin: 0; display: grid; gap: 0.4rem; }
+.ks > div { display: grid; grid-template-columns: 3rem 1fr; align-items: center; gap: 0.6rem; padding: 0.35rem 0; border-bottom: 1px solid var(--rule); }
+.ks dd { margin: 0; }
+.ks kbd { display: inline-grid; place-items: center; min-width: 2rem; height: 2rem; padding: 0 0.4rem; border: 1px solid var(--rule); border-bottom-width: 3px; border-radius: 3px; font: 700 0.9rem var(--font-ui); background: var(--paper); }
