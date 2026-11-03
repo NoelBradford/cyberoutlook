@@ -363,6 +363,9 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
 .next-sec a:hover { border-color: var(--accent); color: var(--accent); }
 .next-sec small, .next-sec a span:first-of-type { color: var(--muted); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.72rem; }
 
+.next-sec { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.next-sec a.to-toc { font-weight: 500; color: var(--muted); }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -1333,6 +1336,13 @@ window.cvToast = (function () {
     n.innerHTML = '<small>Next</small> ' + next.innerHTML + ' <span aria-hidden="true">→</span>';
     nav.appendChild(n);
     sec.appendChild(nav);
+  });
+})();
+(function () {
+  document.querySelectorAll('.next-sec').forEach(function (nav) {
+    var a = document.createElement('a');
+    a.href = '#toc-h'; a.className = 'to-toc'; a.textContent = 'Contents';
+    nav.appendChild(a);
   });
 })();
 </script>
