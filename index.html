@@ -366,6 +366,11 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
 .next-sec { display: flex; gap: 0.6rem; flex-wrap: wrap; }
 .next-sec a.to-toc { font-weight: 500; color: var(--muted); }
 
+@media (prefers-reduced-motion: no-preference) {
+  .section:target > h2, main h3:target { animation: cv-flash 1.6s ease-out; }
+  @keyframes cv-flash { 0% { background: color-mix(in srgb, var(--signal) 35%, transparent); } 100% { background: transparent; } }
+}
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
