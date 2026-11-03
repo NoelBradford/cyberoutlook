@@ -349,6 +349,8 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
 
 #title:focus { outline: none; }
 
+.toc a[aria-current] { color: var(--accent); font-weight: 600; box-shadow: inset 3px 0 0 var(--accent); padding-left: 0.5rem; margin-left: -0.5rem; }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -1250,6 +1252,29 @@ window.cvToast = (function () {
     var h = document.getElementById('title'); if (h) h.focus({ preventScroll: true });
     history.replaceState(null, '', location.pathname + location.search);
   });
+})();
+(function () {
+  var links = {};
+  document.querySelectorAll('.toc a[href^="#"]').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+  var sections = Array.prototype.filter.call(document.querySelectorAll('main section[id]'), function (s) { return links[s.id]; });
+  if (!sections.length) return;
+  function current() {
+    var y = window.innerHeight * 0.3, cur = null;
+    sections.forEach(function (s) { if (s.getBoundingClientRect().top <= y) cur = s; });
+    return cur;
+  }
+  var last = null, ticking = false;
+  function update() {
+    ticking = false;
+    var cur = current();
+    if (cur === last) return;
+    if (last && links[last.id]) links[last.id].removeAttribute('aria-current');
+    if (cur) links[cur.id].setAttribute('aria-current', 'location');
+    last = cur;
+    document.dispatchEvent(new CustomEvent('cv:section', { detail: cur ? cur.id : null }));
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
 })();
 </script>
 </body>
