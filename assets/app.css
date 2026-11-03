@@ -827,3 +827,7 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
 .inc-log ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; font-size: 0.9rem; }
 .inc-log time { color: #e6b043; font-variant-numeric: tabular-nums; margin-right: 0.4rem; }
 @media print { .inc { display: none !important; } .tool.inc-btn { display: none !important; } }
+
+/* --- src/features/167-restore-log.css --- */
+.rs-due { margin: 0; padding: 0.6rem 0.8rem; border-left: 5px solid var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--paper)); }
+.rs-due.late { border-left-color: var(--signal); background: color-mix(in srgb, var(--signal) 14%, var(--paper)); }
