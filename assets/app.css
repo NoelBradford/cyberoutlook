@@ -282,3 +282,12 @@ p.listen-src { position: absolute; left: -9999px; width: 1px; height: 1px; overf
 .listen-extra { margin: 0 !important; font-size: 0.85rem; color: var(--muted); }
 @media (max-width: 520px) { .listen { grid-template-columns: 1fr; } .listen-icon { justify-content: start; } }
 @media print { p.listen-src { position: static; width: auto; height: auto; } .listen { display: none; } }
+
+/* --- src/features/123-citation-cards.css --- */
+.cite-card { position: fixed; z-index: 40; background: var(--ink); color: var(--paper); border-radius: 3px; padding: 0.75rem 0.85rem; box-shadow: 0 12px 30px rgba(0,0,0,0.3); font-family: var(--font-ui); display: grid; gap: 0.35rem; pointer-events: auto; }
+.cite-card[hidden] { display: none; }
+.cite-card p { margin: 0; }
+.cc-k { font: 600 0.66rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); }
+.cc-t { font-size: 0.86rem; line-height: 1.4; }
+.cc-u { font-size: 0.72rem; color: color-mix(in srgb, var(--paper) 65%, transparent); }
+@media print { .cite-card { display: none !important; } }
