@@ -464,3 +464,23 @@ body.focus-mode { background: var(--paper); }
 .fm-exit:hover, .fm-exit:focus-visible { opacity: 1; color: var(--ink); }
 .fm-exit[hidden] { display: none; }
 @media print { .fm-exit { display: none !important; } }
+
+/* --- src/features/138-action-cards-mobile.css --- */
+/* @msg Phones: the action tables become stacked action cards with spend and effort badges, no sideways scrolling */
+/* @sel #theme-1 table.actions */
+@media (max-width: 640px) {
+  .table-wrap:has(> table.actions) { overflow: visible; background: none; }
+  table.actions { min-width: 0 !important; display: block; }
+  table.actions caption { display: block; }
+  table.actions thead { position: absolute; left: -9999px; }
+  table.actions tbody { display: grid; gap: 0.6rem; }
+  table.actions tr { display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 0.6rem; align-items: center; padding: 0.85rem 0.9rem; border: 1px solid var(--rule); border-radius: 3px; background: var(--paper); }
+  table.actions td { border: 0; padding: 0 !important; }
+  table.actions td:first-child { grid-column: 1 / -1; width: auto !important; font-size: 1rem; line-height: 1.45; }
+  table.actions td:nth-child(2) { white-space: nowrap; }
+  table.actions td:nth-child(3) { font-size: 0.82rem; color: var(--muted); }
+  table.actions td:nth-child(3)::before { content: "Effort: "; font-weight: 600; }
+  table.actions tr.in-plan { border-color: var(--accent); box-shadow: inset 4px 0 0 var(--accent); }
+  table.actions tr.in-plan td:first-child { box-shadow: none; padding-left: 0 !important; }
+  table.actions .plan-add { margin-top: 0.6rem; min-height: 40px; }
+}
