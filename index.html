@@ -418,6 +418,9 @@ html { scrollbar-color: var(--rule) var(--paper); }
 
 .brand { box-shadow: 0 0 0 1px var(--rule); }
 
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .portrait img, :root:not([data-theme="light"]) .bio img { filter: brightness(0.92); } }
+:root[data-theme="dark"] .portrait img, :root[data-theme="dark"] .bio img { filter: brightness(0.92); }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
