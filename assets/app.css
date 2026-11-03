@@ -133,3 +133,19 @@ tr.in-plan td:first-child { box-shadow: inset 4px 0 0 var(--accent); padding-lef
 .imp-list { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.5rem; }
 .imp-list li::marker { color: var(--accent); }
 .imp-meta { display: block; font-size: 0.82rem; color: var(--muted); }
+
+/* --- src/features/114-ninety-day-tracker.css --- */
+.nd-month ul { list-style: none; padding-left: 0 !important; }
+.nd-li { display: grid; grid-template-columns: 1.8rem 1fr; align-items: start; gap: 0.2rem; margin-bottom: 0.6rem; }
+.nd-cb { width: 1.2rem; height: 1.2rem; margin: 0.2rem 0 0; accent-color: var(--accent); cursor: pointer; }
+.nd-li label { cursor: pointer; }
+.nd-li.done label { color: var(--muted); }
+.nd-meter { height: 6px; background: var(--rule); border-radius: 3px; overflow: hidden; margin: 0 0 0.3rem; }
+.nd-meter span { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.25s; }
+.nd-count { font: 600 0.75rem var(--font-ui); color: var(--muted); margin: 0 0 0.8rem; letter-spacing: 0.04em; }
+.nd-month.complete { border-top-color: var(--signal) !important; }
+.nd-month.complete .nd-meter span { background: var(--signal); }
+.nd-tools { display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; align-items: center; justify-content: space-between; margin: 0 0 2rem; padding: 1rem 1.1rem; border: 2px solid var(--ink); border-radius: 3px; font-family: var(--font-ui); font-size: 0.92rem; }
+.nd-tools p { margin: 0; max-width: 46ch; }
+@media (prefers-reduced-motion: reduce) { .nd-meter span { transition: none; } }
+@media print { .nd-meter, .nd-count { display: none; } }
