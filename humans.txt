@@ -1,0 +1,10 @@
+/* TEAM */
+Author: Noel Bradford
+Role: The Small Business Cyber Security Guy
+Site: https://thesmallbusinesscybersecurityguy.co.uk
+Publisher: SBCSG Enterprises Ltd
+
+/* SITE */
+Last update: 2026/11/03
+Language: English (UK)
+Standards: HTML, CSS
