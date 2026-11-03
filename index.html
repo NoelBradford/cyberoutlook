@@ -339,6 +339,9 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
 .toast.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
 @media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
 
+.progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 20; pointer-events: none; }
+.progress span { display: block; height: 100%; background: var(--signal); transform: scaleX(0); transform-origin: 0 50%; }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -371,10 +374,12 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
   .backrefs { display: none; }
   .h-anchor { display: none !important; }
   .toast { display: none !important; }
+  .progress { display: none !important; }
 }
 </style>
 </head>
 <body>
+<div class="progress" aria-hidden="true"><span></span></div>
 <a class="skip" href="#main">Skip to the report</a>
 <a class="skip" href="#toc-h">Skip to contents</a>
 
@@ -1204,6 +1209,19 @@ window.cvToast = (function () {
     var url = location.href.split('#')[0] + a.getAttribute('href');
     navigator.clipboard.writeText(url).then(function () { window.cvToast && window.cvToast('Link to this section copied'); }, function () {});
   });
+})();
+(function () {
+  var bar = document.querySelector('.progress span');
+  if (!bar) return;
+  var ticking = false;
+  function update() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.transform = 'scaleX(' + (h > 0 ? Math.min(1, window.scrollY / h) : 0) + ')';
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
 })();
 </script>
 </body>
