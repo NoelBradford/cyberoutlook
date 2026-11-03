@@ -848,3 +848,12 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
 .cw p { margin: 0; }
 .cw-s { font-size: 0.82rem; color: var(--muted); }
 .cw-out { font: 700 clamp(1.6rem, 5vw, 2.2rem)/1.1 var(--font-head); letter-spacing: 0.02em; color: var(--accent); word-break: break-word; }
+
+/* --- src/features/170-team-pack.css --- */
+@media print {
+  body.print-pack .print-toc, body.print-pack .toc, body.print-pack .start { display: none !important; }
+  body.print-pack main > section:not(#summary):not(#mvc) { display: none !important; }
+  body.print-pack #mvc > *:not(.sec-num):not(h2):not(.a4-page) { display: none !important; }
+  body.print-pack #summary { break-before: page; }
+  body.print-pack .cover { break-after: auto; }
+}
