@@ -320,6 +320,8 @@ abbr[title] { text-decoration: underline dotted; text-underline-offset: 0.2em; c
   :root[data-theme="dark"] { --muted: #c3cfd2; --rule: #5b6d74; }
 }
 
+@media (pointer: coarse) { sup.cite a { display: inline-block; padding: 0.35em 0.15em; margin: -0.35em 0; } }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
