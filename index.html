@@ -1128,6 +1128,16 @@ abbr[title] { text-decoration: underline dotted; text-underline-offset: 0.2em; c
   if (mq && mq.addEventListener) mq.addEventListener('change', function () { if (!root.getAttribute('data-theme')) label(); });
   label();
 })();
+(function () {
+  document.querySelectorAll('sup.cite a[href^="#s"]').forEach(function (a) {
+    var li = document.getElementById(a.getAttribute('href').slice(1));
+    if (!li) return;
+    var t = li.cloneNode(true);
+    t.querySelectorAll('a, .backrefs').forEach(function (n) { n.remove(); });
+    var txt = t.textContent.replace(/\s+/g, ' ').trim();
+    a.title = txt.length > 180 ? txt.slice(0, 177) + '…' : txt;
+  });
+})();
 </script>
 </body>
 </html>
