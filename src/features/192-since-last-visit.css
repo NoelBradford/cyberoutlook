@@ -1,0 +1,5 @@
+.slv { display: grid; gap: 0.25rem; padding: 0.75rem 0.9rem; border-left: 5px solid var(--signal); background: color-mix(in srgb, var(--paper) 8%, transparent); color: var(--paper); font: 400 0.92rem/1.45 var(--font-ui); }
+.slv p { margin: 0; }
+.slv .cv-kicker { color: var(--signal); }
+.slv a { color: var(--signal); }
+.start.slim .start-inner > .slv { display: grid !important; }
