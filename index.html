@@ -399,6 +399,9 @@ main [id] { scroll-margin-top: 1.25rem; }
 
 ::selection { background: color-mix(in srgb, var(--signal) 40%, transparent); color: var(--ink); }
 
+html { scrollbar-color: var(--rule) var(--paper); }
+.toc { scrollbar-width: thin; }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
