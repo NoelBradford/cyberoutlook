@@ -381,6 +381,8 @@ main [id] { scroll-margin-top: 1.25rem; }
 .brand-link { display: block; border-radius: 6px; }
 .brand-link:hover .brand { box-shadow: 0 0 0 3px var(--accent); }
 
+.print-only { display: none; }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -418,6 +420,7 @@ main [id] { scroll-margin-top: 1.25rem; }
   .next-sec { display: none !important; }
   .tools { display: none !important; }
   .screen-only { display: none !important; }
+  .print-only { display: block !important; font-family: var(--font-ui); font-size: 9pt; color: var(--muted); margin-top: 0.8rem; }
 }
 </style>
 </head>
@@ -441,6 +444,7 @@ main [id] { scroll-margin-top: 1.25rem; }
       <div>
         <h1 tabindex="-1" id="title">UK Small Business Cyber Outlook <span class="yr">2027</span></h1>
         <p class="dek">Three themes, the rules that change, and a plan that fits on one sheet of A4. Written for UK firms with five to 50 staff.</p>
+        <p class="print-only">Read online at cyberoutlook.sbcsg.uk</p>
         <svg class="isobars" viewBox="0 -14 520 112" aria-hidden="true" focusable="false">
           <path d="M0 70 C 80 40, 160 85, 250 55 S 420 20, 520 45"/>
           <path d="M0 52 C 90 22, 170 70, 255 38 S 410 6, 520 28"/>
