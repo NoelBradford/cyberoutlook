@@ -1,0 +1,9 @@
+.ai-list { display: grid; gap: 0.6rem; }
+.ai-card { border: 1px solid var(--rule); border-left: 5px solid var(--accent); border-radius: 3px; padding: 0.7rem 0.8rem; display: grid; gap: 0.5rem; }
+.ai-card.risky { border-left-color: var(--signal); background: color-mix(in srgb, var(--signal) 10%, var(--paper)); }
+.ai-top { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 44px; gap: 0.4rem; }
+.ai-top .cv-input { min-height: 40px; padding: 0.35rem 0.5rem; }
+.ai-abil { display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem; font-size: 0.88rem; }
+.ai-warn { font-size: 0.86rem; margin: 0; }
+.ai-sum { font-weight: 600; }
+@media print { .cv-sheet.ai-sheet { display: block !important; font-family: var(--font-ui); } .ai-sheet h2 { font: 700 26pt var(--font-head); text-transform: uppercase; margin: 0 0 4mm; } .ai-sheet table { width: 100%; border-collapse: collapse; font-size: 10pt; } .ai-sheet th, .ai-sheet td { border-bottom: 0.5pt solid #999; padding: 2.5mm 2mm 2.5mm 0; text-align: left; } .ai-sheet td { height: 9mm; } }

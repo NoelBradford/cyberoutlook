@@ -201,3 +201,14 @@ tr.in-plan td:first-child { box-shadow: inset 4px 0 0 var(--accent); padding-lef
 .ff-tile.lv3 .ff-kind, .ff-tile.lv3 .ff-lv { color: var(--signal); }
 @media (max-width: 560px) { .ff-row { grid-template-columns: 1fr 1fr; } .ff-row .cv-input:nth-child(2) { grid-column: 1 / -1; order: 3; } }
 @media print { .cv-sheet.ff-sheet { display: block !important; font-family: var(--font-ui); } .ff-sheet h2 { font: 700 26pt var(--font-head); text-transform: uppercase; margin: 0 0 2mm; } .ff-sheet .ff-tile.lv3 { background: #000 !important; color: #fff !important; } }
+
+/* --- src/features/118-ai-tool-register.css --- */
+.ai-list { display: grid; gap: 0.6rem; }
+.ai-card { border: 1px solid var(--rule); border-left: 5px solid var(--accent); border-radius: 3px; padding: 0.7rem 0.8rem; display: grid; gap: 0.5rem; }
+.ai-card.risky { border-left-color: var(--signal); background: color-mix(in srgb, var(--signal) 10%, var(--paper)); }
+.ai-top { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 44px; gap: 0.4rem; }
+.ai-top .cv-input { min-height: 40px; padding: 0.35rem 0.5rem; }
+.ai-abil { display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem; font-size: 0.88rem; }
+.ai-warn { font-size: 0.86rem; margin: 0; }
+.ai-sum { font-weight: 600; }
+@media print { .cv-sheet.ai-sheet { display: block !important; font-family: var(--font-ui); } .ai-sheet h2 { font: 700 26pt var(--font-head); text-transform: uppercase; margin: 0 0 4mm; } .ai-sheet table { width: 100%; border-collapse: collapse; font-size: 10pt; } .ai-sheet th, .ai-sheet td { border-bottom: 0.5pt solid #999; padding: 2.5mm 2mm 2.5mm 0; text-align: left; } .ai-sheet td { height: 9mm; } }
