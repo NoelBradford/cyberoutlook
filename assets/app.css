@@ -749,3 +749,13 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
   .a4 td { padding-top: 1.6mm !important; padding-bottom: 1.6mm !important; }
   .a4 td { height: 6.4mm !important; }
 }
+
+/* --- src/features/161-toc-progress.css --- */
+.toc a { grid-template-columns: 2.1rem 1fr auto auto !important; align-items: center; column-gap: 0.4rem; }
+.tp-min { font-size: 0.68rem; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.tp-ring { width: 14px; height: 14px; border-radius: 50%; background: conic-gradient(var(--accent) var(--p, 0%), color-mix(in srgb, var(--rule) 80%, transparent) 0); -webkit-mask: radial-gradient(circle, transparent 3.5px, #000 4px); mask: radial-gradient(circle, transparent 3.5px, #000 4px); }
+.toc a.tp-done .tp-ring { background: var(--accent); -webkit-mask: none; mask: none; }
+.toc a.tp-done .tp-min { color: var(--accent); }
+@media (max-width: 1099px) { .tp-min { display: none; } }
+@media (min-width: 1100px) { .layout { grid-template-columns: 264px minmax(0, 1fr) !important; gap: 3.5rem !important; } }
+.tp-min { font-size: 0.64rem; }
