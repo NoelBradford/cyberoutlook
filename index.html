@@ -376,6 +376,8 @@ main [id] { scroll-margin-top: 1.25rem; }
 .tools { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .tool { text-decoration: none; display: inline-flex; align-items: center; }
 
+@media (pointer: coarse) { .tool, .theme-toggle, .toc-toggle { min-height: 44px; } }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
