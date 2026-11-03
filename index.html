@@ -425,6 +425,7 @@ main [id] { scroll-margin-top: 1.25rem; }
     <div class="cover-top">
       <span>The Small Business Cyber Security Guy &middot; SBCSG Enterprises Ltd &middot; Professional edition</span>
       <span class="tools">
+        <button class="tool" type="button" id="copyBtn">Copy link</button>
         <button class="tool" type="button" id="printBtn">Print or save PDF</button>
         <button class="theme-toggle" type="button" id="themeToggle">Dark mode</button>
       </span>
@@ -1361,6 +1362,12 @@ window.cvToast = (function () {
   });
 })();
 document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
+document.getElementById('copyBtn').addEventListener('click', function () {
+  var url = document.querySelector('link[rel="canonical"]').href;
+  function fallback() { window.cvToast && window.cvToast('Copy this address: ' + url); }
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(function () { window.cvToast && window.cvToast('Link copied'); }, fallback);
+  else fallback();
+});
 </script>
 </body>
 </html>
