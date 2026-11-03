@@ -324,6 +324,9 @@ abbr[title] { text-decoration: underline dotted; text-underline-offset: 0.2em; c
 
 @media (pointer: coarse) { .toc a { min-height: 44px; align-items: center; } }
 
+.backrefs { display: inline-flex; gap: 0.35rem; margin-left: 0.2rem; }
+.backrefs a { text-decoration: none; font-weight: 600; word-break: normal; }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -353,6 +356,7 @@ abbr[title] { text-decoration: underline dotted; text-underline-offset: 0.2em; c
   .a4 td { height: 8mm; }
   ol.sources a { text-decoration: underline; }
   .c-track { fill: #e6e6e6; }
+  .backrefs { display: none; }
 }
 </style>
 </head>
@@ -1136,6 +1140,29 @@ abbr[title] { text-decoration: underline dotted; text-underline-offset: 0.2em; c
     t.querySelectorAll('a, .backrefs').forEach(function (n) { n.remove(); });
     var txt = t.textContent.replace(/\s+/g, ' ').trim();
     a.title = txt.length > 180 ? txt.slice(0, 177) + '…' : txt;
+  });
+})();
+(function () {
+  var groups = {};
+  document.querySelectorAll('sup.cite a[href^="#s"]').forEach(function (a) {
+    var id = a.getAttribute('href').slice(1);
+    (groups[id] = groups[id] || []).push(a);
+  });
+  Object.keys(groups).forEach(function (id) {
+    var li = document.getElementById(id);
+    if (!li) return;
+    var span = document.createElement('span');
+    span.className = 'backrefs';
+    groups[id].forEach(function (a, i) {
+      a.id = 'ref-' + id + '-' + (i + 1);
+      var back = document.createElement('a');
+      back.href = '#' + a.id;
+      back.textContent = groups[id].length > 1 ? '↩' + (i + 1) : '↩';
+      back.setAttribute('aria-label', 'Back to citation ' + (i + 1) + ' of ' + groups[id].length);
+      span.appendChild(back);
+    });
+    li.appendChild(document.createTextNode(' '));
+    li.appendChild(span);
   });
 })();
 </script>
