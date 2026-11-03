@@ -975,3 +975,21 @@ figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em;
 .toc a[href="#theme-3"][aria-current] { box-shadow: inset 3px 0 0 var(--t3); color: var(--t3); }
 .plan-theme:nth-of-type(1) { color: var(--t1); }
 @media print { #theme-1, #theme-2, #theme-3 { --tc: var(--accent); } }
+
+/* --- src/features/182-night-chart.css --- */
+/* @msg Night chart dark mode: dark mode gets its own atmosphere, with a deep navy chart-paper grid, glowing accent lines and softer panels */
+/* @sel #theme-1 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body { background-color: var(--paper); background-image: linear-gradient(rgba(98,184,181,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(98,184,181,0.035) 1px, transparent 1px); background-size: 32px 32px; }
+  :root:not([data-theme="light"]) .forecast { text-shadow: 0 0 24px rgba(98,184,181,0.18); }
+  :root:not([data-theme="light"]) .call, :root:not([data-theme="light"]) .example, :root:not([data-theme="light"]) .box, :root:not([data-theme="light"]) .cta-card { background-color: color-mix(in srgb, var(--paper) 88%, #1d2c35); }
+  :root:not([data-theme="light"]) .stat .n, :root:not([data-theme="light"]) .cs b { text-shadow: 0 0 18px rgba(98,184,181,0.35); }
+  :root:not([data-theme="light"]) .cover { background: radial-gradient(1200px 500px at 85% 20%, rgba(98,184,181,0.10), transparent 60%); }
+}
+:root[data-theme="dark"] body { background-color: var(--paper); background-image: linear-gradient(rgba(98,184,181,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(98,184,181,0.035) 1px, transparent 1px); background-size: 32px 32px; }
+:root[data-theme="dark"] .forecast { text-shadow: 0 0 24px rgba(98,184,181,0.18); }
+:root[data-theme="dark"] .call, :root[data-theme="dark"] .example, :root[data-theme="dark"] .box, :root[data-theme="dark"] .cta-card { background-color: color-mix(in srgb, var(--paper) 88%, #1d2c35); }
+:root[data-theme="dark"] .stat .n, :root[data-theme="dark"] .cs b { text-shadow: 0 0 18px rgba(98,184,181,0.35); }
+:root[data-theme="dark"] .cover { background: radial-gradient(1200px 500px at 85% 20%, rgba(98,184,181,0.10), transparent 60%); }
+:root[data-theme="dark"] .cta-card, :root[data-theme="dark"] .nudge { box-shadow: 6px 6px 0 rgba(230,176,67,0.45); }
+@media print { body { background-image: none !important; } }
