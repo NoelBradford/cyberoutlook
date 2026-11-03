@@ -759,3 +759,15 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
 @media (max-width: 1099px) { .tp-min { display: none; } }
 @media (min-width: 1100px) { .layout { grid-template-columns: 264px minmax(0, 1fr) !important; gap: 3.5rem !important; } }
 .tp-min { font-size: 0.64rem; }
+
+/* --- src/features/162-five-tracker.css --- */
+.toc a.ft { display: grid !important; grid-template-columns: 1fr !important; gap: 0.35rem; margin: 1.2rem 0 0.4rem; padding: 0.8rem 0.85rem !important; border: 2px solid var(--ink); border-radius: 3px; color: var(--ink) !important; text-decoration: none; }
+.ft:hover { border-color: var(--accent); }
+.ft-k { font: 600 0.66rem var(--font-ui) !important; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent) !important; }
+.ft-dots { display: flex; gap: 5px; }
+.ft-dots span { flex: 1; height: 8px; border-radius: 2px; background: var(--rule); }
+.ft-dots span.on { background: var(--accent); }
+.ft.all .ft-dots span { background: var(--signal); }
+.ft-l { font: 600 0.82rem var(--font-ui); color: var(--ink) !important; }
+.toc.collapsed .ft { display: none !important; }
+@media print { .ft { display: none !important; } }
