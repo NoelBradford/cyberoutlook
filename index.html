@@ -342,6 +342,11 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
 .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 20; pointer-events: none; }
 .progress span { display: block; height: 100%; background: var(--signal); transform: scaleX(0); transform-origin: 0 50%; }
 
+.to-top { position: fixed; right: 16px; bottom: 16px; z-index: 15; font: 600 0.82rem var(--font-ui); letter-spacing: 0.04em; text-transform: uppercase; color: var(--paper); background: var(--ink); text-decoration: none; padding: 0.6rem 0.85rem; border-radius: 3px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.to-top.show { opacity: 1; pointer-events: auto; }
+.to-top:hover { background: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .to-top { transition: none; } }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -375,10 +380,11 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
   .h-anchor { display: none !important; }
   .toast { display: none !important; }
   .progress { display: none !important; }
+  .to-top { display: none !important; }
 }
 </style>
 </head>
-<body>
+<body id="top">
 <div class="progress" aria-hidden="true"><span></span></div>
 <a class="skip" href="#main">Skip to the report</a>
 <a class="skip" href="#toc-h">Skip to contents</a>
@@ -1127,6 +1133,8 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
 </main>
 </div>
 
+<a class="to-top" href="#top" aria-label="Back to top">↑<span> Top</span></a>
+
 <script>
 (function () {
   var root = document.documentElement;
@@ -1222,6 +1230,13 @@ window.cvToast = (function () {
   window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
   window.addEventListener('resize', update);
   update();
+})();
+(function () {
+  var b = document.querySelector('.to-top');
+  if (!b) return;
+  function vis() { b.classList.toggle('show', window.scrollY > 1200); }
+  window.addEventListener('scroll', vis, { passive: true });
+  vis();
 })();
 </script>
 </body>
