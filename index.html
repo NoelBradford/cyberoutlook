@@ -428,6 +428,9 @@ main [id] { scroll-margin-top: 1.25rem; }
   .a4 ol.q li { border-bottom: 1px dashed #777; }
   .a4 td { border-bottom-color: #777; }
   .flag { border: 0.6pt solid #000; background: none; }
+  .plan-tools { display: none !important; }
+  body.print-plan .cover, body.print-plan .print-toc, body.print-plan .toc, body.print-plan main > section:not(#mvc), body.print-plan #mvc > *:not(.a4-page) { display: none !important; }
+  body.print-plan .a4-page { break-before: auto; }
 }
 </style>
 </head>
@@ -969,6 +972,7 @@ main [id] { scroll-margin-top: 1.25rem; }
     <p>For Mick at the garage, question one takes a minute: the job card system, the parts supplier's ordering site, and the card machine. Question three is where it gets useful. Can he run on paper job cards and phone orders for a week? He probably can, if he prints the week's bookings every Friday. That one habit is his business continuity plan.</p>
   </div>
 
+  <p class="plan-tools"><button type="button" class="tool" id="printPlan">Print just this plan</button></p>
   <div class="a4-page">
     <div class="a4" role="region" aria-labelledby="h-a4">
       <div class="a4-head">
@@ -1388,6 +1392,11 @@ document.getElementById('copyBtn').addEventListener('click', function () {
   if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(function () { window.cvToast && window.cvToast('Link copied'); }, fallback);
   else fallback();
 });
+document.getElementById('printPlan').addEventListener('click', function () {
+  document.body.classList.add('print-plan');
+  window.print();
+});
+window.addEventListener('afterprint', function () { document.body.classList.remove('print-plan'); });
 </script>
 </body>
 </html>
