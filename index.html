@@ -389,6 +389,14 @@ main [id] { scroll-margin-top: 1.25rem; }
 .plan-tools { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
 .plan-note { font-family: var(--font-ui); font-size: 0.82rem; color: var(--muted); }
 
+.table-wrap {
+  background:
+    linear-gradient(to right, var(--paper) 30%, transparent) left / 40px 100% no-repeat local,
+    linear-gradient(to left, var(--paper) 30%, transparent) right / 40px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(0,0,0,0.18), transparent) left / 14px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.18), transparent) right / 14px 100% no-repeat scroll;
+}
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -438,6 +446,7 @@ main [id] { scroll-margin-top: 1.25rem; }
   body.print-plan .cover, body.print-plan .print-toc, body.print-plan .toc, body.print-plan main > section:not(#mvc), body.print-plan #mvc > *:not(.a4-page) { display: none !important; }
   body.print-plan .a4-page { break-before: auto; }
   .a4 td.fill { background: none; }
+  .table-wrap { background: none; }
 }
 </style>
 </head>
