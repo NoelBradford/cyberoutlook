@@ -1,0 +1,48 @@
+/* Built by tools/build.py. Edit src/, not this file. */
+/* --- src/core.css --- */
+/* Shared styles for the interactive layer. Uses the report's own tokens. */
+.cv-offscreen { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.cv-dialog { width: min(640px, calc(100vw - 32px)); max-height: calc(100vh - 48px); padding: 0; border: 2px solid var(--ink); border-radius: 3px; background: var(--paper); color: var(--ink); box-shadow: 0 24px 60px rgba(0,0,0,0.35); overflow: auto; }
+.cv-dialog.wide { width: min(920px, calc(100vw - 32px)); }
+.cv-dialog::backdrop { background: rgba(14, 22, 27, 0.6); }
+.cv-dialog-head { position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.25rem 0.8rem; background: var(--paper); border-bottom: 2px solid var(--ink); }
+.cv-dialog-head h2 { font-family: var(--font-head); font-size: 1.7rem; text-transform: uppercase; letter-spacing: 0.01em; margin: 0; }
+.cv-x { font: 400 1.8rem/1 var(--font-ui); background: none; border: 0; color: var(--ink); cursor: pointer; width: 44px; height: 44px; border-radius: 2px; }
+.cv-x:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+.cv-dialog-body { padding: 1.1rem 1.25rem 1.3rem; font-family: var(--font-ui); font-size: 0.95rem; line-height: 1.5; display: grid; gap: 1rem; }
+.cv-dialog-body p { margin: 0; }
+.cv-dialog-note { margin: 0; padding: 0.7rem 1.25rem 1rem; font: 400 0.78rem/1.45 var(--font-ui); color: var(--muted); border-top: 1px solid var(--rule); }
+html.cv-modal-open { overflow: hidden; }
+.cv-field { display: grid; gap: 0.3rem; }
+.cv-field label { font: 600 0.75rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.cv-field input, .cv-field textarea, .cv-field select, .cv-input { font: 400 1rem var(--font-ui); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 2px; padding: 0.55rem 0.65rem; min-height: 44px; width: 100%; }
+.cv-field textarea { min-height: 7rem; resize: vertical; line-height: 1.45; }
+.cv-field input:focus, .cv-field textarea:focus, .cv-field select:focus, .cv-input:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+.cv-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.cv-grid2 { display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.tool.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tool.primary:hover { background: var(--accent); border-color: var(--accent); }
+.cv-kicker { font: 600 0.72rem var(--font-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0; }
+.cv-pre { font: 400 0.88rem/1.5 ui-monospace, "SFMono-Regular", Menlo, monospace; white-space: pre-wrap; background: color-mix(in srgb, var(--accent) 6%, var(--paper)); border: 1px solid var(--rule); padding: 0.8rem 0.9rem; border-radius: 2px; max-height: 40vh; overflow: auto; margin: 0; }
+@media print { .cv-dialog, .cv-noprint { display: none !important; } }
+
+/* --- src/features/107-start-here.css --- */
+.start { background: var(--ink); color: var(--paper); padding: 2.2rem max(16px, 4vw) 2.4rem; }
+.start-inner { max-width: 1240px; margin: 0 auto; display: grid; gap: 1.3rem; }
+.start-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.6rem 1.5rem; }
+.start h2 { font-family: var(--font-head); font-size: clamp(2rem, 5vw, 3rem); text-transform: uppercase; color: var(--paper); margin: 0; }
+.start-count { font: 600 0.95rem var(--font-ui); color: var(--signal); margin: 0; font-variant-numeric: tabular-nums; }
+.start-count b { font: 700 1.5rem var(--font-head); color: var(--paper); margin-right: 0.25rem; }
+.paths { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.path { display: grid; gap: 0.35rem; align-content: start; height: 100%; padding: 1.1rem 1.15rem 1.2rem; border: 1px solid color-mix(in srgb, var(--paper) 25%, transparent); border-radius: 3px; color: var(--paper); text-decoration: none; position: relative; transition: background 0.15s, border-color 0.15s, transform 0.15s; }
+.path:hover, .path:focus-visible { background: color-mix(in srgb, var(--paper) 8%, transparent); border-color: var(--signal); }
+.path::after { content: "\2192"; position: absolute; right: 1rem; top: 1rem; font: 600 1.2rem var(--font-ui); color: var(--signal); }
+.path .p-time { font: 600 0.72rem var(--font-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal); }
+.path b { font: 700 1.7rem/1.05 var(--font-head); text-transform: uppercase; padding-right: 1.5rem; }
+.path .p-sub { font: 400 0.92rem/1.45 var(--font-ui); color: color-mix(in srgb, var(--paper) 78%, transparent); }
+.path.primary { background: var(--signal); border-color: var(--signal); color: var(--ink); }
+.path.primary .p-time, .path.primary::after { color: var(--ink); }
+.path.primary .p-sub { color: color-mix(in srgb, var(--ink) 80%, transparent); }
+.path.primary:hover, .path.primary:focus-visible { background: color-mix(in srgb, var(--signal) 85%, var(--paper)); }
+@media (prefers-reduced-motion: no-preference) { .path:hover { transform: translateY(-2px); } }
+@media print { .start { display: none !important; } }

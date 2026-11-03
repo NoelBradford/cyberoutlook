@@ -1,0 +1,19 @@
+.start { background: var(--ink); color: var(--paper); padding: 2.2rem max(16px, 4vw) 2.4rem; }
+.start-inner { max-width: 1240px; margin: 0 auto; display: grid; gap: 1.3rem; }
+.start-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.6rem 1.5rem; }
+.start h2 { font-family: var(--font-head); font-size: clamp(2rem, 5vw, 3rem); text-transform: uppercase; color: var(--paper); margin: 0; }
+.start-count { font: 600 0.95rem var(--font-ui); color: var(--signal); margin: 0; font-variant-numeric: tabular-nums; }
+.start-count b { font: 700 1.5rem var(--font-head); color: var(--paper); margin-right: 0.25rem; }
+.paths { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.path { display: grid; gap: 0.35rem; align-content: start; height: 100%; padding: 1.1rem 1.15rem 1.2rem; border: 1px solid color-mix(in srgb, var(--paper) 25%, transparent); border-radius: 3px; color: var(--paper); text-decoration: none; position: relative; transition: background 0.15s, border-color 0.15s, transform 0.15s; }
+.path:hover, .path:focus-visible { background: color-mix(in srgb, var(--paper) 8%, transparent); border-color: var(--signal); }
+.path::after { content: "\2192"; position: absolute; right: 1rem; top: 1rem; font: 600 1.2rem var(--font-ui); color: var(--signal); }
+.path .p-time { font: 600 0.72rem var(--font-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal); }
+.path b { font: 700 1.7rem/1.05 var(--font-head); text-transform: uppercase; padding-right: 1.5rem; }
+.path .p-sub { font: 400 0.92rem/1.45 var(--font-ui); color: color-mix(in srgb, var(--paper) 78%, transparent); }
+.path.primary { background: var(--signal); border-color: var(--signal); color: var(--ink); }
+.path.primary .p-time, .path.primary::after { color: var(--ink); }
+.path.primary .p-sub { color: color-mix(in srgb, var(--ink) 80%, transparent); }
+.path.primary:hover, .path.primary:focus-visible { background: color-mix(in srgb, var(--signal) 85%, var(--paper)); }
+@media (prefers-reduced-motion: no-preference) { .path:hover { transform: translateY(-2px); } }
+@media print { .start { display: none !important; } }
