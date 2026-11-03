@@ -1,0 +1,7 @@
+body.short-v .sv-x, body.short-v section.sv-hide-all > *:not(h2):not(.sec-num):not(.next-sec) { display: none !important; }
+body.short-v section.sv-hide-all { padding-top: 1.6rem; }
+body.short-v section.sv-hide-all > h2 { opacity: 0.55; font-size: clamp(1.5rem, 3vw, 2rem); }
+.sv-banner { max-width: 1240px; margin: 1rem auto 0; padding: 0.7rem 0.9rem; display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; justify-content: space-between; background: color-mix(in srgb, var(--signal) 18%, var(--paper)); border-left: 6px solid var(--signal); font: 400 0.92rem var(--font-ui); }
+.layout + .sv-banner, .sv-banner { margin-left: max(16px, 4vw); margin-right: max(16px, 4vw); }
+.sv-banner p { margin: 0; }
+@media print { body.short-v .sv-x { display: revert !important; } .sv-banner { display: none; } }
