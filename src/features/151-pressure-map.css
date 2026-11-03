@@ -1,0 +1,4 @@
+.isobars.pm-replaced { display: none; }
+canvas.pm { display: block; width: 100%; max-width: 640px; height: 150px; margin-top: 1.6rem; }
+@media (max-width: 520px) { canvas.pm { height: 110px; } }
+@media print { canvas.pm { display: none; } }
