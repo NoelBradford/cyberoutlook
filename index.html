@@ -422,6 +422,8 @@ main [id] { scroll-margin-top: 1.25rem; }
   .screen-only { display: none !important; }
   .print-only { display: block !important; font-family: var(--font-ui); font-size: 9pt; color: var(--muted); margin-top: 0.8rem; }
   @page { @bottom-right { content: counter(page); font-family: "IBM Plex Sans", sans-serif; font-size: 8pt; color: #4a5960; } }
+  @page { @bottom-left { content: "UK Small Business Cyber Outlook 2027 \00b7  cyberoutlook.sbcsg.uk"; font-family: "IBM Plex Sans", sans-serif; font-size: 8pt; color: #4a5960; } }
+  @page :first { @bottom-left { content: none; } @bottom-right { content: none; } }
 }
 </style>
 </head>
