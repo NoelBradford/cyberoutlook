@@ -226,3 +226,24 @@ tr.in-plan td:first-child { box-shadow: inset 4px 0 0 var(--accent); padding-lef
   .wc-who { font-weight: 600; }
   .wc-foot { margin: 0; font-size: 6pt; font-weight: 600; color: #8a5f00; }
 }
+
+/* --- src/features/120-waffle-43.css --- */
+figure.wf { max-width: 760px; margin: 2rem 0 2.4rem; padding: 1.2rem; border: 2px solid var(--ink); border-radius: 3px; display: grid; gap: 1rem; }
+.wf-top { display: grid; gap: 0.6rem; }
+.wf-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem; }
+.wf-tab { display: grid; gap: 0.15rem; text-align: left; padding: 0.55rem 0.65rem; border: 1px solid var(--rule); border-radius: 2px; background: transparent; color: var(--ink); cursor: pointer; font: 400 0.75rem/1.25 var(--font-ui); }
+.wf-tab b { font: 700 1.25rem var(--font-head); }
+.wf-tab[aria-checked="true"] { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.wf-body { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 1.4rem; align-items: center; }
+.wf-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; aspect-ratio: 1; max-width: 100%; }
+.wf-grid span { border-radius: 2px; background: color-mix(in srgb, var(--rule) 70%, var(--paper)); transition: background 0.35s; }
+.wf-grid span.on.all { background: var(--muted); }
+.wf-grid span.on.crime { background: var(--accent); }
+.wf-grid span.on.nophish { background: var(--signal); }
+.wf-big { font: 400 1.05rem/1.35 var(--font-ui); margin: 0; }
+.wf-big b { display: block; font: 700 clamp(3rem, 8vw, 4.6rem)/0.95 var(--font-head); color: var(--accent); }
+.wf-note { font-size: 0.95rem; color: var(--muted); margin: 0.5rem 0 0; }
+.wf figcaption { margin: 0; }
+@media (max-width: 600px) { .wf-body { grid-template-columns: 1fr; } .wf-grid { max-width: 260px; } .wf-tabs { grid-template-columns: 1fr; } .wf-tab { grid-template-columns: auto 1fr; gap: 0.6rem; align-items: baseline; } }
+@media (prefers-reduced-motion: reduce) { .wf-grid span { transition: none; } }
+@media print { .wf-tabs { display: none; } figure.wf { break-inside: avoid; } }
