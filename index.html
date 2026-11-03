@@ -333,8 +333,9 @@ abbr[title] { text-decoration: underline dotted; text-underline-offset: 0.2em; c
 
 @media (pointer: coarse) { .toc a { min-height: 44px; align-items: center; } }
 
-.backrefs { display: inline-flex; gap: 0.35rem; margin-left: 0.2rem; }
-.backrefs a { text-decoration: none; font-weight: 600; word-break: normal; }
+.backrefs { display: inline-flex; flex-wrap: wrap; gap: 0.3rem; margin-left: 0.2rem; vertical-align: middle; }
+.backrefs a { text-decoration: none; font-weight: 600; word-break: normal; display: inline-flex; align-items: center; justify-content: center; min-width: 28px; min-height: 28px; padding: 0 0.3rem; border: 1px solid var(--rule); border-radius: 2px; line-height: 1; }
+.backrefs a:hover { border-color: var(--accent); }
 
 ol.sources li:target { background: #f6ecd5; background: color-mix(in srgb, var(--signal) 18%, var(--paper)); outline: 6px solid #f6ecd5; outline-color: color-mix(in srgb, var(--signal) 18%, var(--paper)); border-radius: 2px; }
 
