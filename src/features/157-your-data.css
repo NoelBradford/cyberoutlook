@@ -1,0 +1,6 @@
+.md-t { font-size: 0.88rem; }
+.md-t td:last-child { color: var(--muted); white-space: nowrap; }
+.md-confirm { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; padding: 0.8rem 0.9rem; border: 2px solid var(--signal); border-radius: 3px; background: color-mix(in srgb, var(--signal) 12%, var(--paper)); }
+.md-confirm[hidden] { display: none; }
+.md-confirm p { flex: 1 1 260px; margin: 0; }
+.tool.md-danger { background: #9b2c1d; border-color: #9b2c1d; color: #fff; }

@@ -710,3 +710,11 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
 .tm-n:empty, .tm-n.zero { display: none; }
 .tm-n { font: 700 0.72rem var(--font-ui); background: var(--signal); color: var(--ink); border-radius: 999px; padding: 0.05rem 0.45rem; }
 @media (max-width: 560px) { .tm { left: 0; right: auto; } }
+
+/* --- src/features/157-your-data.css --- */
+.md-t { font-size: 0.88rem; }
+.md-t td:last-child { color: var(--muted); white-space: nowrap; }
+.md-confirm { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; padding: 0.8rem 0.9rem; border: 2px solid var(--signal); border-radius: 3px; background: color-mix(in srgb, var(--signal) 12%, var(--paper)); }
+.md-confirm[hidden] { display: none; }
+.md-confirm p { flex: 1 1 260px; margin: 0; }
+.tool.md-danger { background: #9b2c1d; border-color: #9b2c1d; color: #fff; }
