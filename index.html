@@ -335,6 +335,10 @@ sup.cite a:target { background: color-mix(in srgb, var(--signal) 30%, transparen
 h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
 @media (hover: none) { .h-anchor { opacity: 0.45; } }
 
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px); opacity: 0; visibility: hidden; background: var(--ink); color: var(--paper); font: 500 0.88rem var(--font-ui); padding: 0.6rem 1rem; border-radius: 3px; z-index: 30; transition: transform 0.2s, opacity 0.2s, visibility 0.2s; max-width: calc(100vw - 32px); }
+.toast.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
+@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -366,6 +370,7 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
   .c-track { fill: #e6e6e6; }
   .backrefs { display: none; }
   .h-anchor { display: none !important; }
+  .toast { display: none !important; }
 }
 </style>
 </head>
@@ -1184,6 +1189,13 @@ h2:hover .h-anchor, h3:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
     a.setAttribute('aria-label', 'Link to this section: ' + h.textContent.trim());
     h.appendChild(a);
   });
+})();
+window.cvToast = (function () {
+  var el = document.createElement('div');
+  el.className = 'toast'; el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite');
+  document.body.appendChild(el);
+  var t;
+  return function (msg) { el.textContent = msg; el.classList.add('show'); clearTimeout(t); t = setTimeout(function () { el.classList.remove('show'); }, 2400); };
 })();
 </script>
 </body>
