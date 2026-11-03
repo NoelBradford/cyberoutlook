@@ -402,6 +402,8 @@ main [id] { scroll-margin-top: 1.25rem; }
 html { scrollbar-color: var(--rule) var(--paper); }
 .toc { scrollbar-width: thin; }
 
+@media (hover: hover) { tbody tr:hover td { background: color-mix(in srgb, var(--accent) 6%, transparent); } }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
