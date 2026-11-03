@@ -2678,7 +2678,7 @@ CV.ready(function () {
 // @msg Cover numbers strip: the three figures that frame the whole report sit right under the title, each linking to where it's explained
 // @sel .cover
 CV.ready(function () {
-  var dek = CV.$('.cover .dek'); if (!dek) return;
+  var dek = CV.$('.cover .dek'); if (!dek || CV.$('.cover .cs')) return; // the strip is static HTML now
   var F = [
     ['1 in 5', 'UK businesses were victims of a cyber crime', '#h-43'],
     ['1 in 33', 'once you take phishing out', '#h-43'],
@@ -3044,3 +3044,11 @@ CV.ready(function () {
   // Keep the floating back-to-top link inside a landmark.
   var top = CV.$('.to-top'); if (top && !top.closest('nav, main, header, footer')) { var nav = CV.h('nav', { 'aria-label': 'Back to top', class: 'top-nav' }); top.parentNode.insertBefore(nav, top); nav.appendChild(top); }
 });
+
+/* --- src/features/197-no-shift.js --- */
+// Mark the page ready once every feature has started, so the toolbar can drop its reserved height.
+(function () {
+  var done = function () { document.documentElement.classList.add('cv-ready'); };
+  document.addEventListener('cv:ready', done);
+  setTimeout(done, 6000); // never hold the toolbar for longer than this
+})();

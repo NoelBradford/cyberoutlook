@@ -1128,3 +1128,11 @@ html.simple canvas.pm { display: none !important; }
 /* Reserve the toolbar's final height so buttons arriving after load don't push the cover down. */
 .cover .tools { min-height: 36px; }
 @media (max-width: 560px) { .cover .tools { min-height: 84px; align-content: flex-start; } }
+
+/* --- src/features/197-no-shift.css --- */
+/* While tools load, the toolbar keeps its final size and clips any temporary buttons. */
+html:not(.cv-ready) .cover .tools { height: 36px; overflow: hidden; }
+@media (max-width: 560px) { html:not(.cv-ready) .cover .tools { height: 84px; } .cover .tools { min-height: 84px; } }
+@media print { html:not(.cv-ready) .cover .tools { height: auto; } }
+/* The toolbar always sits on its own row, so it never changes rows as tools arrive. */
+.cover-top .tools { flex-basis: 100%; }

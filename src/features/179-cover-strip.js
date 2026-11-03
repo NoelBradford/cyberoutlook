@@ -1,7 +1,7 @@
 // @msg Cover numbers strip: the three figures that frame the whole report sit right under the title, each linking to where it's explained
 // @sel .cover
 CV.ready(function () {
-  var dek = CV.$('.cover .dek'); if (!dek) return;
+  var dek = CV.$('.cover .dek'); if (!dek || CV.$('.cover .cs')) return; // the strip is static HTML now
   var F = [
     ['1 in 5', 'UK businesses were victims of a cyber crime', '#h-43'],
     ['1 in 33', 'once you take phishing out', '#h-43'],
