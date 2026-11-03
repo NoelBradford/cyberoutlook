@@ -315,6 +315,11 @@ abbr[title] { text-decoration: underline dotted; text-underline-offset: 0.2em; c
   .isobars { display: none; }
 }
 
+@media (prefers-contrast: more) {
+  :root { --muted: #3b474e; --rule: #8a9897; }
+  :root[data-theme="dark"] { --muted: #c3cfd2; --rule: #5b6d74; }
+}
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
