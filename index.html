@@ -397,6 +397,8 @@ main [id] { scroll-margin-top: 1.25rem; }
     radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.18), transparent) right / 14px 100% no-repeat scroll;
 }
 
+::selection { background: color-mix(in srgb, var(--signal) 40%, transparent); color: var(--ink); }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
