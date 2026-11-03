@@ -1,0 +1,21 @@
+.poster { font-family: var(--font-ui); color: #15222b; background: #fff; border: 3px solid #15222b; padding: 1.4rem 1.4rem 1.1rem; display: grid; gap: 0.7rem; }
+.poster h2 { font: 700 3rem/0.9 var(--font-head); text-transform: uppercase; margin: 0; color: #15222b; }
+.poster h2 span { color: #c68a0c; display: block; }
+.pst-firm { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em; text-transform: uppercase; color: #0d5b60; margin: 0; }
+.pst-rule { font: 600 1.15rem/1.35 var(--font-body); margin: 0; }
+.poster ol { margin: 0; padding-left: 1.3rem; display: grid; gap: 0.35rem; font-size: 0.95rem; }
+.pst-who { margin: 0; padding: 0.6rem 0.8rem; background: #f6ecd5; font-size: 0.95rem; }
+.pst-src { margin: 0; font-size: 0.7rem; color: #4a5960; }
+.pst-preview { max-height: 46vh; overflow: auto; }
+.cv-sheet { display: none; }
+@media print {
+  body.print-sheet > *:not(.cv-sheet) { display: none !important; }
+  body.print-sheet .cv-sheet { display: grid !important; }
+  .cv-sheet.poster { border-width: 4pt; padding: 18mm 16mm; min-height: 250mm; align-content: start; gap: 9mm; }
+  .cv-sheet.poster h2 { font-size: 72pt; }
+  .cv-sheet .pst-firm { font-size: 12pt; }
+  .cv-sheet .pst-rule { font-size: 22pt; }
+  .cv-sheet.poster ol { font-size: 15pt; gap: 4mm; }
+  .cv-sheet .pst-who { font-size: 15pt; padding: 5mm 6mm; }
+  .cv-sheet .pst-src { font-size: 9pt; margin-top: auto; }
+}
