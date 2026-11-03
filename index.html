@@ -240,7 +240,7 @@ td:first-child { font-weight: 500; }
 /* Stats */
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 0; margin: 1.6rem 0 2rem; border-top: 1px solid var(--ink); }
 .stat { padding: 1rem 1rem 1.1rem 0; border-bottom: 1px solid var(--rule); }
-.stat .n { font-family: var(--font-head); font-weight: 700; font-size: 2.9rem; line-height: 1; font-variant-numeric: tabular-nums; color: var(--accent); }
+.stat .n { font-family: var(--font-head); font-weight: 700; font-size: clamp(2.3rem, 5vw, 3.1rem); line-height: 1; font-variant-numeric: tabular-nums; color: var(--accent); }
 .stat .l { font-family: var(--font-ui); font-size: 0.88rem; line-height: 1.4; margin-top: 0.4rem; }
 .stat .s { font-family: var(--font-ui); font-size: 0.74rem; color: var(--muted); margin-top: 0.35rem; }
 .stat.warn .n { color: var(--ink); text-decoration: line-through; text-decoration-color: var(--signal); text-decoration-thickness: 4px; }
