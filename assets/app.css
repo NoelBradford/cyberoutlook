@@ -1021,3 +1021,11 @@ figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em;
 .ep-chip:hover { border-color: var(--signal); }
 .ep-chip-k { background: var(--signal); color: var(--ink); border-radius: 999px; padding: 0.05rem 0.45rem; }
 @media (max-width: 1100px) { .ep-chip { display: none; } }
+
+/* --- src/features/186-paragraph-links.css --- */
+.mg-host { position: relative; }
+.pl-btn { position: absolute; left: -2.1rem; width: 1.7rem; height: 1.7rem; margin-top: 0.15rem; border: 0; border-radius: 2px; background: none; color: var(--muted); font: 600 1rem var(--font-body); cursor: pointer; opacity: 0; transition: opacity 0.15s; }
+.pl-btn:has(+ .pl-p:hover), .pl-btn:hover, .pl-btn:focus-visible { opacity: 1; }
+.pl-btn:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+@media (hover: none), (max-width: 760px) { .pl-btn { display: none; } }
+@media print { .pl-btn { display: none !important; } }
