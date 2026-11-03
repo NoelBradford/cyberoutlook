@@ -1,0 +1,5 @@
+.stat .n { font-variant-numeric: tabular-nums; }
+.stat .n.cu-done { animation: cu-pop 0.5s ease-out; }
+@keyframes cu-pop { 0% { color: var(--signal); } 100% { color: var(--accent); } }
+.stat { transition: background 0.2s; }
+@media (hover: hover) { .stat:hover { background: color-mix(in srgb, var(--accent) 5%, transparent); } }
