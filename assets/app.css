@@ -111,3 +111,20 @@ tr.in-plan td:first-child { box-shadow: inset 4px 0 0 var(--accent); padding-lef
 /* --- src/features/111-check-to-plan.css --- */
 .qz-plan { display: flex; flex-wrap: wrap; gap: 0.8rem 1.2rem; align-items: center; justify-content: space-between; padding: 0.9rem 1rem; border: 2px solid var(--ink); border-radius: 3px; }
 .qz-plan p { margin: 0; }
+
+/* --- src/features/112-plan-export.css --- */
+.plan-export { padding-top: 0.8rem; border-top: 2px solid var(--ink); }
+.plan-export .cv-kicker { margin-right: 0.4rem; }
+.plan-print { display: none; }
+@media print {
+  body.print-myplan > *:not(.plan-print) { display: none !important; }
+  body.print-myplan .plan-print { display: block !important; font-family: var(--font-ui); }
+  .pp-head { border-bottom: 2px solid #000; margin-bottom: 6mm; padding-bottom: 3mm; }
+  .pp-head h2 { font: 700 26pt var(--font-head); text-transform: uppercase; margin: 0; }
+  .pp-head p { font-size: 9pt; color: #4a5960; margin: 1mm 0 0; }
+  .plan-print table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+  .plan-print th { text-align: left; border-bottom: 1.5pt solid #000; padding: 2mm 2mm 2mm 0; }
+  .plan-print td { border-bottom: 0.5pt solid #999; padding: 3mm 2mm 3mm 0; vertical-align: top; }
+  .plan-print td:first-child { font-size: 14pt; width: 8mm; }
+  .plan-print tr { break-inside: avoid; }
+}
