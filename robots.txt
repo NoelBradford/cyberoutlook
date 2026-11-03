@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cyberoutlook.sbcsg.uk/sitemap.xml

@@ -1,0 +1,21 @@
+{
+  "name": "UK Small Business Cyber Outlook 2027",
+  "short_name": "Cyber Outlook",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#f3f6f5",
+  "theme_color": "#0d5b60",
+  "lang": "en-GB",
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
