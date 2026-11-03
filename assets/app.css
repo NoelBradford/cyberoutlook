@@ -587,3 +587,17 @@ figure.bt-fig { max-width: 100%; margin: 1.6rem 0 2rem; display: grid; gap: 0.7r
 /* --- src/features/145-certificate.css --- */
 .cert-btn { grid-column: 1 / -1; justify-self: start; }
 .cert-btn[hidden] { display: none; }
+
+/* --- src/features/146-spend-builder.css --- */
+.sp-tier ul { list-style: none; padding-left: 0 !important; }
+.sp-li { display: grid; grid-template-columns: 1.8rem 1fr; gap: 0.2rem; align-items: start; }
+.sp-cb { width: 1.2rem; height: 1.2rem; margin: 0.2rem 0 0; accent-color: var(--accent); cursor: pointer; }
+.sp-li label { cursor: pointer; }
+.sp-li.on label { font-weight: 600; }
+.sp-sum { display: grid; gap: 0.5rem; max-width: 760px; margin: -0.6rem 0 2rem; padding: 1rem 1.1rem; border: 2px solid var(--ink); border-radius: 3px; font-family: var(--font-ui); font-size: 0.95rem; }
+.sp-sum p { margin: 0; }
+.sp-bars { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: var(--rule); }
+.sp-bars span { flex-basis: 0; }
+.sp-b0 { background: var(--accent); } .sp-b1 { background: var(--signal); } .sp-b2 { background: var(--ink); }
+.sp-tip { font-size: 0.85rem; color: var(--muted); border-left: 3px solid var(--signal); padding-left: 0.6rem; }
+@media print { .sp-sum { display: none; } }
