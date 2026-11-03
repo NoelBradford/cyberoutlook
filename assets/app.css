@@ -953,3 +953,25 @@ figure.pq blockquote { margin: 0; }
 figure.pq blockquote p { margin: 0; font: 700 clamp(2rem, 5vw, 3.2rem)/1 var(--font-head); text-transform: uppercase; max-width: 18ch; text-wrap: balance; }
 figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0; }
 @media print { figure.pq { break-inside: avoid; } figure.pq blockquote p { font-size: 22pt; } }
+
+/* --- src/features/181-theme-colours.css --- */
+/* @msg Colour-coded themes: suppliers in teal, AI in violet, crime in red-amber, carried through the openers, contents and tools so you always know which theme you're in */
+/* @sel #theme-2 */
+:root { --t1: #0d5b60; --t2: #5b4a9e; --t3: #a3451f; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --t1: #62b8b5; --t2: #a99bf0; --t3: #f08a5d; } }
+:root[data-theme="dark"] { --t1: #62b8b5; --t2: #a99bf0; --t3: #f08a5d; }
+#theme-1 { --tc: var(--t1); } #theme-2 { --tc: var(--t2); } #theme-3 { --tc: var(--t3); }
+#theme-1 .sec-num, #theme-2 .sec-num, #theme-3 .sec-num { color: var(--tc); }
+#theme-1.opener::before, #theme-2.opener::before, #theme-3.opener::before { background: var(--tc); }
+#theme-1 .op-num, #theme-2 .op-num, #theme-3 .op-num { -webkit-text-stroke-color: color-mix(in srgb, var(--tc) 45%, transparent); }
+#theme-1 .forecast, #theme-2 .forecast, #theme-3 .forecast { border-left-color: var(--tc); }
+#theme-1 .example, #theme-2 .example, #theme-3 .example { background: color-mix(in srgb, var(--tc) 7%, var(--paper)); }
+#theme-1 .example .kicker, #theme-2 .example .kicker, #theme-3 .example .kicker { color: var(--tc); }
+.toc a[href="#theme-1"] span:first-child { color: var(--t1); }
+.toc a[href="#theme-2"] span:first-child { color: var(--t2); }
+.toc a[href="#theme-3"] span:first-child { color: var(--t3); }
+.toc a[href="#theme-1"][aria-current] { box-shadow: inset 3px 0 0 var(--t1); color: var(--t1); }
+.toc a[href="#theme-2"][aria-current] { box-shadow: inset 3px 0 0 var(--t2); color: var(--t2); }
+.toc a[href="#theme-3"][aria-current] { box-shadow: inset 3px 0 0 var(--t3); color: var(--t3); }
+.plan-theme:nth-of-type(1) { color: var(--t1); }
+@media print { #theme-1, #theme-2, #theme-3 { --tc: var(--accent); } }
