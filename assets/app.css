@@ -583,3 +583,7 @@ figure.bt-fig { max-width: 100%; margin: 1.6rem 0 2rem; display: grid; gap: 0.7r
 .ph-l { font: 600 0.68rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
 .ph-tile b { font: 700 2rem/1 var(--font-head); font-variant-numeric: tabular-nums; }
 .ph-s { font-size: 0.76rem; color: var(--muted); }
+
+/* --- src/features/145-certificate.css --- */
+.cert-btn { grid-column: 1 / -1; justify-self: start; }
+.cert-btn[hidden] { display: none; }
