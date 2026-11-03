@@ -1,0 +1,9 @@
+svg.chart rect.c-bar, svg.chart rect.c-bar2 { transform-box: fill-box; transform-origin: 0 50%; transition: opacity 0.15s; }
+svg.chart rect.hot { opacity: 0.75; }
+svg.chart.ch-wait rect.c-bar, svg.chart.ch-wait rect.c-bar2 { transform: scaleX(0.02); }
+svg.chart.ch-grow rect.c-bar, svg.chart.ch-grow rect.c-bar2 { animation: ch-grow 0.9s cubic-bezier(.2,.7,.2,1) both; }
+svg.chart.ch-grow rect:nth-of-type(2n) { animation-delay: 0.08s; }
+@keyframes ch-grow { from { transform: scaleX(0.02); } to { transform: scaleX(1); } }
+.ch-tip { position: fixed; z-index: 42; pointer-events: none; background: var(--ink); color: var(--paper); font: 600 0.8rem var(--font-ui); padding: 0.35rem 0.55rem; border-radius: 2px; white-space: nowrap; }
+.ch-tip[hidden] { display: none; }
+@media print { svg.chart rect { transform: none !important; animation: none !important; } .ch-tip { display: none !important; } }
