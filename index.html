@@ -1286,6 +1286,17 @@ window.cvToast = (function () {
     order.forEach(function (a, i) { a.classList.toggle('passed', idx > -1 && i < idx); });
   });
 })();
+(function () {
+  var toc = document.querySelector('.toc');
+  if (!toc) return;
+  document.addEventListener('cv:section', function () {
+    if (getComputedStyle(toc).position !== 'sticky') return;
+    var a = toc.querySelector('a[aria-current]');
+    if (!a) return;
+    var r = a.getBoundingClientRect(), t = toc.getBoundingClientRect();
+    if (r.top < t.top + 40 || r.bottom > t.bottom - 40) toc.scrollTop += r.top - t.top - t.height / 2;
+  });
+})();
 </script>
 </body>
 </html>
