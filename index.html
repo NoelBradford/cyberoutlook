@@ -421,6 +421,8 @@ html { scrollbar-color: var(--rule) var(--paper); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .portrait img, :root:not([data-theme="light"]) .bio img { filter: brightness(0.92); } }
 :root[data-theme="dark"] .portrait img, :root[data-theme="dark"] .bio img { filter: brightness(0.92); }
 
+.prose a[href^="http"]:not(.h-anchor)::after { content: "\2197" / ""; font-size: 0.75em; margin-left: 0.1em; text-decoration: none; display: inline-block; }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -471,6 +473,7 @@ html { scrollbar-color: var(--rule) var(--paper); }
   body.print-plan .a4-page { break-before: auto; }
   .a4 td.fill { background: none; }
   .table-wrap { background: none; }
+  .prose a[href^="http"]::after { content: none; }
 }
 </style>
 </head>
