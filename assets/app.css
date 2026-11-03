@@ -1136,3 +1136,10 @@ html:not(.cv-ready) .cover .tools { height: 36px; overflow: hidden; }
 @media print { html:not(.cv-ready) .cover .tools { height: auto; } }
 /* The toolbar always sits on its own row, so it never changes rows as tools arrive. */
 .cover-top .tools { flex-basis: 100%; }
+
+/* --- src/features/201-whats-new.css --- */
+.wn2 { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--rule); }
+.wn2 li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--rule); }
+.wn2 li > div { display: grid; gap: 0.15rem; flex: 1 1 280px; }
+.wn2 b { font: 700 1.2rem var(--font-head); text-transform: uppercase; }
+.wn2 span { font-size: 0.88rem; color: var(--muted); }
