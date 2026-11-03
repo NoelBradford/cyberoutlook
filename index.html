@@ -1097,7 +1097,7 @@ ol.sources a { word-break: break-all; }
   }
   function label() {
     var d = isDark();
-    btn.textContent = d ? 'Light mode' : 'Dark mode';
+    btn.innerHTML = d ? '<span aria-hidden="true">☀</span> Light mode' : '<span aria-hidden="true">☾</span> Dark mode';
     btn.setAttribute('aria-pressed', d ? 'true' : 'false');
   }
   btn.addEventListener('click', function () {
