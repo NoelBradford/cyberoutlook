@@ -1099,6 +1099,7 @@ ol.sources a { word-break: break-all; }
     var d = isDark();
     btn.innerHTML = d ? '<span aria-hidden="true">☀</span> Light mode' : '<span aria-hidden="true">☾</span> Dark mode';
     btn.setAttribute('aria-pressed', d ? 'true' : 'false');
+    if (root.getAttribute('data-theme')) document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute('content', d ? '#0e161b' : '#f3f6f5'); });
   }
   btn.addEventListener('click', function () {
     root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
