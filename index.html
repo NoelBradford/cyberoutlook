@@ -1101,6 +1101,7 @@ ol.sources a { word-break: break-all; }
   }
   btn.addEventListener('click', function () {
     root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
+    try { localStorage.setItem('theme', root.getAttribute('data-theme')); } catch (e) {}
     label();
   });
   if (mq && mq.addEventListener) mq.addEventListener('change', function () { if (!root.getAttribute('data-theme')) label(); });
