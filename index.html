@@ -386,6 +386,9 @@ main [id] { scroll-margin-top: 1.25rem; }
 .a4 td.fill { background: color-mix(in srgb, var(--accent) 5%, var(--paper)); cursor: text; }
 .a4 td.fill:focus { outline: 2px solid var(--accent); outline-offset: -2px; }
 
+.plan-tools { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
+.plan-note { font-family: var(--font-ui); font-size: 0.82rem; color: var(--muted); }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -1412,6 +1415,26 @@ window.addEventListener('afterprint', function () { document.body.classList.remo
       td.classList.add('fill');
     });
   });
+})();
+(function () {
+  var cells = document.querySelectorAll('.a4 td.fill');
+  var KEY = 'cv-plan-contacts';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+  cells.forEach(function (td, i) {
+    if (saved[i]) td.textContent = saved[i];
+    td.addEventListener('input', function () {
+      saved[i] = td.textContent;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+    });
+  });
+  var tools = document.querySelector('.plan-tools');
+  if (tools && cells.length) {
+    var note = document.createElement('span');
+    note.className = 'plan-note';
+    note.textContent = 'Type names and numbers into the table below. They stay in this browser only.';
+    tools.appendChild(note);
+  }
 })();
 </script>
 </body>
