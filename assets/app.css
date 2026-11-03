@@ -894,3 +894,8 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
   .a4-ans { height: auto !important; field-sizing: content; overflow: visible; }
   .a4 ol.q li:has(.a4-ans:not(:placeholder-shown)) { padding-bottom: 1.5mm !important; }
 }
+
+/* --- src/features/175-supplier-email.css --- */
+.se { display: grid; gap: 0.6rem; padding-top: 1rem; border-top: 2px solid var(--ink); }
+.se .cta-sub { margin: 0; }
+.se-list { display: grid; gap: 0.4rem; }

@@ -1,0 +1,3 @@
+.se { display: grid; gap: 0.6rem; padding-top: 1rem; border-top: 2px solid var(--ink); }
+.se .cta-sub { margin: 0; }
+.se-list { display: grid; gap: 0.4rem; }
