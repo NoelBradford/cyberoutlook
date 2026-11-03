@@ -1059,3 +1059,12 @@ figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em;
 .rn-t td span { color: var(--muted); }
 .rn-t tr.gap td { color: var(--signal); font-weight: 600; }
 @media print { .cv-sheet.rn-sheet { display: block !important; font-family: var(--font-ui); } .rn-sheet table { width: 100%; border-collapse: collapse; font-size: 11pt; } .rn-sheet th, .rn-sheet td { text-align: left; padding: 3mm 2mm 3mm 0; border-bottom: 0.5pt solid #999; vertical-align: top; } }
+
+/* --- src/features/191-toolkit-print.css --- */
+.tk-pack { display: none; }
+@media print {
+  .cv-sheet.tk-pack { display: block !important; }
+  .tk-pack > .tk-page { break-after: page; }
+  .tk-pack > .tk-page:last-child { break-after: auto; }
+  .tk-pack > .plan-print { display: block !important; font-family: var(--font-ui); }
+}

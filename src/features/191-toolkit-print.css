@@ -1,0 +1,7 @@
+.tk-pack { display: none; }
+@media print {
+  .cv-sheet.tk-pack { display: block !important; }
+  .tk-pack > .tk-page { break-after: page; }
+  .tk-pack > .tk-page:last-child { break-after: auto; }
+  .tk-pack > .plan-print { display: block !important; font-family: var(--font-ui); }
+}
