@@ -484,3 +484,22 @@ body.focus-mode { background: var(--paper); }
   table.actions tr.in-plan td:first-child { box-shadow: none; padding-left: 0 !important; }
   table.actions .plan-add { margin-top: 0.6rem; min-height: 40px; }
 }
+
+/* --- src/features/139-bill-timeline.css --- */
+figure.bt-fig { max-width: 100%; margin: 1.6rem 0 2rem; display: grid; gap: 0.7rem; }
+.bt-scroll { overflow-x: auto; padding-bottom: 0.4rem; }
+.bt { list-style: none !important; margin: 0 !important; padding: 0 !important; display: grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); min-width: 860px; position: relative; font-family: var(--font-ui); }
+.bt::before { content: ""; position: absolute; left: 0; right: 0; top: 9px; height: 3px; background: var(--rule); }
+.bt li { position: relative; display: grid; gap: 0.2rem; align-content: start; padding: 1.7rem 0.8rem 0 0; margin: 0 !important; font-size: 0.85rem; line-height: 1.3; }
+.bt-dot { position: absolute; top: 0; left: 0; width: 21px; height: 21px; border-radius: 50%; background: var(--paper); border: 3px solid var(--rule); }
+.bt-done .bt-dot { background: var(--accent); border-color: var(--accent); }
+.bt-done::after { content: ""; position: absolute; left: 0; right: 0; top: 9px; height: 3px; background: var(--accent); }
+.bt-now .bt-dot { background: var(--signal); border-color: var(--signal); box-shadow: 0 0 0 6px color-mix(in srgb, var(--signal) 25%, transparent); }
+.bt li > * { position: relative; z-index: 1; }
+.bt-d { font: 600 0.7rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.bt-now .bt-d { color: var(--signal); }
+.bt b { font-weight: 600; }
+.bt-n { font-size: 0.78rem; color: var(--muted); }
+.bt-later b { color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { .bt-now .bt-dot { animation: bt-pulse 2s ease-out infinite; } @keyframes bt-pulse { 50% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--signal) 10%, transparent); } } }
+@media print { .bt { min-width: 0; grid-template-columns: repeat(7, 1fr); font-size: 7pt; } figure.bt-fig { break-inside: avoid; } }
