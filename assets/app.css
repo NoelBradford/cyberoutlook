@@ -1053,3 +1053,9 @@ figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em;
 .hr-recs li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.4rem 1rem; padding: 0.5rem 0.7rem; border-left: 4px solid var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--paper)); }
 .hr-recs li.open { border-left-color: var(--signal); background: color-mix(in srgb, var(--signal) 10%, var(--paper)); }
 .hr-recs span { font-size: 0.82rem; color: var(--muted); }
+
+/* --- src/features/190-renewal-pack.css --- */
+.rn-t th { width: 34%; font-weight: 600; text-transform: none; letter-spacing: 0; font-size: 0.88rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.rn-t td span { color: var(--muted); }
+.rn-t tr.gap td { color: var(--signal); font-weight: 600; }
+@media print { .cv-sheet.rn-sheet { display: block !important; font-family: var(--font-ui); } .rn-sheet table { width: 100%; border-collapse: collapse; font-size: 11pt; } .rn-sheet th, .rn-sheet td { text-align: left; padding: 3mm 2mm 3mm 0; border-bottom: 0.5pt solid #999; vertical-align: top; } }

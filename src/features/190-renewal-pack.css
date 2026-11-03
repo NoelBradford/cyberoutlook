@@ -1,0 +1,4 @@
+.rn-t th { width: 34%; font-weight: 600; text-transform: none; letter-spacing: 0; font-size: 0.88rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.rn-t td span { color: var(--muted); }
+.rn-t tr.gap td { color: var(--signal); font-weight: 600; }
+@media print { .cv-sheet.rn-sheet { display: block !important; font-family: var(--font-ui); } .rn-sheet table { width: 100%; border-collapse: collapse; font-size: 11pt; } .rn-sheet th, .rn-sheet td { text-align: left; padding: 3mm 2mm 3mm 0; border-bottom: 0.5pt solid #999; vertical-align: top; } }
