@@ -1,0 +1,18 @@
+.print-qr, .plan-qr { display: none; }
+@media print {
+  .print-only.print-qr { display: grid !important; grid-template-columns: 22mm 1fr; gap: 5mm; align-items: center; margin-top: 6mm; max-width: 110mm; }
+  .print-only.plan-qr { display: grid !important; grid-template-columns: 11mm auto; gap: 2mm; align-items: center; margin: 0; }
+  .print-qr svg.qr, .plan-qr svg.qr { width: 100%; height: auto; display: block; }
+  .print-qr svg.qr path, .plan-qr svg.qr path { fill: #000; }
+  .print-qr p, .plan-qr p { margin: 0; font: 400 9pt/1.35 var(--font-ui); color: #15222b; }
+  .plan-qr p { font-size: 6.5pt; max-width: 18mm; }
+  /* keep the cover on one page now it carries a QR code */
+  .cover-side .brand, .cover-meta .brand { width: 34mm !important; height: auto !important; }
+  .cover .cover-grid { margin-top: 8mm; gap: 8mm; }
+  .cover h1 { font-size: 40pt; }
+  /* keep the one-page plan on one page */
+  .a4 ol.q li { padding-bottom: 3mm !important; }
+  .a4 { padding: 6mm !important; }
+  .a4 td { padding-top: 1.6mm !important; padding-bottom: 1.6mm !important; }
+  .a4 td { height: 6.4mm !important; }
+}
