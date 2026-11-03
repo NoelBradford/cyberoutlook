@@ -325,3 +325,10 @@ p.listen-src { position: absolute; left: -9999px; width: 1px; height: 1px; overf
 @media (hover: hover) { .stat .sc-btn { opacity: 0; transition: opacity 0.15s; } .stat:hover .sc-btn, .stat .sc-btn:focus-visible { opacity: 1; } }
 .sc-img { width: 100%; max-width: 420px; height: auto; border-radius: 3px; justify-self: center; border: 1px solid var(--rule); }
 @media print { .sc-btn { display: none; } }
+
+/* --- src/features/127-share-hub.css --- */
+.sh-tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.sh-tab { font: 600 0.8rem var(--font-ui); padding: 0.45rem 0.8rem; border: 1px solid var(--rule); background: transparent; color: var(--ink); border-radius: 999px; cursor: pointer; min-height: 36px; }
+.sh-tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.sh-text { min-height: 12rem; font: 400 0.92rem/1.5 var(--font-ui); resize: vertical; }
+.sh-quick { padding-bottom: 0.4rem; }

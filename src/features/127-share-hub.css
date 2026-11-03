@@ -1,0 +1,5 @@
+.sh-tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.sh-tab { font: 600 0.8rem var(--font-ui); padding: 0.45rem 0.8rem; border: 1px solid var(--rule); background: transparent; color: var(--ink); border-radius: 999px; cursor: pointer; min-height: 36px; }
+.sh-tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.sh-text { min-height: 12rem; font: 400 0.92rem/1.5 var(--font-ui); resize: vertical; }
+.sh-quick { padding-bottom: 0.4rem; }
