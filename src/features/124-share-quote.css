@@ -1,0 +1,6 @@
+.sq { position: fixed; z-index: 45; display: flex; gap: 2px; background: var(--ink); border-radius: 3px; padding: 3px; box-shadow: 0 10px 26px rgba(0,0,0,0.3); }
+.sq[hidden] { display: none; }
+.sq-b { font: 600 0.78rem var(--font-ui); color: var(--paper); background: transparent; border: 0; padding: 0.5rem 0.7rem; border-radius: 2px; cursor: pointer; min-height: 36px; }
+.sq-b:hover, .sq-b:focus-visible { background: color-mix(in srgb, var(--paper) 15%, transparent); }
+.sq-b:first-child { color: var(--signal); }
+@media print { .sq { display: none !important; } }
