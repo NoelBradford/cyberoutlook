@@ -1,0 +1,22 @@
+.plan-add { display: inline-flex; align-items: center; margin-top: 0.45rem; font: 600 0.74rem var(--font-ui); letter-spacing: 0.04em; color: var(--accent); background: transparent; border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); border-radius: 2px; padding: 0.3rem 0.55rem; min-height: 32px; cursor: pointer; }
+.plan-add:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.plan-add[aria-pressed="true"] { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+tr.in-plan td:first-child { box-shadow: inset 4px 0 0 var(--accent); padding-left: 0.6rem; }
+.plan-tool { gap: 0.4rem; }
+.plan-count { display: inline-grid; place-items: center; min-width: 1.45rem; height: 1.45rem; padding: 0 0.3rem; border-radius: 999px; background: var(--signal); color: var(--ink); font: 700 0.75rem var(--font-ui); }
+.plan-empty { display: grid; gap: 0.9rem; }
+.plan-sum { display: grid; gap: 0.4rem; }
+.plan-sum p { font-size: 0.95rem; }
+.plan-bar { height: 8px; background: var(--rule); border-radius: 4px; overflow: hidden; }
+.plan-bar span { display: block; height: 100%; background: var(--accent); }
+.plan-theme { font: 700 1.25rem var(--font-head); text-transform: uppercase; margin: 0.3rem 0 0; color: var(--accent); }
+.plan-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+.plan-item { display: grid; grid-template-columns: 2rem minmax(0, 1fr) 44px; gap: 0.5rem; align-items: start; padding: 0.75rem 0; border-bottom: 1px solid var(--rule); }
+.plan-item input[type="checkbox"] { width: 1.3rem; height: 1.3rem; margin: 0.15rem 0 0; accent-color: var(--accent); }
+.plan-item label { font: 500 0.98rem/1.4 var(--font-ui); cursor: pointer; }
+.plan-item.done label { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--accent); }
+.plan-main { display: grid; gap: 0.35rem; min-width: 0; }
+.plan-meta { font-size: 0.8rem; color: var(--muted); }
+.plan-rm { width: 44px; height: 36px; font: 400 1.4rem/1 var(--font-ui); color: var(--muted); background: none; border: 1px solid transparent; border-radius: 2px; cursor: pointer; }
+.plan-rm:hover { border-color: var(--rule); color: var(--ink); }
+@media print { .plan-add { display: none !important; } tr.in-plan td:first-child { box-shadow: none; padding-left: 0; } }
