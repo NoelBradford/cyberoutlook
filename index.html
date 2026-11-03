@@ -132,8 +132,8 @@ body {
   font-optical-sizing: auto;
   overflow-wrap: break-word;
 }
-a { color: var(--accent); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
-a:hover { text-decoration-thickness: 2px; }
+a { color: var(--accent); text-underline-offset: 0.18em; text-decoration-thickness: 1px; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
+a:hover { text-decoration-thickness: 2px; text-decoration-color: currentColor; }
 :focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; border-radius: 2px; }
 h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.08; text-wrap: balance; margin: 0; font-weight: 700; letter-spacing: 0.005em; }
 p, li { text-wrap: pretty; }
