@@ -1,0 +1,1 @@
+@media print { .sec-num { break-after: avoid; page-break-after: avoid; } .section > h2 { break-before: avoid; } }

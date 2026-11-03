@@ -1,0 +1,12 @@
+.ab-chip { display: none; }
+@media (max-width: 900px) {
+  .ab { flex-wrap: wrap; gap: 0; }
+  .ab-chip { display: flex; align-items: center; gap: 0.5rem; width: calc(100% + 16px); margin: 0 -8px; padding: 0.4rem max(12px, env(safe-area-inset-left, 0px)); border: 0; border-bottom: 1px solid var(--rule); background: color-mix(in srgb, var(--accent) 8%, var(--paper)); color: var(--ink); font: 600 0.8rem var(--font-ui); text-align: left; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ab-chip[hidden] { display: none; }
+  .ab-chip-n { flex: 0 0 auto; display: inline-grid; place-items: center; min-width: 1.6rem; height: 1.3rem; border-radius: 2px; background: var(--accent); color: var(--paper); font: 700 0.85rem var(--font-head); }
+  .ab-chip-c { margin-left: auto; color: var(--muted); }
+  body.ab-on { padding-bottom: 96px; }
+  body.ab-on .to-top { bottom: 108px; }
+  body.ab-on .toast { bottom: 112px; }
+  .nudge { bottom: 112px !important; }
+}

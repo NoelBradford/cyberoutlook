@@ -1,0 +1,8 @@
+mark.cv-hl { background: color-mix(in srgb, var(--signal) 38%, transparent); color: inherit; border-radius: 2px; padding: 0 1px; cursor: pointer; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+mark.cv-hl.has-note { border-bottom: 2px solid var(--signal); }
+.sq-b.sq-hl { color: var(--paper); background: color-mix(in srgb, var(--signal) 35%, transparent); }
+.nt-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+.nt-list li { display: grid; gap: 0.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule); }
+.nt-list blockquote { margin: 0; padding: 0.5rem 0.8rem; border-left: 4px solid var(--signal); font: 400 1rem/1.5 var(--font-body); background: color-mix(in srgb, var(--signal) 10%, var(--paper)); }
+.nt-note { min-height: 3.2rem !important; font-size: 0.9rem; resize: vertical; }
+@media print { mark.cv-hl { background: #fde9b0 !important; } }

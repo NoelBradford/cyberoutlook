@@ -1,0 +1,6 @@
+/* While tools load, the toolbar keeps its final size and clips any temporary buttons. */
+html:not(.cv-ready) .cover .tools { height: 36px; overflow: hidden; }
+@media (max-width: 560px) { html:not(.cv-ready) .cover .tools { height: 84px; } .cover .tools { min-height: 84px; } }
+@media print { html:not(.cv-ready) .cover .tools { height: auto; } }
+/* The toolbar always sits on its own row, so it never changes rows as tools arrive. */
+.cover-top .tools { flex-basis: 100%; }

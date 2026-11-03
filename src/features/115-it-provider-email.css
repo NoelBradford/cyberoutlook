@@ -1,0 +1,7 @@
+.cta-card { display: flex; flex-wrap: wrap; gap: 0.9rem 1.4rem; align-items: center; justify-content: space-between; margin: 1.4rem 0 1.6rem; padding: 1rem 1.15rem; border: 2px solid var(--ink); border-radius: 3px; background: var(--paper); font-family: var(--font-ui); max-width: 65ch; box-shadow: 6px 6px 0 color-mix(in srgb, var(--signal) 70%, transparent); }
+.cta-card > div { display: grid; gap: 0.25rem; min-width: 0; flex: 1 1 260px; }
+.cta-card p { margin: 0 !important; }
+.cta-title { font: 700 1.45rem/1.1 var(--font-head); text-transform: uppercase; }
+.cta-sub { font-size: 0.88rem; color: var(--muted); }
+.qz-opt-inline { display: grid; grid-template-columns: 1.6rem 1fr; align-items: start; gap: 0.3rem; }
+.qz-opt-inline input { width: 1.2rem; height: 1.2rem; margin: 0.15rem 0 0; accent-color: var(--accent); }

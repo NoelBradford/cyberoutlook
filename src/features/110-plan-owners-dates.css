@@ -1,0 +1,4 @@
+.plan-assign { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 11rem); gap: 0.5rem; margin-top: 0.2rem; }
+.plan-assign .cv-input { min-height: 40px; padding: 0.4rem 0.55rem; font-size: 0.9rem; }
+.plan-actions { padding: 0.2rem 0; }
+@media (max-width: 520px) { .plan-assign { grid-template-columns: 1fr; } }

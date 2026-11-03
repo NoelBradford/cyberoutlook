@@ -1,0 +1,7 @@
+@media print {
+  body.print-pack .print-toc, body.print-pack .toc, body.print-pack .start { display: none !important; }
+  body.print-pack main > section:not(#summary):not(#mvc) { display: none !important; }
+  body.print-pack #mvc > *:not(.sec-num):not(h2):not(.a4-page) { display: none !important; }
+  body.print-pack #summary { break-before: page; }
+  body.print-pack .cover { break-after: auto; }
+}

@@ -1,0 +1,16 @@
+.ce-list { margin: 0; padding-left: 1.4rem; display: grid; gap: 0.7rem; }
+.ce-list li { padding: 0.5rem 0 0.7rem; border-bottom: 1px solid var(--rule); display: grid; gap: 0.4rem; }
+.ce-list li.no::marker { color: var(--signal); }
+.ce-list li.yes::marker { color: var(--accent); }
+.ce-list p { margin: 0; }
+.ce-opt { font: 600 0.66rem var(--font-ui); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.ce-opts { display: flex; gap: 0.4rem; }
+.ce-o { position: relative; }
+.ce-o input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.ce-o label { display: inline-block; padding: 0.4rem 1rem; border: 2px solid var(--rule); border-radius: 999px; font: 600 0.85rem var(--font-ui); cursor: pointer; min-height: 38px; }
+.ce-o input:checked + label { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.ce-o input:focus-visible + label { outline: 3px solid var(--signal); outline-offset: 2px; }
+.ce-fix { font-size: 0.86rem; border-left: 3px solid var(--signal); padding-left: 0.6rem; }
+.ce-res { padding: 0.8rem 0.9rem; border-radius: 3px; }
+.ce-res.ok { background: color-mix(in srgb, var(--accent) 12%, var(--paper)); border-left: 6px solid var(--accent); }
+.ce-res.fix { background: color-mix(in srgb, var(--signal) 14%, var(--paper)); border-left: 6px solid var(--signal); }

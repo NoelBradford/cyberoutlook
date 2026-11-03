@@ -1,0 +1,11 @@
+.ph-next { display: flex; flex-wrap: wrap; gap: 0.8rem 1.2rem; align-items: center; justify-content: space-between; padding: 1rem 1.1rem; background: var(--ink); color: var(--paper); border-radius: 3px; }
+.ph-next p { margin: 0; }
+.ph-next .cv-kicker { color: var(--signal); }
+.ph-nt { font: 700 1.5rem/1.1 var(--font-head); text-transform: uppercase; }
+.ph-next .tool.primary { background: var(--signal); color: var(--ink); border-color: var(--signal); }
+.ph-grid { display: grid; gap: 0.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr)); }
+.ph-tile { display: grid; gap: 0.15rem; text-align: left; padding: 0.8rem 0.85rem; border: 1px solid var(--rule); border-radius: 3px; background: var(--paper); color: var(--ink); cursor: pointer; font-family: var(--font-ui); }
+.ph-tile:hover, .ph-tile:focus-visible { border-color: var(--accent); }
+.ph-l { font: 600 0.68rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+.ph-tile b { font: 700 2rem/1 var(--font-head); font-variant-numeric: tabular-nums; }
+.ph-s { font-size: 0.76rem; color: var(--muted); }

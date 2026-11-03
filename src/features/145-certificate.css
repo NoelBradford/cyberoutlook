@@ -1,0 +1,2 @@
+.cert-btn { grid-column: 1 / -1; justify-self: start; }
+.cert-btn[hidden] { display: none; }

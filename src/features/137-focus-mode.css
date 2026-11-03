@@ -1,0 +1,8 @@
+body.focus-mode .toc, body.focus-mode .start, body.focus-mode .cover, body.focus-mode .ab, body.focus-mode .to-top, body.focus-mode .cta-card, body.focus-mode .listen, body.focus-mode .next-sec, body.focus-mode .tts-start, body.focus-mode .sc-btn, body.focus-mode .plan-add, body.focus-mode .ep-guide, body.focus-mode .wb, body.focus-mode .what-next { display: none !important; }
+body.focus-mode .layout { display: block; max-width: 760px; }
+body.focus-mode main .section { border-top-color: var(--rule); }
+body.focus-mode { background: var(--paper); }
+.fm-exit { position: fixed; z-index: 26; top: calc(12px + env(safe-area-inset-top, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); font: 600 0.78rem var(--font-ui); padding: 0.5rem 0.8rem; border-radius: 999px; border: 1px solid var(--rule); background: var(--paper); color: var(--muted); cursor: pointer; opacity: 0.6; }
+.fm-exit:hover, .fm-exit:focus-visible { opacity: 1; color: var(--ink); }
+.fm-exit[hidden] { display: none; }
+@media print { .fm-exit { display: none !important; } }

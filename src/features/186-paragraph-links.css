@@ -1,0 +1,6 @@
+.mg-host { position: relative; }
+.pl-btn { position: absolute; left: -2.1rem; width: 1.7rem; height: 1.7rem; margin-top: 0.15rem; border: 0; border-radius: 2px; background: none; color: var(--muted); font: 600 1rem var(--font-body); cursor: pointer; opacity: 0; transition: opacity 0.15s; }
+.pl-btn:has(+ .pl-p:hover), .pl-btn:hover, .pl-btn:focus-visible { opacity: 1; }
+.pl-btn:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+@media (hover: none), (max-width: 760px) { .pl-btn { display: none; } }
+@media print { .pl-btn { display: none !important; } }

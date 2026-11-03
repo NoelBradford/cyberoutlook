@@ -1,0 +1,9 @@
+.nudge { position: fixed; z-index: 24; right: max(16px, env(safe-area-inset-right, 0px)); bottom: 72px; width: min(340px, calc(100vw - 32px)); background: var(--paper); border: 2px solid var(--ink); border-radius: 3px; padding: 0.9rem 1rem 1rem; display: grid; gap: 0.35rem; font-family: var(--font-ui); box-shadow: 8px 8px 0 color-mix(in srgb, var(--signal) 70%, transparent); transform: translateY(20px); opacity: 0; transition: transform 0.25s, opacity 0.25s; }
+.nudge.show { transform: none; opacity: 1; }
+.nudge p { margin: 0; }
+.nudge-t { font: 700 1.4rem/1.05 var(--font-head); text-transform: uppercase; }
+.nudge-s { font-size: 0.88rem; color: var(--muted); }
+.nudge .cv-row { margin-top: 0.4rem; }
+@media (max-width: 900px) { .nudge { bottom: 82px; left: 50%; right: auto; transform: translate(-50%, 20px); } .nudge.show { transform: translate(-50%, 0); } }
+@media (prefers-reduced-motion: reduce) { .nudge { transition: none; } }
+@media print { .nudge { display: none !important; } }
