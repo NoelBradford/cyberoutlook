@@ -1095,3 +1095,28 @@ html.simple canvas.pm { display: none !important; }
 .sm-exit[hidden] { display: none !important; }
 .sm-link { font: 500 0.8rem var(--font-ui); color: color-mix(in srgb, var(--paper) 75%, transparent); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; flex-basis: 100%; text-align: left; }
 .sm-link:hover { color: var(--signal); }
+
+/* --- src/features/195-a11y-audit.css --- */
+/* Band colours that stay dark in both themes, and an amber that is readable as text on the light page. */
+:root { --band: #15222b; --band-ink: #f3f6f5; --band-muted: #c4cfd1; --signal-text: #8a5f00; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --band: #1b2a33; --band-ink: #e2e9e9; --band-muted: #a9b8bc; --signal-text: #e6b043; } }
+:root[data-theme="dark"] { --band: #1b2a33; --band-ink: #e2e9e9; --band-muted: #a9b8bc; --signal-text: #e6b043; }
+.start, .ep-guide, .what-next, .ph-next, .wb-in, .inc-banner { background: var(--band) !important; color: var(--band-ink) !important; }
+.start h2, .what-next h2, .ss, .slv, .rp-q, .rp-opt, .rp-step, .path, .wn-t, .wn-five, .ep-title, .ep-main b, .ph-nt { color: var(--band-ink); }
+.path .p-sub, .wn-s, .wn-lead, .ep-meta { color: var(--band-muted) !important; }
+.rp-opt[aria-checked="true"] { background: var(--band-ink); color: var(--band); border-color: var(--band-ink); }
+.path.primary, .path.primary b, .path.primary .p-time, .path.primary::after, .path.primary .p-sub { color: #15222b !important; }
+.wn-card.primary, .wn-card.primary .wn-t, .wn-card.primary .wn-s, .wn-card.primary .cv-kicker { color: #15222b !important; }
+.wn-card.primary .tool { background: #15222b !important; color: #f3f6f5 !important; border-color: #15222b !important; }
+.ph-next .tool.primary, .ss .tool.primary, .ep-guide .tool.primary, .wb .tool.primary, .aw .tool.primary { color: #15222b !important; }
+.ep-guide .tool:not(.primary), .wn-card .tool:not(.primary), .ss .tool:not(.primary) { color: var(--band-ink) !important; }
+.ep.out .ep-state, .ep-chip-k, .plan-count, .tm-n, .ab-badge { color: #15222b; }
+.aw { color: #15222b; }
+.aw .tool.primary { background: #15222b !important; color: #f3f6f5 !important; }
+/* Amber used as text on the page itself */
+.src-k.k-ours, .rn-t tr.gap td, .fc-b.fc-disagree:not([aria-pressed="true"]), .rs-due.late b { color: var(--signal-text) !important; }
+.src-k.k-ours { border-color: color-mix(in srgb, var(--signal-text) 50%, transparent); }
+.top-nav { display: contents; }
+.start-count b { color: var(--band-ink) !important; }
+.off-note, .sm-link { color: var(--band-muted) !important; }
+.off-note.off { color: #e6b043 !important; }
