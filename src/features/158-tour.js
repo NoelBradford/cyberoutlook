@@ -15,11 +15,11 @@ CV.ready(function () {
   function place() {
     var el = CV.$(STEPS[i][0]); if (!el) return end();
     var r = el.getBoundingClientRect();
-    ring.style.cssText = 'left:' + (r.left - 6) + 'px;top:' + (r.top - 6) + 'px;width:' + (r.width + 12) + 'px;height:' + (r.height + 12) + 'px';
+    ring.style.cssText = 'transform:translate(' + (r.left - 6) + 'px,' + (r.top - 6) + 'px);width:' + (r.width + 12) + 'px;height:' + (r.height + 12) + 'px';
     var w = Math.min(320, window.innerWidth - 32); box.style.width = w + 'px';
     var x = Math.max(16, Math.min(window.innerWidth - w - 16, r.left)); var y = r.bottom + 14;
     if (y + box.offsetHeight > window.innerHeight - 12) y = Math.max(12, r.top - box.offsetHeight - 14);
-    box.style.left = x + 'px'; box.style.top = y + 'px';
+    box.style.transform = 'translate(' + x + 'px,' + y + 'px)';
   }
   function show() {
     var s = STEPS[i], el = CV.$(s[0]);

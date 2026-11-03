@@ -135,9 +135,22 @@ window.CV = (function () {
   function addTool(el, before) { var t = toolbar(); if (!t) return; if (before) t.insertBefore(el, t.firstChild); else t.insertBefore(el, $('#themeToggle', t)); }
 
   // Run feature code after the page is ready, without blocking first paint.
+  // Features start in order, in small slices when the browser is idle, so no single long task blocks taps and scrolling.
+  var queue = [], scheduled = false;
+  var idle = window.requestIdleCallback || function (cb) { return setTimeout(function () { cb({ didTimeout: true, timeRemaining: function () { return 0; } }); }, 1); };
+  function pump(deadline) {
+    scheduled = false;
+    var start = Date.now();
+    while (queue.length && (deadline.timeRemaining() > 3 || (deadline.didTimeout && Date.now() - start < 12))) {
+      var fn = queue.shift();
+      try { fn(); } catch (e) { if (window.console) console.warn('CV feature failed', e); }
+    }
+    if (queue.length) schedule(); else emit('ready');
+  }
+  function schedule() { if (scheduled) return; scheduled = true; idle(pump, { timeout: 600 }); }
   function ready(fn) {
-    var run = function () { try { fn(); } catch (e) { if (window.console) console.warn('CV feature failed', e); } };
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+    queue.push(fn);
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedule); else schedule();
   }
 
   return { SITE: SITE, TITLE: TITLE, PODCAST: PODCAST, AUTHOR_SITE: AUTHOR_SITE, store: store, h: h, $: $, $$: $$, on: on, emit: emit, toast: toast,

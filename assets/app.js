@@ -137,9 +137,22 @@ window.CV = (function () {
   function addTool(el, before) { var t = toolbar(); if (!t) return; if (before) t.insertBefore(el, t.firstChild); else t.insertBefore(el, $('#themeToggle', t)); }
 
   // Run feature code after the page is ready, without blocking first paint.
+  // Features start in order, in small slices when the browser is idle, so no single long task blocks taps and scrolling.
+  var queue = [], scheduled = false;
+  var idle = window.requestIdleCallback || function (cb) { return setTimeout(function () { cb({ didTimeout: true, timeRemaining: function () { return 0; } }); }, 1); };
+  function pump(deadline) {
+    scheduled = false;
+    var start = Date.now();
+    while (queue.length && (deadline.timeRemaining() > 3 || (deadline.didTimeout && Date.now() - start < 12))) {
+      var fn = queue.shift();
+      try { fn(); } catch (e) { if (window.console) console.warn('CV feature failed', e); }
+    }
+    if (queue.length) schedule(); else emit('ready');
+  }
+  function schedule() { if (scheduled) return; scheduled = true; idle(pump, { timeout: 600 }); }
   function ready(fn) {
-    var run = function () { try { fn(); } catch (e) { if (window.console) console.warn('CV feature failed', e); } };
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+    queue.push(fn);
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedule); else schedule();
   }
 
   return { SITE: SITE, TITLE: TITLE, PODCAST: PODCAST, AUTHOR_SITE: AUTHOR_SITE, store: store, h: h, $: $, $$: $$, on: on, emit: emit, toast: toast,
@@ -2140,11 +2153,11 @@ CV.ready(function () {
   function place() {
     var el = CV.$(STEPS[i][0]); if (!el) return end();
     var r = el.getBoundingClientRect();
-    ring.style.cssText = 'left:' + (r.left - 6) + 'px;top:' + (r.top - 6) + 'px;width:' + (r.width + 12) + 'px;height:' + (r.height + 12) + 'px';
+    ring.style.cssText = 'transform:translate(' + (r.left - 6) + 'px,' + (r.top - 6) + 'px);width:' + (r.width + 12) + 'px;height:' + (r.height + 12) + 'px';
     var w = Math.min(320, window.innerWidth - 32); box.style.width = w + 'px';
     var x = Math.max(16, Math.min(window.innerWidth - w - 16, r.left)); var y = r.bottom + 14;
     if (y + box.offsetHeight > window.innerHeight - 12) y = Math.max(12, r.top - box.offsetHeight - 14);
-    box.style.left = x + 'px'; box.style.top = y + 'px';
+    box.style.transform = 'translate(' + x + 'px,' + y + 'px)';
   }
   function show() {
     var s = STEPS[i], el = CV.$(s[0]);
