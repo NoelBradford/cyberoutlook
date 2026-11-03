@@ -899,3 +899,14 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
 .se { display: grid; gap: 0.6rem; padding-top: 1rem; border-top: 2px solid var(--ink); }
 .se .cta-sub { margin: 0; }
 .se-list { display: grid; gap: 0.4rem; }
+
+/* --- src/features/176-briefing.css --- */
+.br-list { margin: 0; padding-left: 1.4rem; display: grid; gap: 0.7rem; }
+.br-list li { display: grid; gap: 0.15rem; }
+.br-list li::marker { font: 700 1.1rem var(--font-head); color: var(--accent); }
+.br-list b { font: 700 1.15rem var(--font-head); text-transform: uppercase; }
+@media print {
+  .cv-sheet.br-sheet { display: block !important; font-family: var(--font-ui); }
+  .br-sheet ol { font-size: 13pt; line-height: 1.45; display: grid; gap: 5mm; padding-left: 7mm; }
+  .br-sign { margin-top: 14mm; font-size: 10pt; }
+}
