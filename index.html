@@ -449,6 +449,20 @@ html { scrollbar-color: var(--rule) var(--paper); }
 
 .prose h3.label { font-family: var(--font-ui); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); margin: 1.8rem 0 0.5rem; text-rendering: auto; }
 
+.five-note { font-family: var(--font-ui); font-size: 0.82rem; color: var(--muted); margin: -0.3rem 0 0.8rem !important; }
+ol.five.is-checklist { list-style: none; padding-left: 0; margin-bottom: 0.9rem; border-top: 1px solid var(--rule); }
+ol.five.is-checklist li { display: grid; grid-template-columns: 2.2rem 1fr; align-items: start; margin: 0; padding: 0.7rem 0; border-bottom: 1px solid var(--rule); }
+ol.five.is-checklist input { width: 1.35rem; height: 1.35rem; margin: 0.15rem 0 0; accent-color: var(--accent); cursor: pointer; }
+ol.five.is-checklist label { cursor: pointer; }
+ol.five.is-checklist li.done label { color: var(--muted); }
+.five-foot { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem 1rem; align-items: center; font-family: var(--font-ui); margin: 0 0 1.4rem; }
+.five-bar { grid-column: 1 / -1; height: 6px; background: var(--rule); border-radius: 3px; overflow: hidden; }
+.five-bar span { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.25s; }
+ol.five.all-done ~ .five-foot .five-bar span { background: var(--signal); }
+.five-status { margin: 0 !important; font-size: 0.88rem; font-weight: 600; }
+@media (prefers-reduced-motion: reduce) { .five-bar span { transition: none; } }
+@media (pointer: coarse) { ol.five.is-checklist input { width: 1.6rem; height: 1.6rem; } }
+
 /* Print */
 @media print {
   :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
@@ -503,6 +517,8 @@ html { scrollbar-color: var(--rule) var(--paper); }
   caption { break-after: avoid; }
   .table-wrap { break-before: auto; }
   thead { display: table-header-group; }
+  .five-note, .five-foot { display: none !important; }
+  ol.five.is-checklist li { break-inside: avoid; }
 }
 </style>
 </head>
@@ -673,7 +689,7 @@ html { scrollbar-color: var(--rule) var(--paper); }
     <h3 id="h-the-rules-change">The rules change</h3>
     <p>Cyber Essentials now fails any applicant without multi-factor authentication on cloud services where it's available.<sup class="cite"><a href="#s19" aria-label="Source 19">[19]</a></sup> The Cyber Security and Resilience Bill will bring medium and large IT providers into regulation, with 24-hour incident reporting.<sup class="cite"><a href="#s15" aria-label="Source 15">[15]</a></sup> On 26 October 2026 the government lost two votes on it in the House of Lords.<sup class="cite"><a href="#s17" aria-label="Source 17">[17]</a></sup> Lords Third Reading was set for 2 November, the day this report was published, so its outcome isn't covered here.<sup class="cite"><a href="#s14" aria-label="Source 14">[14]</a></sup> Expect both to turn up in your customers' supplier questionnaires during 2027.</p>
     <h3 id="h-if-you-do-five-things-before-january">If you do five things before January</h3>
-    <ol>
+    <ol class="five" id="five">
       <li>Switch on multi-factor authentication for every cloud service, starting with email.</li>
       <li>Agree a call-back rule: no change to bank details or urgent payment goes through without a phone call to a number you already hold.</li>
       <li>Send your IT provider the four questions in Theme 1.</li>
@@ -1515,6 +1531,63 @@ window.addEventListener('afterprint', function () { document.body.classList.remo
     window.cvToast && window.cvToast('Contacts cleared');
   });
   tools.insertBefore(b, tools.querySelector('.plan-note'));
+})();
+(function () {
+  var list = document.getElementById('five');
+  if (!list) return;
+  var KEY = 'cv-five-things';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+  var items = list.querySelectorAll('li');
+  var status = document.createElement('p');
+  status.className = 'five-status';
+  status.setAttribute('aria-live', 'polite');
+  var bar = document.createElement('div');
+  bar.className = 'five-bar'; bar.setAttribute('aria-hidden', 'true');
+  bar.appendChild(document.createElement('span'));
+  var reset = document.createElement('button');
+  reset.type = 'button'; reset.className = 'tool five-reset'; reset.textContent = 'Untick all';
+  function update() {
+    var done = list.querySelectorAll('input:checked').length;
+    status.textContent = done === items.length ? 'All ' + items.length + ' done.'
+      : done + ' of ' + items.length + ' done';
+    bar.firstChild.style.width = (done / items.length * 100) + '%';
+    reset.hidden = done === 0;
+    list.classList.toggle('all-done', done === items.length);
+  }
+  items.forEach(function (li, i) {
+    var id = 'five-' + (i + 1);
+    var box = document.createElement('input');
+    box.type = 'checkbox'; box.id = id; box.checked = !!saved[i];
+    var label = document.createElement('label');
+    label.htmlFor = id;
+    while (li.firstChild) label.appendChild(li.firstChild);
+    li.appendChild(box); li.appendChild(label);
+    li.classList.toggle('done', box.checked);
+    box.addEventListener('change', function () {
+      li.classList.toggle('done', box.checked);
+      saved[i] = box.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+      update();
+    });
+  });
+  reset.addEventListener('click', function () {
+    list.querySelectorAll('input').forEach(function (b) { b.checked = false; b.parentNode.classList.remove('done'); });
+    saved = {};
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    update();
+    list.querySelector('input').focus();
+  });
+  var foot = document.createElement('div');
+  foot.className = 'five-foot';
+  foot.appendChild(bar); foot.appendChild(status); foot.appendChild(reset);
+  list.parentNode.insertBefore(foot, list.nextSibling);
+  var note = document.createElement('p');
+  note.className = 'five-note';
+  note.textContent = 'Tick them off as you go. Your ticks stay in this browser only.';
+  list.parentNode.insertBefore(note, list);
+  list.classList.add('is-checklist');
+  update();
 })();
 </script>
 </body>
