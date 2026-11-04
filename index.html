@@ -108,6 +108,9 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"></noscript>
 <style>
+@font-face { font-family: "Barlow Fallback"; src: local("Arial"), local("Helvetica"), local("Liberation Sans"), local("Roboto"); size-adjust: 72%; }
+@font-face { font-family: "Barlow Fallback"; font-weight: 700; src: local("Arial Bold"), local("Arial-BoldMT"), local("Helvetica Bold"), local("Liberation Sans Bold"), local("Roboto Bold"); size-adjust: 73%; }
+@font-face { font-family: "Plex Fallback"; src: local("Arial"), local("Helvetica"), local("Liberation Sans"), local("Roboto"); size-adjust: 94%; }
 :root {
   --paper: #f3f6f5;
   --ink: #15222b;
@@ -115,9 +118,9 @@
   --accent: #0d5b60;
   --signal: #c68a0c;
   --rule: #c7d1d0;
-  --font-head: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-head: "Barlow Condensed", "Barlow Fallback", sans-serif;
   --font-body: "Source Serif 4", Georgia, serif;
-  --font-ui: "IBM Plex Sans", "Segoe UI", sans-serif;
+  --font-ui: "IBM Plex Sans", "Plex Fallback", sans-serif;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
