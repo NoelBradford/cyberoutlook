@@ -1161,10 +1161,14 @@ CV.ready(function () {
   var input = CV.h('input', { type: 'search', id: 'sr-q', class: 'cv-input sr-q', placeholder: 'Try "backup", "MFA", "Danzell", "invoice"', autocomplete: 'off', 'aria-controls': 'sr-res' });
   var count = CV.h('p', { class: 'sr-count', 'aria-live': 'polite' });
   var res = CV.h('ol', { class: 'sr-res', id: 'sr-res' });
+  d.body.appendChild(CV.h('label', { for: 'sr-q', class: 'sr-lab' }, 'Search for a word or phrase'));
   d.body.appendChild(input); d.body.appendChild(count); d.body.appendChild(res);
   function snippet(t, q) { var i = t.toLowerCase().indexOf(q), s = Math.max(0, i - 60), e = Math.min(t.length, i + q.length + 90); var pre = (s ? '…' : '') + t.slice(s, i), hit = t.slice(i, i + q.length), post = t.slice(i + q.length, e) + (e < t.length ? '…' : ''); return [pre, CV.h('mark', null, hit), post]; }
   function clearMarks() { CV.$$('.sr-hit').forEach(function (n) { n.classList.remove('sr-hit'); }); }
-  function go(el) { d.close(); clearMarks(); el.classList.add('sr-hit'); el.scrollIntoView({ block: 'center', behavior: CV.reduced() ? 'auto' : 'smooth' }); setTimeout(clearMarks, 4000); }
+  function go(el) { d.close(); clearMarks(); el.classList.add('sr-hit'); el.scrollIntoView({ block: 'center', behavior: CV.reduced() ? 'auto' : 'smooth' });
+    // Move focus to the match so keyboard and screen-reader users land where they see the highlight.
+    if (!el.hasAttribute('tabindex')) { el.setAttribute('tabindex', '-1'); el.addEventListener('blur', function rm() { el.removeAttribute('tabindex'); el.removeEventListener('blur', rm); }); }
+    setTimeout(function () { el.focus({ preventScroll: true }); }, 0); setTimeout(clearMarks, 4000); }
   var t;
   function run() {
     var q = input.value.trim().toLowerCase(); res.innerHTML = '';

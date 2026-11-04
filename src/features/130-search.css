@@ -9,3 +9,6 @@
 .sr-hit { outline: 3px solid var(--signal); outline-offset: 4px; border-radius: 2px; transition: outline-color 0.6s; }
 .search-tool kbd { font: 600 0.7rem var(--font-ui); border: 1px solid var(--rule); border-radius: 2px; padding: 0 0.3rem; margin-left: 0.4rem; color: var(--muted); }
 @media (pointer: coarse) { .search-tool kbd { display: none; } }
+
+.sr-lab { display: block; font-weight: 600; margin: 0 0 0.35rem; }
+.sr-hit:focus { outline: 3px solid var(--signal); outline-offset: 4px; }
