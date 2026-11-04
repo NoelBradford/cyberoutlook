@@ -17,13 +17,4 @@ CV.ready(function () {
   }
   window.addEventListener('hashchange', route);
   route();
-  // Let every tool dialog copy its own link.
-  var MAP = { plan: 'plan', share: 'share', poster: 'poster', itmail: 'itmail', fivefive: 'fivefive', aitools: 'aitools', ce: 'readiness', progress: 'progress', forecasts: 'forecasts', glossary: 'glossary', restore: 'restore', mfa: 'mfa', check: 'check' };
-  Object.keys(MAP).forEach(function (id) {
-    var d = document.getElementById(id); if (!d) return;
-    var head = d.querySelector('.cv-dialog-head'); if (!head) return;
-    var b = CV.h('button', { type: 'button', class: 'dl-link', 'aria-label': 'Copy a link to this tool' }, 'Copy link');
-    b.addEventListener('click', function () { CV.copy(CV.SITE + '#' + MAP[id], 'Link to this tool copied'); });
-    head.insertBefore(b, head.querySelector('.cv-x'));
-  });
 });

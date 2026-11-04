@@ -97,7 +97,8 @@ window.CV = (function () {
     d.addEventListener('close', function () { document.documentElement.classList.remove('cv-modal-open'); if (opts.onclose) opts.onclose(); });
     return {
       dialog: d, body: body,
-      open: function () { if (opts.onopen) opts.onopen(body); if (!d.open) { d.showModal(); document.documentElement.classList.add('cv-modal-open'); } },
+      // Focus starts on the title so screen readers announce what opened; tools that want a field focused do that after open().
+      open: function () { if (opts.onopen) opts.onopen(body); if (!d.open) { d.showModal(); document.documentElement.classList.add('cv-modal-open'); var t = document.getElementById(opts.id + '-title'); if (t) { t.setAttribute('tabindex', '-1'); t.focus(); } } },
       close: function () { d.close(); }
     };
   }
@@ -2433,15 +2434,6 @@ CV.ready(function () {
   }
   window.addEventListener('hashchange', route);
   route();
-  // Let every tool dialog copy its own link.
-  var MAP = { plan: 'plan', share: 'share', poster: 'poster', itmail: 'itmail', fivefive: 'fivefive', aitools: 'aitools', ce: 'readiness', progress: 'progress', forecasts: 'forecasts', glossary: 'glossary', restore: 'restore', mfa: 'mfa', check: 'check' };
-  Object.keys(MAP).forEach(function (id) {
-    var d = document.getElementById(id); if (!d) return;
-    var head = d.querySelector('.cv-dialog-head'); if (!head) return;
-    var b = CV.h('button', { type: 'button', class: 'dl-link', 'aria-label': 'Copy a link to this tool' }, 'Copy link');
-    b.addEventListener('click', function () { CV.copy(CV.SITE + '#' + MAP[id], 'Link to this tool copied'); });
-    head.insertBefore(b, head.querySelector('.cv-x'));
-  });
 });
 
 /* --- src/features/172-arrival-welcome.js --- */

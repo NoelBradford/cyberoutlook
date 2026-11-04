@@ -95,7 +95,8 @@ window.CV = (function () {
     d.addEventListener('close', function () { document.documentElement.classList.remove('cv-modal-open'); if (opts.onclose) opts.onclose(); });
     return {
       dialog: d, body: body,
-      open: function () { if (opts.onopen) opts.onopen(body); if (!d.open) { d.showModal(); document.documentElement.classList.add('cv-modal-open'); } },
+      // Focus starts on the title so screen readers announce what opened; tools that want a field focused do that after open().
+      open: function () { if (opts.onopen) opts.onopen(body); if (!d.open) { d.showModal(); document.documentElement.classList.add('cv-modal-open'); var t = document.getElementById(opts.id + '-title'); if (t) { t.setAttribute('tabindex', '-1'); t.focus(); } } },
       close: function () { d.close(); }
     };
   }
