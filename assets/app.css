@@ -754,14 +754,11 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
 @media print { .ft { display: none !important; } }
 
 /* --- src/features/163-plan-nudge.css --- */
-.nudge { position: fixed; z-index: 24; right: max(16px, env(safe-area-inset-right, 0px)); bottom: 72px; width: min(340px, calc(100vw - 32px)); background: var(--paper); border: 2px solid var(--ink); border-radius: 3px; padding: 0.9rem 1rem 1rem; display: grid; gap: 0.35rem; font-family: var(--font-ui); box-shadow: 8px 8px 0 color-mix(in srgb, var(--signal) 70%, transparent); transform: translateY(20px); opacity: 0; transition: transform 0.25s, opacity 0.25s; }
-.nudge.show { transform: none; opacity: 1; }
-.nudge p { margin: 0; }
-.nudge-t { font: 700 1.4rem/1.05 var(--font-head); text-transform: uppercase; }
-.nudge-s { font-size: 0.88rem; color: var(--muted); }
+.nudge { margin: 1.6rem 0; padding: 1rem 1.15rem; border: 1px solid var(--rule); border-left: 4px solid var(--signal); border-radius: 3px; display: grid; gap: 0.35rem; font-family: var(--font-ui); }
+.nudge p { margin: 0 !important; }
+.nudge-t { font: 700 1.25rem/1.1 var(--font-head); text-transform: uppercase; }
+.nudge-s { font-size: 0.92rem; color: var(--muted); }
 .nudge .cv-row { margin-top: 0.4rem; }
-@media (max-width: 900px) { .nudge { bottom: 82px; left: 50%; right: auto; transform: translate(-50%, 20px); } .nudge.show { transform: translate(-50%, 0); } }
-@media (prefers-reduced-motion: reduce) { .nudge { transition: none; } }
 @media print { .nudge { display: none !important; } }
 
 /* --- src/features/164-ce-readiness.css --- */
@@ -910,7 +907,6 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
   body.ab-on { padding-bottom: 96px; }
   body.ab-on .to-top { bottom: 108px; }
   body.ab-on .toast { bottom: 112px; }
-  .nudge { bottom: 112px !important; }
 }
 
 /* --- src/features/179-cover-strip.css --- */
@@ -972,7 +968,7 @@ figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em;
 :root[data-theme="dark"] .call, :root[data-theme="dark"] .example, :root[data-theme="dark"] .box, :root[data-theme="dark"] .cta-card { background-color: color-mix(in srgb, var(--paper) 88%, #1d2c35); }
 :root[data-theme="dark"] .stat .n, :root[data-theme="dark"] .cs b { text-shadow: 0 0 18px rgba(98,184,181,0.35); }
 :root[data-theme="dark"] .cover { background: radial-gradient(1200px 500px at 85% 20%, rgba(98,184,181,0.10), transparent 60%); }
-:root[data-theme="dark"] .cta-card, :root[data-theme="dark"] .nudge { box-shadow: 6px 6px 0 rgba(230,176,67,0.45); }
+:root[data-theme="dark"] .cta-card { box-shadow: 6px 6px 0 rgba(230,176,67,0.45); }
 @media print { body { background-image: none !important; } }
 
 /* --- src/features/183-slim-start.css --- */

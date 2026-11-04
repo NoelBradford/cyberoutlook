@@ -12,5 +12,5 @@
 :root[data-theme="dark"] .call, :root[data-theme="dark"] .example, :root[data-theme="dark"] .box, :root[data-theme="dark"] .cta-card { background-color: color-mix(in srgb, var(--paper) 88%, #1d2c35); }
 :root[data-theme="dark"] .stat .n, :root[data-theme="dark"] .cs b { text-shadow: 0 0 18px rgba(98,184,181,0.35); }
 :root[data-theme="dark"] .cover { background: radial-gradient(1200px 500px at 85% 20%, rgba(98,184,181,0.10), transparent 60%); }
-:root[data-theme="dark"] .cta-card, :root[data-theme="dark"] .nudge { box-shadow: 6px 6px 0 rgba(230,176,67,0.45); }
+:root[data-theme="dark"] .cta-card { box-shadow: 6px 6px 0 rgba(230,176,67,0.45); }
 @media print { body { background-image: none !important; } }
