@@ -37,11 +37,11 @@ CV.ready(function () {
   speed.addEventListener('click', function () { rate = rate >= 1.5 ? 0.85 : rate === 0.85 ? 1 : rate + 0.25; CV.store.set('rate', rate); speed.textContent = rate + '×'; synth.cancel(); setTimeout(speak, 60); });
   stop.addEventListener('click', end);
   window.addEventListener('beforeunload', function () { synth.cancel(); });
-  CV.$$('main section.section').forEach(function (sec) {
-    if (/sources|disclaimer/.test(sec.id)) return;
-    var h = sec.querySelector('h2'); if (!h) return;
-    var b = CV.h('button', { type: 'button', class: 'tts-start', 'aria-label': 'Listen to this section: ' + CV.text(h).replace(/#$/, '') }, CV.h('span', { 'aria-hidden': 'true' }, '▶'), ' Listen');
-    b.addEventListener('click', function () { start(sec); });
-    var num = sec.querySelector('.sec-num'); (num || h).appendChild(b);
-  });
+  // One entry point (Tools, Listen from here) instead of a button on every section: start at the section on screen.
+  CV.listenHere = function () {
+    var secs = CV.$$('main section.section').filter(function (s) { return !/sources|disclaimer/.test(s.id); });
+    var mid = window.innerHeight * 0.35, cur = secs[0];
+    secs.forEach(function (s) { if (s.getBoundingClientRect().top < mid) cur = s; });
+    if (cur) start(cur);
+  };
 });
