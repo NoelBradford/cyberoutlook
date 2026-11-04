@@ -45,6 +45,5 @@ CV.ready(function () {
   // Glossary and shortcuts have no toolbar button yet; give them a home.
   if (CV.openGlossary) CV.toolsMenu.add('Glossary', CV.openGlossary, 'Reading');
   CV.toolsMenu.add('Keyboard shortcuts', function () { var d = document.getElementById('keys'); if (d) d.showModal(); }, 'More');
-  if (CV.openForecasts) CV.toolsMenu.add('All the forecasts', CV.openForecasts, 'Reading');
   if (CV.present) CV.toolsMenu.add('Present to my team', CV.present, 'Share and print');
 });

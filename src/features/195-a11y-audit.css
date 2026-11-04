@@ -15,7 +15,7 @@
 .aw { color: #15222b; }
 .aw .tool.primary { background: #15222b !important; color: #f3f6f5 !important; }
 /* Amber used as text on the page itself */
-.src-k.k-ours, .rn-t tr.gap td, .fc-b.fc-disagree:not([aria-pressed="true"]), .rs-due.late b { color: var(--signal-text) !important; }
+.src-k.k-ours, .rn-t tr.gap td, .rs-due.late b { color: var(--signal-text) !important; }
 .src-k.k-ours { border-color: color-mix(in srgb, var(--signal-text) 50%, transparent); }
 .top-nav { display: contents; }
 .start-count b { color: var(--band-ink) !important; }

@@ -13,7 +13,6 @@ CV.ready(function () {
       contacts: n('cv-plan-contacts'),
       mapped: (ff.s || []).concat(ff.c || []).filter(function (r) { return r.name && r.name.trim(); }).length,
       tools: (ai.tools || []).length,
-      votes: Object.keys(CV.store.get('votes', {})).filter(function (k) { return CV.store.get('votes', {})[k]; }).length,
       notes: CV.store.get('marks', []).length
     };
   }
@@ -39,7 +38,6 @@ CV.ready(function () {
       tile('Who to call', s.contacts + '/7', 'Contacts on your plan', function () { location.hash = '#mvc'; }),
       tile('Five and five', s.mapped + '/10', 'Suppliers and customers mapped', function () { CV.openFiveFive && CV.openFiveFive(); }),
       tile('AI tools', String(s.tools), 'Listed on your register', function () { CV.openAiTools && CV.openAiTools(); }),
-      tile('Forecasts', s.votes + '/14', 'Calls you reacted to', function () { CV.openForecasts && CV.openForecasts(); }),
       tile('Notes', String(s.notes), 'Highlights saved', function () { CV.openNotes && CV.openNotes(); })));
     CV.emit('progress-render', { body: b, state: s });
   }
