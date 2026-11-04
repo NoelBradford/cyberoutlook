@@ -14,3 +14,5 @@
 .tts-now { background: color-mix(in srgb, var(--signal) 22%, transparent); box-shadow: -10px 0 0 color-mix(in srgb, var(--signal) 22%, transparent), 10px 0 0 color-mix(in srgb, var(--signal) 22%, transparent); border-radius: 2px; }
 @media (max-width: 900px) { .tts { top: auto; bottom: 74px; } .tts-t { max-width: 28vw; } }
 @media print { .tts, .tts-start { display: none !important; } }
+/* On phones the player takes the section chip's place in the bottom dock rather than sitting over it. */
+@media (max-width: 900px) { body:has(.tts:not([hidden])) .ab-chip { display: none !important; } .tts { bottom: calc(66px + env(safe-area-inset-bottom, 0px)); } }
