@@ -17,3 +17,11 @@
 .path.primary:hover, .path.primary:focus-visible { background: color-mix(in srgb, var(--signal) 85%, var(--paper)); }
 @media (prefers-reduced-motion: no-preference) { .path:hover { transform: translateY(-2px); } }
 @media print { .start { display: none !important; } }
+
+/* Cover call to action: the one first step. */
+.cover-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; margin: 1.4rem 0 0; }
+.cc-btn { display: inline-flex; align-items: center; min-height: 48px; padding: 0.7rem 1.2rem; background: var(--signal); color: #15222b; border: 2px solid var(--signal); border-radius: 3px; font: 700 1rem var(--font-ui); letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; }
+.cc-btn::after { content: "\2192"; margin-left: 0.5rem; }
+.cc-btn:hover, .cc-btn:focus-visible { background: color-mix(in srgb, var(--signal) 85%, var(--paper)); }
+.cc-sub { font: 400 0.92rem/1.4 var(--font-ui); color: var(--muted); max-width: 32ch; }
+html.simple .cover-cta { display: none; }

@@ -90,14 +90,14 @@ CV.ready(function () {
     CV.emit('check-result', { score: s, gaps: gaps });
   }
   CV.openCheck = function (fresh) { if (fresh || !saved.done) { step = 0; d.open(); renderQ(); } else { d.open(); renderResult(); } };
-  // Make it the first path in "Start here".
-  var paths = CV.$('.paths');
-  if (paths) {
-    var li = CV.h('li', null, CV.h('a', { class: 'path primary', href: '#check', 'data-path': 'check', onclick: function (e) { e.preventDefault(); CV.openCheck(); } },
-      CV.h('span', { class: 'p-time' }, '2 min'), CV.h('b', null, saved.done ? 'Your exposure check' : 'Check your exposure'),
-      CV.h('span', { class: 'p-sub' }, saved.done ? 'See your result and your gaps again.' : 'Ten yes-or-no questions. See where you stand against UK small firms.')));
-    paths.insertBefore(li, paths.firstChild);
-    paths.classList.add('four');
+  // The check links on the cover and in Start here are in the page; wire them up.
+  CV.$$('a[data-path="check"]').forEach(function (a) {
+    a.addEventListener('click', function (e) { e.preventDefault(); CV.openCheck(); });
+  });
+  if (saved.done) {
+    var card = CV.$('.path[data-path="check"]');
+    if (card) { card.querySelector('b').textContent = 'Your exposure check'; card.querySelector('.p-sub').textContent = 'See your result and your gaps again.'; }
+    var cc = CV.$('.cc-btn'); if (cc) cc.textContent = 'See your check result';
   }
   if (location.hash === '#check') CV.openCheck();
 });

@@ -4,3 +4,5 @@ html:not(.cv-ready) .cover .tools { height: 36px; overflow: hidden; }
 @media print { html:not(.cv-ready) .cover .tools { height: auto; } }
 /* The toolbar always sits on its own row, so it never changes rows as tools arrive. */
 .cover-top .tools { flex-basis: 100%; }
+html:not(.cv-ready) .cover .tools > * { visibility: hidden; }
+@media print { html:not(.cv-ready) .cover .tools > * { visibility: visible; } }
