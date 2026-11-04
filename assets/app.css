@@ -78,6 +78,11 @@ tr.cv-flash td { animation: cv-row-flash 2.2s ease-out; }
 @media (prefers-reduced-motion: reduce) { tr.cv-flash td { animation: none; background: color-mix(in srgb, var(--signal) 20%, transparent); } }
 @media (max-width: 520px) { .qz-result { grid-template-columns: 1fr; } .qz-score { justify-items: start; } }
 
+.qz-q legend:focus { outline: none; }
+.qz-q legend:focus-visible { outline: 3px solid var(--signal); outline-offset: 4px; }
+.qz-nav .tool:disabled { opacity: 0.45; cursor: not-allowed; }
+.qz-result h3:focus { outline: none; }
+
 /* --- src/features/109-my-plan.css --- */
 .plan-add { display: inline-flex; align-items: center; margin-top: 0.45rem; font: 600 0.74rem var(--font-ui); letter-spacing: 0.04em; color: var(--accent); background: transparent; border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); border-radius: 2px; padding: 0.3rem 0.55rem; min-height: 32px; cursor: pointer; }
 .plan-add:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }

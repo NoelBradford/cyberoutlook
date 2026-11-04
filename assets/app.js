@@ -217,22 +217,28 @@ CV.ready(function () {
     var bar = CV.h('div', { class: 'qz-bar', 'aria-hidden': 'true' }, CV.h('span', { style: 'width:' + (step / Q.length * 100) + '%' }));
     b.appendChild(CV.h('p', { class: 'cv-kicker' }, 'Question ' + (step + 1) + ' of ' + Q.length));
     b.appendChild(bar);
-    var fs = CV.h('fieldset', { class: 'qz-q' }, CV.h('legend', null, item.q));
+    var legend = CV.h('legend', { tabindex: '-1', id: 'qz-legend' }, item.q);
+    var fs = CV.h('fieldset', { class: 'qz-q' }, legend);
+    var nextBtn = CV.button(step === Q.length - 1 ? 'See my result' : 'Next →', next, 'primary');
+    nextBtn.disabled = !a;
     [['yes', 'Yes'], ['unsure', 'Not sure'], ['no', 'No']].forEach(function (o) {
       var id = 'qz-' + step + '-' + o[0];
       var input = CV.h('input', { type: 'radio', name: 'qz-' + step, id: id, value: o[0] });
       if (a === o[0]) input.checked = true;
-      input.addEventListener('change', function () { saved.a = answers(); saved.a[step] = o[0]; save(); setTimeout(next, CV.reduced() ? 0 : 180); });
+      input.addEventListener('change', function () { saved.a = answers(); saved.a[step] = o[0]; save(); nextBtn.disabled = false; });
       fs.appendChild(CV.h('div', { class: 'qz-opt' }, input, CV.h('label', { for: id }, o[1])));
     });
     b.appendChild(fs);
     var nav = CV.h('div', { class: 'cv-row qz-nav' });
-    if (step > 0) nav.appendChild(CV.button('← Back', function () { step--; renderQ(); }));
-    if (a) nav.appendChild(CV.button(step === Q.length - 1 ? 'See my result' : 'Next →', next, 'primary'));
+    if (step > 0) nav.appendChild(CV.button('← Back', function () { step--; focusQ = true; renderQ(); }));
+    nav.appendChild(nextBtn);
     b.appendChild(nav);
-    var first = fs.querySelector('input:checked') || fs.querySelector('input'); if (first) first.focus();
+    // Focus the question itself so screen readers announce it; the answers follow in tab order.
+    if (focusQ) legend.focus(); else { var first = fs.querySelector('input:checked') || fs.querySelector('input'); if (first) first.focus(); }
+    focusQ = false;
   }
-  function next() { if (step < Q.length - 1) { step++; renderQ(); } else renderResult(); }
+  var focusQ = false;
+  function next() { if (!answers()[step]) return; if (step < Q.length - 1) { step++; focusQ = true; renderQ(); } else renderResult(); }
   function score() { var s = 0, ans = answers(); Object.keys(ans).forEach(function (k) { if (ans[k] === 'yes') s++; }); return s; }
   CV.checkScore = function () { var ans = answers(); return Object.keys(ans).length === Q.length ? score() : null; };
   CV.checkGaps = function () { var ans = answers(); return Q.map(function (x, i) { return { i: i, q: x, a: ans[i] }; }).filter(function (g) { return g.a && g.a !== 'yes'; }); };
@@ -260,6 +266,7 @@ CV.ready(function () {
       b.appendChild(ol);
     } else b.appendChild(CV.h('p', null, 'No gaps. Print the one-page plan and run a one-hour tabletop against it.'));
     b.appendChild(CV.h('div', { class: 'cv-row qz-nav' }, CV.button('Start again', function () { saved = {}; save(); step = 0; renderQ(); })));
+    var rh = b.querySelector('.qz-result h3'); if (rh) { rh.setAttribute('tabindex', '-1'); rh.focus(); }
     CV.emit('check-result', { score: s, gaps: gaps });
   }
   CV.openCheck = function (fresh) { if (fresh || !saved.done) { step = 0; d.open(); renderQ(); } else { d.open(); renderResult(); } };

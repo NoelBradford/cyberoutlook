@@ -27,3 +27,8 @@ tr.cv-flash td { animation: cv-row-flash 2.2s ease-out; }
 @keyframes cv-row-flash { 0%, 30% { background: color-mix(in srgb, var(--signal) 35%, transparent); } 100% { background: transparent; } }
 @media (prefers-reduced-motion: reduce) { tr.cv-flash td { animation: none; background: color-mix(in srgb, var(--signal) 20%, transparent); } }
 @media (max-width: 520px) { .qz-result { grid-template-columns: 1fr; } .qz-score { justify-items: start; } }
+
+.qz-q legend:focus { outline: none; }
+.qz-q legend:focus-visible { outline: 3px solid var(--signal); outline-offset: 4px; }
+.qz-nav .tool:disabled { opacity: 0.45; cursor: not-allowed; }
+.qz-result h3:focus { outline: none; }
