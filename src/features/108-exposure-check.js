@@ -39,13 +39,17 @@ CV.ready(function () {
     b.appendChild(bar);
     var legend = CV.h('legend', { tabindex: '-1', id: 'qz-legend' }, item.q);
     var fs = CV.h('fieldset', { class: 'qz-q' }, legend);
+    // Advance automatically only for a pointer tap or click. Arrow keys change the answer too, and must not move on.
+    var tapped = false;
+    fs.addEventListener('pointerdown', function () { tapped = true; });
+    fs.addEventListener('keydown', function () { tapped = false; });
     var nextBtn = CV.button(step === Q.length - 1 ? 'See my result' : 'Next →', next, 'primary');
     nextBtn.disabled = !a;
     [['yes', 'Yes'], ['unsure', 'Not sure'], ['no', 'No']].forEach(function (o) {
       var id = 'qz-' + step + '-' + o[0];
       var input = CV.h('input', { type: 'radio', name: 'qz-' + step, id: id, value: o[0] });
       if (a === o[0]) input.checked = true;
-      input.addEventListener('change', function () { saved.a = answers(); saved.a[step] = o[0]; save(); nextBtn.disabled = false; });
+      input.addEventListener('change', function () { saved.a = answers(); saved.a[step] = o[0]; save(); nextBtn.disabled = false; if (tapped) { var at = step; setTimeout(function () { if (step === at) next(); }, CV.reduced() ? 0 : 220); } });
       fs.appendChild(CV.h('div', { class: 'qz-opt' }, input, CV.h('label', { for: id }, o[1])));
     });
     b.appendChild(fs);
