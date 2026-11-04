@@ -37,8 +37,13 @@ CV.ready(function () {
   // Dialog
   var dlg = CV.dialog({ id: 'plan', title: 'My plan', wide: true, note: 'Your plan stays in this browser. Nothing is sent anywhere.', onopen: render });
   CV.planDialog = dlg;
+  // Re-rendering replaces the list, so remember where focus was and put it back afterwards.
+  var focusNext = null;
   function render() {
-    var b = dlg.body; b.innerHTML = '';
+    var b = dlg.body, ae = document.activeElement, keep = focusNext || (ae && b.contains(ae) && ae.id) || null;
+    var hadFocus = !!focusNext || (ae && b.contains(ae)); focusNext = null;
+    b.innerHTML = '';
+    setTimeout(function () { if (!hadFocus) return; var t = keep && document.getElementById(keep); if (!t || !b.contains(t)) t = b.querySelector('.plan-item input[type=checkbox]') || document.getElementById('plan-title'); if (t) { if (t.id === 'plan-title') t.setAttribute('tabindex', '-1'); t.focus(); } }, 0);
     var items = CV.plan.list();
     if (!items.length) {
       b.appendChild(CV.h('div', { class: 'plan-empty' },
@@ -66,7 +71,7 @@ CV.ready(function () {
           cb, CV.h('div', { class: 'plan-main' },
             CV.h('label', { for: cbid }, x.a.text),
             CV.h('p', { class: 'plan-meta' }, CV.h('span', { class: 'chip ' + x.a.spend.toLowerCase() }, x.a.spend), ' ', x.a.effort)),
-          CV.h('button', { type: 'button', class: 'plan-rm', 'aria-label': 'Remove: ' + x.a.text, onclick: function () { CV.plan.remove(x.id); render(); } }, '×'));
+          CV.h('button', { type: 'button', class: 'plan-rm', 'aria-label': 'Remove: ' + x.a.text, id: 'rm-' + x.id, onclick: function () { var nx = li.nextElementSibling || li.previousElementSibling; focusNext = nx ? 'pl-' + nx.getAttribute('data-id') : null; CV.plan.remove(x.id); render(); CV.toast('Removed from your plan'); } }, '×'));
         ul.appendChild(li);
         CV.emit('plan-item', { li: li, item: x });
       });
