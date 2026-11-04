@@ -11,7 +11,7 @@ CV.ready(function () {
   }
   function decode(s) {
     return s.split('~').map(function (p) {
-      var f = p.split('.'); if (!/^t[123]-[1-9]$/.test(f[0]) || !CV.plan.byId[f[0]]) return null;
+      var f = p.split('.'); if (!/^(t[123]-[1-9]|p-(plan|owner))$/.test(f[0]) || !CV.plan.byId[f[0]]) return null;
       var due = /^\d{8}$/.test(f[2] || '') ? f[2].slice(0, 4) + '-' + f[2].slice(4, 6) + '-' + f[2].slice(6) : '';
       return { id: f[0], owner: (f[1] || '').replace(/_/g, ' '), due: due };
     }).filter(Boolean);

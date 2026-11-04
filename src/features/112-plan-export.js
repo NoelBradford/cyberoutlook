@@ -4,9 +4,9 @@ CV.ready(function () {
   if (!CV.plan) return;
   function asText() {
     var items = CV.plan.list(), lines = ['MY CYBER PLAN', 'From the ' + CV.TITLE + ' (' + CV.SITE + ')', ''];
-    [1, 2, 3].forEach(function (t) {
+    [0, 1, 2, 3].forEach(function (t) {
       var g = items.filter(function (x) { return x.a.theme === t; }); if (!g.length) return;
-      lines.push('Theme ' + t + ': ' + CV.THEMES[t]);
+      lines.push(CV.themeLabel(t));
       g.forEach(function (x) {
         var meta = [x.a.spend + ' spend', x.a.effort]; if (x.meta.owner) meta.push('Owner: ' + x.meta.owner); if (x.meta.due) meta.push('Due: ' + CV.fmtDate(CV.parseDate(x.meta.due)));
         lines.push((x.meta.done ? '[x] ' : '[ ] ') + x.a.text); lines.push('    ' + meta.join(' | '));

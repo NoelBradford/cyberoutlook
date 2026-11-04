@@ -3,6 +3,12 @@ CV.ready(function () {
   var A = CV.actions();
   A.forEach(function (a) { if (!a.row.id) a.row.id = 'act-' + a.id; });
   var byId = {}; A.forEach(function (a) { byId[a.id] = a; });
+  // Two controls from the exposure check live on the one-page plan, not in the theme tables.
+  CV.THEMES[0] = 'Your one-page plan';
+  CV.themeLabel = function (t) { return t ? 'Theme ' + t + ': ' + CV.THEMES[t] : CV.THEMES[0]; };
+  [{ id: 'p-plan', theme: 0, text: 'Write your incident plan: fill in the one-page plan and print it.', spend: 'None', effort: 'Part of the one-page plan', row: null },
+   { id: 'p-owner', theme: 0, text: 'Name the owner or director responsible for cyber security, on the one-page plan.', spend: 'None', effort: 'Part of the one-page plan', row: null }
+  ].forEach(function (a) { byId[a.id] = a; });
   function data() { var p = CV.store.get('plan', { items: {}, order: [] }); p.items = p.items || {}; p.order = (p.order || []).filter(function (id) { return p.items[id]; }); return p; }
   function save(p) { CV.store.set('plan', p); CV.emit('plan', p); }
   CV.plan = {
@@ -47,10 +53,10 @@ CV.ready(function () {
     b.appendChild(CV.h('div', { class: 'plan-sum' },
       CV.h('div', { class: 'plan-bar', 'aria-hidden': 'true' }, CV.h('span', { style: 'width:' + (done / items.length * 100) + '%' })),
       CV.h('p', null, CV.h('b', null, done + ' of ' + items.length), ' actions done')));
-    [1, 2, 3].forEach(function (t) {
+    [0, 1, 2, 3].forEach(function (t) {
       var group = items.filter(function (x) { return x.a.theme === t; });
       if (!group.length) return;
-      b.appendChild(CV.h('h3', { class: 'plan-theme' }, 'Theme ' + t + ': ' + CV.THEMES[t]));
+      b.appendChild(CV.h('h3', { class: 'plan-theme' }, CV.themeLabel(t)));
       var ul = CV.h('ul', { class: 'plan-list' });
       group.forEach(function (x) {
         var cbid = 'pl-' + x.id;

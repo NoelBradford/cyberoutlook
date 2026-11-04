@@ -14,7 +14,7 @@ CV.ready(function () {
   function events() {
     return CV.plan.list().filter(function (x) { return x.meta.due && !x.meta.done; }).map(function (x) {
       return { title: 'Cyber: ' + x.a.text.replace(/\.$/, '') + (x.meta.owner ? ' (' + x.meta.owner + ')' : ''), date: CV.parseDate(x.meta.due),
-        description: 'From your plan, UK Small Business Cyber Outlook 2027. Theme ' + x.a.theme + ': ' + CV.THEMES[x.a.theme] + '. Effort: ' + x.a.effort + '.', url: CV.SITE + '#act-' + x.id };
+        description: 'From your plan, UK Small Business Cyber Outlook 2027. ' + CV.themeLabel(x.a.theme) + '. Effort: ' + x.a.effort + '.', url: CV.SITE + (x.a.row === null ? '#mvc' : '#act-' + x.id) };
     });
   }
   CV.on('plan-render', function (d) {

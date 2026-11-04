@@ -3,7 +3,7 @@ CV.ready(function () {
   if (!CV.plan || !CV.openCheck) return;
   var map = { 't3-1': 't3-1', 't1-3': 't1-3', 't1-2': 't1-2', 't1-1': 't1-1', 't2-1': 't2-1', 't3-2': 't3-2', 't3-5': 't3-5', 't3-6': 't3-6' };
   CV.on('check-result', function (r) {
-    var ids = r.gaps.map(function (g) { return g.q.act; }).filter(function (id) { return id && map[id]; });
+    var ids = r.gaps.map(function (g) { return g.q.act || g.q.planAct; }).filter(function (id) { return id && CV.plan.byId[id]; });
     var d = document.getElementById('check'); if (!d) return;
     var body = d.querySelector('.cv-dialog-body');
     var box = CV.h('div', { class: 'qz-plan' });

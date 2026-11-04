@@ -199,9 +199,9 @@ CV.ready(function () {
       bench: 'Of businesses using, adopting or considering AI, only 24% have any practice in place to manage the risk.' },
     { q: 'Are automatic updates switched on for every laptop and phone?', act: 't3-2' },
     { q: 'Do you have a backup ransomware can’t reach, and have you tested a restore in the last three months?', act: 't3-5' },
-    { q: 'Do you have a written plan for what happens in a cyber incident?', go: '#mvc', goLabel: 'Fill in the one-page plan',
+    { q: 'Do you have a written plan for what happens in a cyber incident?', go: '#mvc', goLabel: 'Fill in the one-page plan', planAct: 'p-plan',
       bench: 'Only 21% of micro firms have a formal incident response plan.' },
-    { q: 'Is one named person, the owner or a director, responsible for cyber security?', go: '#mvc', goLabel: 'Name them on the one-page plan',
+    { q: 'Is one named person, the owner or a director, responsible for cyber security?', go: '#mvc', goLabel: 'Name them on the one-page plan', planAct: 'p-owner',
       bench: 'Just 29% of micro firms have a board member or owner with named responsibility for cyber security.' },
     { q: 'Do you know what personal data you hold, where it lives and who can reach it?', act: 't3-6' }
   ];
@@ -281,6 +281,12 @@ CV.ready(function () {
   var A = CV.actions();
   A.forEach(function (a) { if (!a.row.id) a.row.id = 'act-' + a.id; });
   var byId = {}; A.forEach(function (a) { byId[a.id] = a; });
+  // Two controls from the exposure check live on the one-page plan, not in the theme tables.
+  CV.THEMES[0] = 'Your one-page plan';
+  CV.themeLabel = function (t) { return t ? 'Theme ' + t + ': ' + CV.THEMES[t] : CV.THEMES[0]; };
+  [{ id: 'p-plan', theme: 0, text: 'Write your incident plan: fill in the one-page plan and print it.', spend: 'None', effort: 'Part of the one-page plan', row: null },
+   { id: 'p-owner', theme: 0, text: 'Name the owner or director responsible for cyber security, on the one-page plan.', spend: 'None', effort: 'Part of the one-page plan', row: null }
+  ].forEach(function (a) { byId[a.id] = a; });
   function data() { var p = CV.store.get('plan', { items: {}, order: [] }); p.items = p.items || {}; p.order = (p.order || []).filter(function (id) { return p.items[id]; }); return p; }
   function save(p) { CV.store.set('plan', p); CV.emit('plan', p); }
   CV.plan = {
@@ -325,10 +331,10 @@ CV.ready(function () {
     b.appendChild(CV.h('div', { class: 'plan-sum' },
       CV.h('div', { class: 'plan-bar', 'aria-hidden': 'true' }, CV.h('span', { style: 'width:' + (done / items.length * 100) + '%' })),
       CV.h('p', null, CV.h('b', null, done + ' of ' + items.length), ' actions done')));
-    [1, 2, 3].forEach(function (t) {
+    [0, 1, 2, 3].forEach(function (t) {
       var group = items.filter(function (x) { return x.a.theme === t; });
       if (!group.length) return;
-      b.appendChild(CV.h('h3', { class: 'plan-theme' }, 'Theme ' + t + ': ' + CV.THEMES[t]));
+      b.appendChild(CV.h('h3', { class: 'plan-theme' }, CV.themeLabel(t)));
       var ul = CV.h('ul', { class: 'plan-list' });
       group.forEach(function (x) {
         var cbid = 'pl-' + x.id;
@@ -368,7 +374,7 @@ CV.ready(function () {
   function events() {
     return CV.plan.list().filter(function (x) { return x.meta.due && !x.meta.done; }).map(function (x) {
       return { title: 'Cyber: ' + x.a.text.replace(/\.$/, '') + (x.meta.owner ? ' (' + x.meta.owner + ')' : ''), date: CV.parseDate(x.meta.due),
-        description: 'From your plan, UK Small Business Cyber Outlook 2027. Theme ' + x.a.theme + ': ' + CV.THEMES[x.a.theme] + '. Effort: ' + x.a.effort + '.', url: CV.SITE + '#act-' + x.id };
+        description: 'From your plan, UK Small Business Cyber Outlook 2027. ' + CV.themeLabel(x.a.theme) + '. Effort: ' + x.a.effort + '.', url: CV.SITE + (x.a.row === null ? '#mvc' : '#act-' + x.id) };
     });
   }
   CV.on('plan-render', function (d) {
@@ -396,7 +402,7 @@ CV.ready(function () {
   if (!CV.plan || !CV.openCheck) return;
   var map = { 't3-1': 't3-1', 't1-3': 't1-3', 't1-2': 't1-2', 't1-1': 't1-1', 't2-1': 't2-1', 't3-2': 't3-2', 't3-5': 't3-5', 't3-6': 't3-6' };
   CV.on('check-result', function (r) {
-    var ids = r.gaps.map(function (g) { return g.q.act; }).filter(function (id) { return id && map[id]; });
+    var ids = r.gaps.map(function (g) { return g.q.act || g.q.planAct; }).filter(function (id) { return id && CV.plan.byId[id]; });
     var d = document.getElementById('check'); if (!d) return;
     var body = d.querySelector('.cv-dialog-body');
     var box = CV.h('div', { class: 'qz-plan' });
@@ -422,9 +428,9 @@ CV.ready(function () {
   if (!CV.plan) return;
   function asText() {
     var items = CV.plan.list(), lines = ['MY CYBER PLAN', 'From the ' + CV.TITLE + ' (' + CV.SITE + ')', ''];
-    [1, 2, 3].forEach(function (t) {
+    [0, 1, 2, 3].forEach(function (t) {
       var g = items.filter(function (x) { return x.a.theme === t; }); if (!g.length) return;
-      lines.push('Theme ' + t + ': ' + CV.THEMES[t]);
+      lines.push(CV.themeLabel(t));
       g.forEach(function (x) {
         var meta = [x.a.spend + ' spend', x.a.effort]; if (x.meta.owner) meta.push('Owner: ' + x.meta.owner); if (x.meta.due) meta.push('Due: ' + CV.fmtDate(CV.parseDate(x.meta.due)));
         lines.push((x.meta.done ? '[x] ' : '[ ] ') + x.a.text); lines.push('    ' + meta.join(' | '));
@@ -475,7 +481,7 @@ CV.ready(function () {
   }
   function decode(s) {
     return s.split('~').map(function (p) {
-      var f = p.split('.'); if (!/^t[123]-[1-9]$/.test(f[0]) || !CV.plan.byId[f[0]]) return null;
+      var f = p.split('.'); if (!/^(t[123]-[1-9]|p-(plan|owner))$/.test(f[0]) || !CV.plan.byId[f[0]]) return null;
       var due = /^\d{8}$/.test(f[2] || '') ? f[2].slice(0, 4) + '-' + f[2].slice(4, 6) + '-' + f[2].slice(6) : '';
       return { id: f[0], owner: (f[1] || '').replace(/_/g, ' '), due: due };
     }).filter(Boolean);

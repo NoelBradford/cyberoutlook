@@ -19,9 +19,9 @@ CV.ready(function () {
       bench: 'Of businesses using, adopting or considering AI, only 24% have any practice in place to manage the risk.' },
     { q: 'Are automatic updates switched on for every laptop and phone?', act: 't3-2' },
     { q: 'Do you have a backup ransomware can’t reach, and have you tested a restore in the last three months?', act: 't3-5' },
-    { q: 'Do you have a written plan for what happens in a cyber incident?', go: '#mvc', goLabel: 'Fill in the one-page plan',
+    { q: 'Do you have a written plan for what happens in a cyber incident?', go: '#mvc', goLabel: 'Fill in the one-page plan', planAct: 'p-plan',
       bench: 'Only 21% of micro firms have a formal incident response plan.' },
-    { q: 'Is one named person, the owner or a director, responsible for cyber security?', go: '#mvc', goLabel: 'Name them on the one-page plan',
+    { q: 'Is one named person, the owner or a director, responsible for cyber security?', go: '#mvc', goLabel: 'Name them on the one-page plan', planAct: 'p-owner',
       bench: 'Just 29% of micro firms have a board member or owner with named responsibility for cyber security.' },
     { q: 'Do you know what personal data you hold, where it lives and who can reach it?', act: 't3-6' }
   ];
