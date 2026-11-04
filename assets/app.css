@@ -1125,3 +1125,12 @@ html:not(.cv-ready) .cover .tools { height: 36px; overflow: hidden; }
   .bp-pod { padding: 5mm 6mm; border-left: 3pt solid #e6b043; font-size: 10.5pt; line-height: 1.45; background: #16222a; }
   .bp-pub { margin: auto 0 0; font-size: 8pt; color: #9aa9ae; }
 }
+
+/* --- src/features/217-toolkit.css --- */
+.tk-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.tk-list li { display: flex; gap: 0.8rem 1.2rem; align-items: center; justify-content: space-between; padding: 0.8rem 0; border-top: 1px solid var(--rule); }
+.tk-list li:first-child { border-top: 0; }
+.tk-list li > div { min-width: 0; flex: 1 1 auto; }
+.tk-t { margin: 0; font-weight: 700; }
+.tk-s { margin: 0.15rem 0 0; font-size: 0.9rem; color: var(--muted); }
+@media (max-width: 520px) { .tk-list li { flex-wrap: wrap; } }
