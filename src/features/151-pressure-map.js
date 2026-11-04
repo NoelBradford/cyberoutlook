@@ -1,4 +1,4 @@
-// @msg Living cover: the "outlook" isobars become a slow, generative pressure chart that bends around your pointer (still for reduced motion)
+// @msg Cover chart: the "outlook" isobars drawn as a pressure chart, once, without animation
 // @sel .cover
 CV.ready(function () {
   var svg = CV.$('.cover .isobars'); if (!svg) return;
@@ -28,13 +28,8 @@ CV.ready(function () {
     x.fillStyle = sig; x.font = '700 14px "Barlow Condensed", sans-serif'; x.fillText('2027', hx + 8, hy - 8);
     x.beginPath(); x.arc(hx, hy, 4, 0, Math.PI * 2); x.fill();
   }
-  function loop() { t += 0.012; draw(); raf = requestAnimationFrame(loop); }
-  size(); draw();
-  window.addEventListener('resize', function () { size(); draw(); });
-  c.parentNode.addEventListener('pointermove', function (e) { var r = c.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; if (CV.reduced()) draw(); });
-  c.parentNode.addEventListener('pointerleave', function () { mx = my = -1; if (CV.reduced()) draw(); });
-  if (!CV.reduced() && 'IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) { if (es[0].isIntersecting) { if (!raf) loop(); } else { cancelAnimationFrame(raf); raf = null; } }).observe(c);
-  }
+  // Drawn once, and again only when the size or theme changes. No animation loop, no pointer tracking.
+  t = 2.4; size(); draw();
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { size(); draw(); }, 120); });
   var mo = new MutationObserver(function () { draw(); }); mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 });

@@ -13,7 +13,7 @@ CV.ready(function () {
   })();
   var paras = CV.$$('main section .prose > p').filter(function (p) { return !p.classList.contains('listen-src') && !p.classList.contains('pq-src') && !p.closest('.cv-noprint') && CV.text(p).length > 80; });
   paras.forEach(function (p) {
-    var b = CV.h('button', { type: 'button', class: 'pl-btn', 'aria-label': 'Copy a link to the paragraph that starts: ' + CV.text(p).split(' ').slice(0, 6).join(' ') }, '¶');
+    var b = CV.h('button', { type: 'button', class: 'pl-btn', 'aria-label': 'Copy a link to the paragraph that starts: ' + CV.text(p).split(' ').slice(0, 6).join(' '), tabindex: '-1' }, '¶');
     b.addEventListener('click', function () {
       var c = p.cloneNode(true); CV.$$('sup, button', c).forEach(function (n) { if (n.matches('.gl-term')) n.replaceWith(document.createTextNode(n.textContent)); else n.parentNode.removeChild(n); });
       var words = CV.text(c).split(' ').filter(Boolean);
@@ -24,4 +24,5 @@ CV.ready(function () {
     p.classList.add('pl-p');
     CV.margin.add(p, b);
   });
+  CV.$$('.h-anchor').forEach(function (a) { a.setAttribute('tabindex', '-1'); });
 });

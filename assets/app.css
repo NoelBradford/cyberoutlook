@@ -512,13 +512,6 @@ figure.bt-fig { max-width: 100%; margin: 1.6rem 0 2rem; display: grid; gap: 0.7r
 @media (prefers-reduced-motion: no-preference) { .bt-now .bt-dot { animation: bt-pulse 2s ease-out infinite; } @keyframes bt-pulse { 50% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--signal) 10%, transparent); } } }
 @media print { .bt { min-width: 0; grid-template-columns: repeat(7, 1fr); font-size: 7pt; } figure.bt-fig { break-inside: avoid; } }
 
-/* --- src/features/141-count-up.css --- */
-.stat .n { font-variant-numeric: tabular-nums; }
-.stat .n.cu-done { animation: cu-pop 0.5s ease-out; }
-@keyframes cu-pop { 0% { color: var(--signal); } 100% { color: var(--accent); } }
-.stat { transition: background 0.2s; }
-@media (hover: hover) { .stat:hover { background: color-mix(in srgb, var(--accent) 5%, transparent); } }
-
 /* --- src/features/142-present.css --- */
 .pr { position: fixed; inset: 0; z-index: 60; background: #0e161b; color: #e2e9e9; display: grid; grid-template-rows: 1fr auto; font-family: var(--font-ui); }
 .pr[hidden] { display: none; }

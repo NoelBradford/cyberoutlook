@@ -1524,32 +1524,6 @@ CV.ready(function () {
   var p = h.nextElementSibling; (p && p.tagName === 'P' ? p : h).after(fig);
 });
 
-/* --- src/features/141-count-up.js --- */
-// @msg The year in numbers comes alive: each figure counts up as it scrolls into view (the real value is always shown at rest)
-// @sel #numbers .stats
-CV.ready(function () {
-  if (CV.reduced() || !('IntersectionObserver' in window)) return;
-  var ns = CV.$$('#numbers .stat .n'); if (!ns.length) return;
-  ns.forEach(function (el) {
-    var orig = el.textContent, m = orig.match(/^(\D*)([\d,.]+)(\D*)$/); if (!m) return;
-    var target = parseFloat(m[2].replace(/,/g, '')); if (!isFinite(target) || target === 0) return;
-    el.setAttribute('aria-label', orig);
-    var io = new IntersectionObserver(function (es) {
-      if (!es[0].isIntersecting) return; io.disconnect();
-      // Only animate figures that are fully below the fold when the page loads.
-      var t0 = performance.now(), dur = 900 + Math.min(target, 600) * 0.6;
-      el.classList.add('cu-run');
-      function tick(t) {
-        var k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
-        el.textContent = m[1] + Math.round(target * e).toLocaleString('en-GB') + m[3];
-        if (k < 1) requestAnimationFrame(tick); else { el.textContent = orig; el.classList.remove('cu-run'); el.classList.add('cu-done'); }
-      }
-      requestAnimationFrame(tick);
-    }, { threshold: 0.9 });
-    if (el.getBoundingClientRect().top > window.innerHeight) io.observe(el);
-  });
-});
-
 /* --- src/features/142-present.js --- */
 // @msg Present mode: brief your team from the report itself, with eight full-screen slides built from the executive summary (arrow keys to move)
 // @sel #summary
@@ -1866,7 +1840,7 @@ CV.ready(function () {
 });
 
 /* --- src/features/151-pressure-map.js --- */
-// @msg Living cover: the "outlook" isobars become a slow, generative pressure chart that bends around your pointer (still for reduced motion)
+// @msg Cover chart: the "outlook" isobars drawn as a pressure chart, once, without animation
 // @sel .cover
 CV.ready(function () {
   var svg = CV.$('.cover .isobars'); if (!svg) return;
@@ -1896,14 +1870,9 @@ CV.ready(function () {
     x.fillStyle = sig; x.font = '700 14px "Barlow Condensed", sans-serif'; x.fillText('2027', hx + 8, hy - 8);
     x.beginPath(); x.arc(hx, hy, 4, 0, Math.PI * 2); x.fill();
   }
-  function loop() { t += 0.012; draw(); raf = requestAnimationFrame(loop); }
-  size(); draw();
-  window.addEventListener('resize', function () { size(); draw(); });
-  c.parentNode.addEventListener('pointermove', function (e) { var r = c.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; if (CV.reduced()) draw(); });
-  c.parentNode.addEventListener('pointerleave', function () { mx = my = -1; if (CV.reduced()) draw(); });
-  if (!CV.reduced() && 'IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) { if (es[0].isIntersecting) { if (!raf) loop(); } else { cancelAnimationFrame(raf); raf = null; } }).observe(c);
-  }
+  // Drawn once, and again only when the size or theme changes. No animation loop, no pointer tracking.
+  t = 2.4; size(); draw();
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { size(); draw(); }, 120); });
   var mo = new MutationObserver(function () { draw(); }); mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 });
 
@@ -2743,7 +2712,7 @@ CV.ready(function () {
   })();
   var paras = CV.$$('main section .prose > p').filter(function (p) { return !p.classList.contains('listen-src') && !p.classList.contains('pq-src') && !p.closest('.cv-noprint') && CV.text(p).length > 80; });
   paras.forEach(function (p) {
-    var b = CV.h('button', { type: 'button', class: 'pl-btn', 'aria-label': 'Copy a link to the paragraph that starts: ' + CV.text(p).split(' ').slice(0, 6).join(' ') }, '¶');
+    var b = CV.h('button', { type: 'button', class: 'pl-btn', 'aria-label': 'Copy a link to the paragraph that starts: ' + CV.text(p).split(' ').slice(0, 6).join(' '), tabindex: '-1' }, '¶');
     b.addEventListener('click', function () {
       var c = p.cloneNode(true); CV.$$('sup, button', c).forEach(function (n) { if (n.matches('.gl-term')) n.replaceWith(document.createTextNode(n.textContent)); else n.parentNode.removeChild(n); });
       var words = CV.text(c).split(' ').filter(Boolean);
@@ -2754,6 +2723,7 @@ CV.ready(function () {
     p.classList.add('pl-p');
     CV.margin.add(p, b);
   });
+  CV.$$('.h-anchor').forEach(function (a) { a.setAttribute('tabindex', '-1'); });
 });
 
 /* --- src/features/187-sidenotes.js --- */
