@@ -12,7 +12,11 @@ CV.ready(function () {
         CV.h('p', { class: 'cv-kicker' }, 'On the podcast'),
         CV.h('ul', null, eps.map(function (e) { var out = CV.parseDate(e.date) <= now; return CV.h('li', null, CV.h('b', null, 'Ep ' + e.n + ': ' + e.title), CV.h('span', { class: 'listen-when' + (out ? ' out' : '') }, out ? 'Out now' : CV.parseDate(e.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' }))); })),
         /Do it before/.test(p.textContent) ? CV.h('p', { class: 'listen-extra' }, 'Do it before everyone’s back.') : null),
-      CV.h('a', { class: 'tool primary', href: CV.PODCAST, rel: 'noopener' }, 'Listen'));
+      eps.some(function (e) { return CV.parseDate(e.date) <= now; })
+        ? CV.h('a', { class: 'tool primary', href: CV.PODCAST, rel: 'noopener' }, 'Listen')
+        : CV.button('Remind me', function () {
+            CV.ics(eps.map(function (e) { return { title: 'New episode: ' + e.title, date: CV.parseDate(e.date), description: 'The Small Business Cyber Security Guy, episode ' + e.n + '. Companion to the UK Small Business Cyber Outlook 2027.', url: CV.PODCAST }; }), 'cyber-outlook-episodes.ics');
+          }, 'primary'));
     p.classList.add('listen-src'); p.setAttribute('aria-hidden', 'true');
     p.after(card);
   });
