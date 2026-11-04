@@ -8,6 +8,25 @@ window.CV = (function () {
   var TITLE = 'UK Small Business Cyber Outlook 2027';
   var PODCAST = 'https://podcast.thesmallbusinesscybersecurityguy.co.uk/';
   var AUTHOR_SITE = 'https://thesmallbusinesscybersecurityguy.co.uk';
+  // Where to follow the podcast. Fill in a URL to show its button; empty ones are hidden.
+  var FOLLOW = [
+    { name: 'Apple Podcasts', url: '' },
+    { name: 'Spotify', url: '' },
+    { name: 'RSS feed', url: '' }
+  ];
+  // A "Follow the podcast" row: the apps that have links, the podcast site, and every upcoming episode as a calendar reminder.
+  function followRow() {
+    var now = today(), up = EPISODES.filter(function (e) { return parseDate(e.date) >= now; });
+    var row = h('div', { class: 'follow' }, h('p', { class: 'follow-k' }, 'Follow the podcast'));
+    var links = h('div', { class: 'cv-row' });
+    FOLLOW.filter(function (f) { return f.url; }).forEach(function (f) { links.appendChild(h('a', { class: 'tool', href: f.url, rel: 'noopener', target: '_blank' }, f.name)); });
+    links.appendChild(h('a', { class: 'tool primary', href: PODCAST, rel: 'noopener', target: '_blank' }, FOLLOW.some(function (f) { return f.url; }) ? 'Podcast site' : 'Follow on the podcast site'));
+    if (up.length) links.appendChild(button('Put the next ' + (up.length === 1 ? 'episode' : up.length + ' episodes') + ' in my calendar', function () {
+      ics(up.map(function (e) { return { title: 'New episode: ' + e.title, date: parseDate(e.date), description: 'The Small Business Cyber Security Guy, episode ' + e.n + '. Companion to the ' + TITLE + '.', url: PODCAST }; }), 'cyber-outlook-episodes.ics');
+    }));
+    row.appendChild(links);
+    return row;
+  }
 
   var store = {
     get: function (k, d) { try { var v = localStorage.getItem('cv:' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
@@ -156,7 +175,7 @@ window.CV = (function () {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedule); else schedule();
   }
 
-  return { SITE: SITE, TITLE: TITLE, PODCAST: PODCAST, AUTHOR_SITE: AUTHOR_SITE, store: store, h: h, $: $, $$: $$, on: on, emit: emit, toast: toast,
+  return { SITE: SITE, TITLE: TITLE, PODCAST: PODCAST, AUTHOR_SITE: AUTHOR_SITE, FOLLOW: FOLLOW, followRow: followRow, store: store, h: h, $: $, $$: $$, on: on, emit: emit, toast: toast,
     text: text, slug: slug, esc: esc, reduced: reduced, copy: copy, download: download, ics: ics, dialog: dialog, button: button, field: field,
     actions: actions, THEMES: THEMES, EPISODES: EPISODES, parseDate: parseDate, today: today, fmtDate: fmtDate, addTool: addTool, ready: ready };
 })();
@@ -879,11 +898,7 @@ CV.ready(function () {
   var box = CV.h('div', { class: 'ep-guide cv-noprint', id: 'ep-guide' },
     CV.h('div', { class: 'ep-head' }, CV.h('p', { class: 'cv-kicker' }, 'Companion podcast'), CV.h('p', { class: 'ep-title' }, 'Nine episodes, one a week')),
     ol,
-    CV.h('div', { class: 'cv-row' },
-      CV.h('a', { class: 'tool primary', href: CV.PODCAST, rel: 'noopener' }, 'Listen on the podcast site'),
-      upcoming.length ? CV.button('Remind me of the next ' + upcoming.length, function () {
-        CV.ics(upcoming.map(function (e) { return { title: 'Podcast ep ' + e.n + ': ' + e.title, date: CV.parseDate(e.date), description: 'The Small Business Cyber Security Guy, companion series to the ' + CV.TITLE + '.', url: CV.PODCAST }; }), 'cyber-outlook-podcast.ics');
-      }) : null));
+    CV.followRow());
   (para && para.tagName === 'P' ? para : h).after(box);
 });
 
@@ -2683,9 +2698,9 @@ CV.ready(function () {
       CV.h('p', null, '45 years in IT leadership, from Intel to Disney to the BBC. Runs security for a security-first managed service provider, and hosts the podcast and blog for UK small businesses.'),
       next ? CV.h('p', { class: 'auth-next' }, CV.h('b', null, 'Next episode: '), 'Ep ' + next.n + ', “' + next.title + '”, ' + CV.parseDate(next.date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }) + '.') : null,
       CV.h('div', { class: 'cv-row' },
-        CV.h('a', { class: 'tool primary', href: CV.PODCAST, rel: 'noopener', target: '_blank' }, 'Listen to the podcast'),
         CV.h('a', { class: 'tool', href: CV.AUTHOR_SITE, rel: 'noopener', target: '_blank' }, 'Read the blog'),
-        CV.openShare ? CV.button('Share this report', CV.openShare) : null)));
+        CV.openShare ? CV.button('Share this report', CV.openShare) : null),
+      CV.followRow()));
   bio.parentNode.insertBefore(card, bio);
   bio.classList.add('auth-orig');
 });

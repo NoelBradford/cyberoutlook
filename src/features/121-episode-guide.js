@@ -20,10 +20,6 @@ CV.ready(function () {
   var box = CV.h('div', { class: 'ep-guide cv-noprint', id: 'ep-guide' },
     CV.h('div', { class: 'ep-head' }, CV.h('p', { class: 'cv-kicker' }, 'Companion podcast'), CV.h('p', { class: 'ep-title' }, 'Nine episodes, one a week')),
     ol,
-    CV.h('div', { class: 'cv-row' },
-      CV.h('a', { class: 'tool primary', href: CV.PODCAST, rel: 'noopener' }, 'Listen on the podcast site'),
-      upcoming.length ? CV.button('Remind me of the next ' + upcoming.length, function () {
-        CV.ics(upcoming.map(function (e) { return { title: 'Podcast ep ' + e.n + ': ' + e.title, date: CV.parseDate(e.date), description: 'The Small Business Cyber Security Guy, companion series to the ' + CV.TITLE + '.', url: CV.PODCAST }; }), 'cyber-outlook-podcast.ics');
-      }) : null));
+    CV.followRow());
   (para && para.tagName === 'P' ? para : h).after(box);
 });

@@ -13,9 +13,9 @@ CV.ready(function () {
       CV.h('p', null, '45 years in IT leadership, from Intel to Disney to the BBC. Runs security for a security-first managed service provider, and hosts the podcast and blog for UK small businesses.'),
       next ? CV.h('p', { class: 'auth-next' }, CV.h('b', null, 'Next episode: '), 'Ep ' + next.n + ', “' + next.title + '”, ' + CV.parseDate(next.date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }) + '.') : null,
       CV.h('div', { class: 'cv-row' },
-        CV.h('a', { class: 'tool primary', href: CV.PODCAST, rel: 'noopener', target: '_blank' }, 'Listen to the podcast'),
         CV.h('a', { class: 'tool', href: CV.AUTHOR_SITE, rel: 'noopener', target: '_blank' }, 'Read the blog'),
-        CV.openShare ? CV.button('Share this report', CV.openShare) : null)));
+        CV.openShare ? CV.button('Share this report', CV.openShare) : null),
+      CV.followRow()));
   bio.parentNode.insertBefore(card, bio);
   bio.classList.add('auth-orig');
 });
