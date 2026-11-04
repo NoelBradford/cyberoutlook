@@ -91,6 +91,13 @@ tr.cv-flash td { animation: cv-row-flash 2.2s ease-out; }
 .qz-nav .tool:disabled { opacity: 0.45; cursor: not-allowed; }
 .qz-result h3:focus { outline: none; }
 
+.qz-back { position: fixed; z-index: 27; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: stretch; background: var(--ink); color: var(--paper); border-radius: 999px; box-shadow: 0 10px 26px rgba(0,0,0,0.3); font: 600 0.9rem var(--font-ui); }
+.qz-back button { background: transparent; color: inherit; border: 0; font: inherit; min-height: 44px; cursor: pointer; }
+.qz-back-b { padding: 0 0.6rem 0 1.1rem; }
+.qz-back-x { padding: 0 1rem 0 0.6rem; border-left: 1px solid color-mix(in srgb, var(--paper) 25%, transparent) !important; }
+.qz-back button:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; border-radius: 999px; }
+@media (max-width: 900px) { body.ab-on .qz-back { bottom: calc(108px + env(safe-area-inset-bottom, 0px)); } }
+
 /* --- src/features/109-my-plan.css --- */
 .plan-add { display: inline-flex; align-items: center; margin-top: 0.45rem; font: 600 0.74rem var(--font-ui); letter-spacing: 0.04em; color: var(--accent); background: transparent; border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); border-radius: 2px; padding: 0.3rem 0.55rem; min-height: 32px; cursor: pointer; }
 .plan-add:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }

@@ -78,8 +78,8 @@ CV.ready(function () {
       gaps.forEach(function (g) {
         var li = CV.h('li', null, CV.h('p', null, g.q.q + ' ', CV.h('span', { class: 'qz-ans qz-' + g.a }, g.a === 'no' ? 'No' : 'Not sure')));
         if (g.q.bench) li.appendChild(CV.h('p', { class: 'qz-bench' }, g.q.bench + ' [1]'));
-        var go = g.q.act ? CV.button('Show the action →', function () { d.close(); CV.goToAction(g.q.act); })
-          : CV.button((g.q.goLabel || 'Go') + ' →', function () { d.close(); location.hash = g.q.go; });
+        var go = g.q.act ? CV.button('Show the action →', function () { d.close(); CV.goToAction(g.q.act); backPill(); })
+          : CV.button((g.q.goLabel || 'Go') + ' →', function () { d.close(); location.hash = g.q.go; backPill(); });
         li.appendChild(CV.h('div', { class: 'cv-row' }, go));
         ol.appendChild(li);
       });
@@ -89,7 +89,23 @@ CV.ready(function () {
     var rh = b.querySelector('.qz-result h3'); if (rh) { rh.setAttribute('tabindex', '-1'); rh.focus(); }
     CV.emit('check-result', { score: s, gaps: gaps });
   }
-  CV.openCheck = function (fresh) { if (fresh || !saved.done) { step = 0; d.open(); renderQ(); } else { d.open(); renderResult(); } };
+  // Opening the check never throws away answers: a finished check shows its result, a half-finished one resumes.
+  // Only "Start again" clears it.
+  CV.openCheck = function () {
+    if (pill) pill.remove();
+    if (saved.done) { d.open(); renderResult(); return; }
+    var ans = answers(); step = 0; while (step < Q.length - 1 && ans[step]) step++;
+    d.open(); renderQ();
+  };
+  // After jumping from a gap to its fix, offer a way back that doesn't rely on the browser's Back button.
+  var pill = null;
+  function backPill() {
+    if (pill) pill.remove();
+    pill = CV.h('div', { class: 'qz-back cv-noprint', role: 'region', 'aria-label': 'Exposure check' },
+      CV.h('button', { type: 'button', class: 'qz-back-b', onclick: function () { CV.openCheck(); } }, '← Back to your results'),
+      CV.h('button', { type: 'button', class: 'qz-back-x', 'aria-label': 'Hide', onclick: function () { pill.remove(); pill = null; } }, '×'));
+    document.body.appendChild(pill);
+  }
   // The check links on the cover and in Start here are in the page; wire them up.
   CV.$$('a[data-path="check"]').forEach(function (a) {
     a.addEventListener('click', function (e) { e.preventDefault(); CV.openCheck(); });
