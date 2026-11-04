@@ -25,7 +25,7 @@ CV.ready(function () {
     });
     b.appendChild(list);
     var answered = Object.keys(ans).length, blockers = Q.filter(function (x, i) { return x.must && ans[i] === 'no'; }).length;
-    if (answered === Q.length) b.appendChild(CV.h('div', { class: 'ce-res ' + (blockers ? 'fix' : 'ok') }, CV.h('b', null, blockers ? blockers + ' thing' + (blockers === 1 ? '' : 's') + ' to fix before you book.' : 'Looks ready to book an assessment.'), ' ', blockers ? 'Fix the items marked above first.' : 'Book it, and add it to your plan.'));
+    if (answered === Q.length) b.appendChild(CV.h('div', { class: 'ce-res ' + (blockers ? 'fix' : 'ok') }, CV.h('b', null, blockers ? blockers + ' thing' + (blockers === 1 ? '' : 's') + ' to fix before you book.' : 'No blockers among these basics.'), ' ', blockers ? 'Fix the items marked above first.' : 'This is a quick check, not the full requirements. Before you book, go through the official Cyber Essentials requirements for firewalls, malware protection, admin accounts and unsupported software, or ask your IT provider to.'));
     b.appendChild(CV.h('div', { class: 'cv-row' }, CV.plan ? CV.button('Add "MFA on every cloud service" to my plan', function () { CV.plan.add('t3-1'); }) : null, CV.button('Start again', function () { ans = {}; CV.store.set('ce', ans); render(); })));
   }
   var p = h.nextElementSibling; while (p && p.tagName !== 'UL') p = p.nextElementSibling;

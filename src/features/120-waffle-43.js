@@ -30,10 +30,6 @@ CV.ready(function () {
     CV.h('div', { class: 'wf-body' }, grid, CV.h('div', { class: 'wf-text' }, big, note)),
     CV.h('figcaption', null, 'Cyber Security Breaches Survey 2025/26 [1]. Each square is one business in 100.'));
   host.after(fig);
-  show(VIEWS[0]);
-  // Gentle auto-step once when it first comes into view, unless the reader prefers less motion.
-  if (!CV.reduced() && 'IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); setTimeout(function () { show(VIEWS[1]); }, 1400); setTimeout(function () { show(VIEWS[2]); }, 2900); } }, { threshold: 0.6 });
-    io.observe(fig);
-  }
+  // Open on 1 in 5, the figure the report leads with. 43 in 100 is there to compare, not to headline.
+  show(VIEWS[1]);
 });

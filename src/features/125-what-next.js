@@ -10,7 +10,7 @@ CV.ready(function () {
     CV.h('h2', { id: 'wn-h' }, 'What next?'),
     CV.h('p', { class: 'wn-lead' }, 'You’ve read the plan. Here’s how to make it happen.'),
     CV.h('div', { class: 'wn-grid' },
-      card('Do it', CV.plan && CV.plan.count() ? 'Open your plan' : 'Build your plan', CV.plan && CV.plan.count() ? CV.plan.count() + ' actions saved. Give each an owner and a date.' : 'Take the two-minute check and turn your gaps into dated actions.',
+      card('Do it', CV.plan && CV.plan.count() ? 'Open your plan' : 'Build your plan', CV.plan && CV.plan.count() ? CV.plan.count() + ' actions saved. Give each an owner and a date.' : 'Take the two-minute check and turn your gaps into actions you can give an owner and a date.',
         CV.plan && CV.plan.count() ? 'Open my plan' : 'Take the check', function () { if (CV.plan && CV.plan.count()) CV.plan.open(); else if (CV.openCheck) CV.openCheck(true); }, true),
       card('Share it', 'Send it to one business owner', 'A link and one line from you is the easiest way to get it in front of someone who needs it.', 'Share the report', function () { if (CV.openShare) CV.openShare(); else CV.copy(CV.SITE, 'Link copied'); }),
       card('Keep going', 'Nine weekly episodes', 'The podcast series walks through every theme, Mondays to 28 December.', 'Go to the podcast', function () { window.open(CV.PODCAST, '_blank', 'noopener'); })),

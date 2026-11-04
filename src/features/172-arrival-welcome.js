@@ -6,7 +6,7 @@ CV.ready(function () {
   var kind = med === 'qr' || src === 'print' ? 'print' : /linkedin/.test(src) || /linkedin\.com|lnkd\.in/.test(ref) ? 'linkedin' : /podcast/.test(src) || /thesmallbusinesscybersecurityguy/.test(ref) ? 'podcast' : '';
   if (!kind || CV.store.get('welcomed-' + kind, false)) return;
   var M = {
-    linkedin: ['Welcome from LinkedIn.', 'Short on time? The two-minute check shows where you stand.', 'Take the check', function () { CV.openCheck && CV.openCheck(); }],
+    linkedin: ['Welcome from LinkedIn.', 'Short on time? The two-minute check finds your gaps and links each one to its fix.', 'Take the check', function () { CV.openCheck && CV.openCheck(); }],
     print: ['Welcome from the printed copy.', 'Online you can fill in the one-page plan, tick off the five things and add everything to your calendar.', 'Open the one-page plan', function () { location.hash = '#mvc'; }],
     podcast: ['Welcome, podcast listener.', 'Every theme here has a tool to go with the episode. Start with the five things before January.', 'See the five things', function () { location.hash = '#h-if-you-do-five-things-before-january'; }]
   }[kind];

@@ -852,12 +852,8 @@ CV.ready(function () {
     CV.h('div', { class: 'wf-body' }, grid, CV.h('div', { class: 'wf-text' }, big, note)),
     CV.h('figcaption', null, 'Cyber Security Breaches Survey 2025/26 [1]. Each square is one business in 100.'));
   host.after(fig);
-  show(VIEWS[0]);
-  // Gentle auto-step once when it first comes into view, unless the reader prefers less motion.
-  if (!CV.reduced() && 'IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); setTimeout(function () { show(VIEWS[1]); }, 1400); setTimeout(function () { show(VIEWS[2]); }, 2900); } }, { threshold: 0.6 });
-    io.observe(fig);
-  }
+  // Open on 1 in 5, the figure the report leads with. 43 in 100 is there to compare, not to headline.
+  show(VIEWS[1]);
 });
 
 /* --- src/features/121-episode-guide.js --- */
@@ -1017,7 +1013,7 @@ CV.ready(function () {
     CV.h('h2', { id: 'wn-h' }, 'What next?'),
     CV.h('p', { class: 'wn-lead' }, 'You’ve read the plan. Here’s how to make it happen.'),
     CV.h('div', { class: 'wn-grid' },
-      card('Do it', CV.plan && CV.plan.count() ? 'Open your plan' : 'Build your plan', CV.plan && CV.plan.count() ? CV.plan.count() + ' actions saved. Give each an owner and a date.' : 'Take the two-minute check and turn your gaps into dated actions.',
+      card('Do it', CV.plan && CV.plan.count() ? 'Open your plan' : 'Build your plan', CV.plan && CV.plan.count() ? CV.plan.count() + ' actions saved. Give each an owner and a date.' : 'Take the two-minute check and turn your gaps into actions you can give an owner and a date.',
         CV.plan && CV.plan.count() ? 'Open my plan' : 'Take the check', function () { if (CV.plan && CV.plan.count()) CV.plan.open(); else if (CV.openCheck) CV.openCheck(true); }, true),
       card('Share it', 'Send it to one business owner', 'A link and one line from you is the easiest way to get it in front of someone who needs it.', 'Share the report', function () { if (CV.openShare) CV.openShare(); else CV.copy(CV.SITE, 'Link copied'); }),
       card('Keep going', 'Nine weekly episodes', 'The podcast series walks through every theme, Mondays to 28 December.', 'Go to the podcast', function () { window.open(CV.PODCAST, '_blank', 'noopener'); })),
@@ -1810,9 +1806,9 @@ CV.ready(function () {
 CV.ready(function () {
   var after = CV.$$('#how-to-read h3').filter(function (h) { return /businesses in the examples/i.test(h.textContent); })[0]; if (!after) return;
   var P = [
-    { who: 'Gary', what: 'Builder', where: 'Essex, about 12 staff', h: 'h-picture-this-happening-to-gary', hook: 'Other people’s problems become yours', theme: 'Theme 1' },
-    { who: 'Rachel', what: 'Mortgage broker', where: 'Milton Keynes', h: 'h-say-rachel-a-mortgage-broker-in-milton-keynes', hook: 'AI in the back office', theme: 'Theme 2' },
-    { who: 'Dave', what: 'Heating firm', where: 'Horsham', h: 'h-take-dave-a-heating-firm-in-horsham', hook: 'Crime gets cheaper and faster', theme: 'Theme 3' }
+    { who: 'Gary', what: 'Builder', where: 'Essex, about 12 staff', tag: 'Real business, imagined scenario', h: 'h-picture-this-happening-to-gary', hook: 'Other people’s problems become yours', theme: 'Theme 1' },
+    { who: 'Rachel', what: 'Mortgage broker', where: 'Milton Keynes', tag: 'Illustrative example', h: 'h-say-rachel-a-mortgage-broker-in-milton-keynes', hook: 'AI in the back office', theme: 'Theme 2' },
+    { who: 'Dave', what: 'Heating firm', where: 'Horsham', tag: 'Illustrative example', h: 'h-take-dave-a-heating-firm-in-horsham', hook: 'Crime gets cheaper and faster', theme: 'Theme 3' }
   ].filter(function (x) { return document.getElementById(x.h); });
   if (!P.length) return;
   var grid = CV.h('div', { class: 'ly', id: 'like-yours' },
@@ -1820,7 +1816,7 @@ CV.ready(function () {
     CV.h('div', { class: 'ly-grid' }, P.map(function (x) {
       return CV.h('a', { class: 'ly-card', href: '#' + x.h },
         CV.h('span', { class: 'ly-av', 'aria-hidden': 'true' }, x.who[0]),
-        CV.h('span', { class: 'ly-main' }, CV.h('b', null, x.who + ', ' + x.what.toLowerCase()), CV.h('span', { class: 'ly-where' }, x.where), CV.h('span', { class: 'ly-hook' }, x.theme + ': ' + x.hook)),
+        CV.h('span', { class: 'ly-main' }, CV.h('b', null, x.who + ', ' + x.what.toLowerCase()), CV.h('span', { class: 'ly-where' }, x.where + ' · ' + x.tag), CV.h('span', { class: 'ly-hook' }, x.theme + ': ' + x.hook)),
         CV.h('span', { class: 'ly-go', 'aria-hidden': 'true' }, '→'));
     })));
   var p = after.nextElementSibling; (p && p.tagName === 'P' ? p : after).after(grid);
@@ -2233,7 +2229,7 @@ CV.ready(function () {
     });
     b.appendChild(list);
     var answered = Object.keys(ans).length, blockers = Q.filter(function (x, i) { return x.must && ans[i] === 'no'; }).length;
-    if (answered === Q.length) b.appendChild(CV.h('div', { class: 'ce-res ' + (blockers ? 'fix' : 'ok') }, CV.h('b', null, blockers ? blockers + ' thing' + (blockers === 1 ? '' : 's') + ' to fix before you book.' : 'Looks ready to book an assessment.'), ' ', blockers ? 'Fix the items marked above first.' : 'Book it, and add it to your plan.'));
+    if (answered === Q.length) b.appendChild(CV.h('div', { class: 'ce-res ' + (blockers ? 'fix' : 'ok') }, CV.h('b', null, blockers ? blockers + ' thing' + (blockers === 1 ? '' : 's') + ' to fix before you book.' : 'No blockers among these basics.'), ' ', blockers ? 'Fix the items marked above first.' : 'This is a quick check, not the full requirements. Before you book, go through the official Cyber Essentials requirements for firewalls, malware protection, admin accounts and unsupported software, or ask your IT provider to.'));
     b.appendChild(CV.h('div', { class: 'cv-row' }, CV.plan ? CV.button('Add "MFA on every cloud service" to my plan', function () { CV.plan.add('t3-1'); }) : null, CV.button('Start again', function () { ans = {}; CV.store.set('ce', ans); render(); })));
   }
   var p = h.nextElementSibling; while (p && p.tagName !== 'UL') p = p.nextElementSibling;
@@ -2453,7 +2449,7 @@ CV.ready(function () {
   var kind = med === 'qr' || src === 'print' ? 'print' : /linkedin/.test(src) || /linkedin\.com|lnkd\.in/.test(ref) ? 'linkedin' : /podcast/.test(src) || /thesmallbusinesscybersecurityguy/.test(ref) ? 'podcast' : '';
   if (!kind || CV.store.get('welcomed-' + kind, false)) return;
   var M = {
-    linkedin: ['Welcome from LinkedIn.', 'Short on time? The two-minute check shows where you stand.', 'Take the check', function () { CV.openCheck && CV.openCheck(); }],
+    linkedin: ['Welcome from LinkedIn.', 'Short on time? The two-minute check finds your gaps and links each one to its fix.', 'Take the check', function () { CV.openCheck && CV.openCheck(); }],
     print: ['Welcome from the printed copy.', 'Online you can fill in the one-page plan, tick off the five things and add everything to your calendar.', 'Open the one-page plan', function () { location.hash = '#mvc'; }],
     podcast: ['Welcome, podcast listener.', 'Every theme here has a tool to go with the episode. Start with the five things before January.', 'See the five things', function () { location.hash = '#h-if-you-do-five-things-before-january'; }]
   }[kind];
