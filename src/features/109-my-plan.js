@@ -35,7 +35,7 @@ CV.ready(function () {
   CV.addTool(tb, true);
   function syncTool() { var n = CV.plan.count(); tb.querySelector('.plan-count').textContent = n; tb.setAttribute('aria-label', 'My plan, ' + n + ' action' + (n === 1 ? '' : 's')); }
   // Dialog
-  var dlg = CV.dialog({ id: 'plan', title: 'My plan', wide: true, note: 'Your plan stays in this browser. Nothing is sent anywhere.', onopen: render });
+  var dlg = CV.dialog({ id: 'plan', title: 'My plan', wide: true, note: 'Your plan stays in this browser and nothing is sent anywhere. Browsers can clear it if you don’t visit for a while (Safari after seven days), so print it or add the dates to your calendar to keep a copy.', onopen: render });
   CV.planDialog = dlg;
   // Re-rendering replaces the list, so remember where focus was and put it back afterwards.
   var focusNext = null;
@@ -58,10 +58,10 @@ CV.ready(function () {
     b.appendChild(CV.h('div', { class: 'plan-sum' },
       CV.h('div', { class: 'plan-bar', 'aria-hidden': 'true' }, CV.h('span', { style: 'width:' + (done / items.length * 100) + '%' })),
       CV.h('p', null, CV.h('b', null, done + ' of ' + items.length), ' actions done')));
-    [0, 1, 2, 3].forEach(function (t) {
-      var group = items.filter(function (x) { return x.a.theme === t; });
-      if (!group.length) return;
-      b.appendChild(CV.h('h3', { class: 'plan-theme' }, CV.themeLabel(t)));
+    // One list in the order actions were added. The check adds your gaps most important first, so the top item is the one to do first.
+    [items].forEach(function (group) {
+      b.appendChild(CV.h('h3', { class: 'plan-theme' }, 'Your actions'));
+      b.appendChild(CV.h('p', { class: 'plan-order' }, 'Most important first, in the order you added them.'));
       var ul = CV.h('ul', { class: 'plan-list' });
       group.forEach(function (x) {
         var cbid = 'pl-' + x.id;
@@ -70,7 +70,7 @@ CV.ready(function () {
         var li = CV.h('li', { class: 'plan-item' + (x.meta.done ? ' done' : ''), 'data-id': x.id },
           cb, CV.h('div', { class: 'plan-main' },
             CV.h('label', { for: cbid }, x.a.text),
-            CV.h('p', { class: 'plan-meta' }, CV.h('span', { class: 'chip ' + x.a.spend.toLowerCase() }, x.a.spend), ' ', x.a.effort)),
+            CV.h('p', { class: 'plan-meta' }, CV.h('span', { class: 'chip ' + x.a.spend.toLowerCase() }, x.a.spend === 'None' ? 'Free' : x.a.spend), ' ', x.a.effort, CV.h('span', { class: 'plan-th' }, ' · ' + CV.themeLabel(x.a.theme)))),
           CV.h('button', { type: 'button', class: 'plan-rm', 'aria-label': 'Remove: ' + x.a.text, id: 'rm-' + x.id, onclick: function () { var nx = li.nextElementSibling || li.previousElementSibling; focusNext = nx ? 'pl-' + nx.getAttribute('data-id') : null; CV.plan.remove(x.id); render(); CV.toast('Removed from your plan'); } }, '×'));
         ul.appendChild(li);
         CV.emit('plan-item', { li: li, item: x });

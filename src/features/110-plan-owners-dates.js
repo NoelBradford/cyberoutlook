@@ -19,19 +19,19 @@ CV.ready(function () {
   }
   CV.on('plan-render', function (d) {
     if (d.empty) return;
-    var bar = CV.h('div', { class: 'cv-row plan-actions' });
+    var bar = CV.h('div', { class: 'cv-row plan-actions' }), dated = events().length > 0;
     bar.appendChild(CV.button('Add due dates to my calendar', function () {
       var ev = events();
       if (!ev.length) { CV.toast('Give at least one open action a due date first'); return; }
       CV.ics(ev, 'my-cyber-plan.ics');
-    }, 'primary'));
+    }, dated ? 'primary' : ''));
     bar.appendChild(CV.button('Suggest dates from the 90-day plan', function () {
       // Spread undated actions one per week from the first Monday of January 2027.
       var start = new Date(2027, 0, 4), i = 0;
       CV.plan.list().forEach(function (x) { if (!x.meta.due && !x.meta.done) { var dt = new Date(start.getTime() + i * 7 * 86400000); i++; CV.plan.update(x.id, { due: dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0') }); } });
       CV.toast(i ? 'Suggested ' + i + ' date' + (i === 1 ? '' : 's') + ', one a week from 4 January' : 'Every open action already has a date');
       CV.plan.render();
-    }));
+    }, dated ? '' : 'primary'));
     d.body.insertBefore(bar, d.body.children[1] || null);
   });
 });

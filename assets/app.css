@@ -123,6 +123,8 @@ tr.in-plan td:first-child { box-shadow: inset 4px 0 0 var(--accent); padding-lef
 .plan-rm { width: 44px; height: 36px; font: 400 1.4rem/1 var(--font-ui); color: var(--muted); background: none; border: 1px solid transparent; border-radius: 2px; cursor: pointer; }
 .plan-rm:hover { border-color: var(--rule); color: var(--ink); }
 @media print { .plan-add { display: none !important; } tr.in-plan td:first-child { box-shadow: none; padding-left: 0; } }
+.plan-order { margin: 0.1rem 0 0.4rem; font: 400 0.85rem var(--font-ui); color: var(--muted); }
+.plan-th { color: var(--muted); }
 
 /* --- src/features/110-plan-owners-dates.css --- */
 .plan-assign { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 11rem); gap: 0.5rem; margin-top: 0.2rem; }
