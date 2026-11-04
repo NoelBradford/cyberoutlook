@@ -3,7 +3,7 @@
 .ep-title { font: 700 1.6rem/1 var(--font-head) !important; text-transform: uppercase; margin: 0.2rem 0 0 !important; }
 .ep-list { list-style: none; padding: 0 !important; margin: 0 !important; display: grid; gap: 0; }
 .ep { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; gap: 0.6rem; align-items: center; padding: 0.55rem 0; border-top: 1px solid color-mix(in srgb, var(--paper) 18%, transparent); margin: 0 !important; }
-.ep-n { font: 700 1.5rem var(--font-head); color: color-mix(in srgb, var(--paper) 55%, transparent); text-align: center; }
+.ep-n { font: 700 1.5rem var(--font-head); color: var(--band-muted); text-align: center; }
 .ep.out .ep-n, .ep.next .ep-n { color: var(--signal); }
 .ep-main { display: grid; gap: 0.1rem; min-width: 0; }
 .ep-main b { font-weight: 600; font-size: 0.95rem; }

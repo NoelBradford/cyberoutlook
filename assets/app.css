@@ -259,7 +259,7 @@ figure.wf { max-width: 760px; margin: 2rem 0 2.4rem; padding: 1.2rem; border: 2p
 .ep-title { font: 700 1.6rem/1 var(--font-head) !important; text-transform: uppercase; margin: 0.2rem 0 0 !important; }
 .ep-list { list-style: none; padding: 0 !important; margin: 0 !important; display: grid; gap: 0; }
 .ep { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; gap: 0.6rem; align-items: center; padding: 0.55rem 0; border-top: 1px solid color-mix(in srgb, var(--paper) 18%, transparent); margin: 0 !important; }
-.ep-n { font: 700 1.5rem var(--font-head); color: color-mix(in srgb, var(--paper) 55%, transparent); text-align: center; }
+.ep-n { font: 700 1.5rem var(--font-head); color: var(--band-muted); text-align: center; }
 .ep.out .ep-n, .ep.next .ep-n { color: var(--signal); }
 .ep-main { display: grid; gap: 0.1rem; min-width: 0; }
 .ep-main b { font-weight: 600; font-size: 0.95rem; }
@@ -505,7 +505,7 @@ figure.bt-fig { max-width: 100%; margin: 1.6rem 0 2rem; display: grid; gap: 0.7r
 .bt-now .bt-dot { background: var(--signal); border-color: var(--signal); box-shadow: 0 0 0 6px color-mix(in srgb, var(--signal) 25%, transparent); }
 .bt li > * { position: relative; z-index: 1; }
 .bt-d { font: 600 0.7rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-.bt-now .bt-d { color: var(--signal); }
+.bt-now .bt-d { color: var(--signal-text); }
 .bt b { font-weight: 600; }
 .bt-n { font-size: 0.78rem; color: var(--muted); }
 .bt-later b { color: var(--muted); }

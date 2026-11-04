@@ -9,7 +9,7 @@ figure.bt-fig { max-width: 100%; margin: 1.6rem 0 2rem; display: grid; gap: 0.7r
 .bt-now .bt-dot { background: var(--signal); border-color: var(--signal); box-shadow: 0 0 0 6px color-mix(in srgb, var(--signal) 25%, transparent); }
 .bt li > * { position: relative; z-index: 1; }
 .bt-d { font: 600 0.7rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-.bt-now .bt-d { color: var(--signal); }
+.bt-now .bt-d { color: var(--signal-text); }
 .bt b { font-weight: 600; }
 .bt-n { font-size: 0.78rem; color: var(--muted); }
 .bt-later b { color: var(--muted); }

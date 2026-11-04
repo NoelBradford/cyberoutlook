@@ -2130,7 +2130,12 @@ CV.ready(function () {
 // @msg Your data, your control: see exactly what this page has saved in your browser, back it up, move it to another device, or wipe it in one click
 // @sel #disclaimer
 CV.ready(function () {
-  var LABELS = { 'cv:plan': 'My plan', 'cv:check': 'Exposure check answers', 'cv-five-things': 'Five things ticks', 'cv:ninety': '90-day plan ticks', 'cv-plan-contacts': 'Who-to-call contacts', 'cv:fivefive': 'Five-and-five map', 'cv:aitools': 'AI tool register', 'cv:poster': 'Poster details', 'cv:itmail': 'IT provider email details', 'cv:marks': 'Highlights and notes', 'cv:votes': 'Forecast reactions', 'cv:spend': 'Spend planner', 'cv:meeting': 'Team meeting details', 'cv:cert': 'Badge details', 'cv:pos': 'Reading position', 'cv:read': 'Reading settings', 'cv:short': 'Short version switch', 'cv:role': 'Your role', 'cv:rate': 'Read-aloud speed', 'cv:toured': 'First-visit tour seen', 'theme': 'Light or dark mode' };
+  var LABELS = { 'cv:plan': 'My plan', 'cv:check': 'Exposure check answers', 'cv-five-things': 'Five things ticks', 'cv:ninety': '90-day plan ticks', 'cv-plan-contacts': 'Who-to-call contacts', 'cv:fivefive': 'Five-and-five map', 'cv:aitools': 'AI tool register', 'cv:poster': 'Poster details', 'cv:itmail': 'IT provider email details', 'cv:marks': 'Highlights and notes', 'cv:votes': 'Forecast reactions', 'cv:spend': 'Spend planner', 'cv:meeting': 'Team meeting details', 'cv:cert': 'Badge details', 'cv:pos': 'Reading position', 'cv:read': 'Reading settings', 'cv:short': 'Short version switch', 'cv:role': 'Your role', 'cv:rate': 'Read-aloud speed', 'cv:toured': 'First-visit tour seen', 'theme': 'Light or dark mode',
+    'cv:readpct': 'Reading progress', 'cv:snap': 'Progress since your last visit', 'cv:a4': 'Questionnaire answers from the plan', 'cv:aitools': 'AI tool register',
+    'cv:arrival': 'How you arrived (link type)', 'cv:ce': 'Cyber Essentials readiness', 'cv:hires': 'Remote hire checks', 'cv:inclog': 'Incident log',
+    'cv:mfa': 'MFA tracker', 'cv:nudged': 'Plan reminder dismissed', 'cv:restores': 'Restore-test log', 'cv:seen-new': 'What’s new seen',
+    'cv:simple': 'Simple mode switch', 'cv:sq': 'Supplier questionnaire answers', 'cv:supmail-who': 'Supplier email details' };
+  function label(k) { if (LABELS[k]) return LABELS[k]; if (/^cv:read-/.test(k)) return 'Reading progress: ' + k.slice(8).replace(/-/g, ' '); if (/^cv:welcomed-/.test(k)) return 'Welcome message seen'; return k; }
   var d = CV.dialog({ id: 'mydata', title: 'Your data', wide: true, onopen: render, note: 'This site has no accounts, no tracking cookies and no server-side storage. Everything below lives in this browser on this device.' });
   function render() {
     var b = d.body; b.innerHTML = '';
@@ -2138,7 +2143,7 @@ CV.ready(function () {
     if (!keys.length) { b.appendChild(CV.h('p', null, 'Nothing saved yet.')); }
     else {
       var tb = CV.h('tbody');
-      keys.forEach(function (k) { var v = ''; try { v = localStorage.getItem(k) || ''; } catch (e) {} tb.appendChild(CV.h('tr', null, CV.h('td', null, LABELS[k] || k), CV.h('td', null, v.length > 2 ? (Math.ceil(v.length / 100) / 10) + ' KB' : 'empty'))); });
+      keys.forEach(function (k) { var v = ''; try { v = localStorage.getItem(k) || ''; } catch (e) {} tb.appendChild(CV.h('tr', null, CV.h('td', null, label(k)), CV.h('td', null, v.length > 2 ? (Math.ceil(v.length / 100) / 10) + ' KB' : 'empty'))); });
       b.appendChild(CV.h('div', { class: 'table-wrap' }, CV.h('table', { class: 'md-t' }, CV.h('thead', null, CV.h('tr', null, CV.h('th', { scope: 'col' }, 'What'), CV.h('th', { scope: 'col' }, 'Size'))), tb)));
     }
     var file = CV.h('input', { type: 'file', accept: 'application/json,.json', class: 'cv-offscreen', id: 'md-file' });
