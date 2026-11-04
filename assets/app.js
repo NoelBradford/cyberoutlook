@@ -2206,7 +2206,7 @@ CV.ready(function () {
   function eligible() { return !CV.store.get('nudged', false) && !(CV.plan && CV.plan.count()) && !(CV.checkScore && CV.checkScore() != null); }
   if (!eligible()) return;
   var host = CV.$$('#theme-3 .table-wrap').pop(); if (!host) return;
-  var card = CV.h('aside', { class: 'nudge cv-noprint', 'aria-label': 'Suggestion' },
+  var card = CV.h('div', { class: 'nudge cv-noprint' },
     CV.h('p', { class: 'nudge-t' }, 'Turn what you’ve read into a plan'),
     CV.h('p', { class: 'nudge-s' }, 'Ten questions, about two minutes. Your gaps become actions you can give an owner and a date.'),
     CV.h('div', { class: 'cv-row' }, CV.button('Take the check', function () { done(); CV.openCheck && CV.openCheck(true); }, 'primary'), CV.button('No thanks', function () { done(); })));

@@ -1100,6 +1100,8 @@ html.simple canvas.pm { display: none !important; }
 .start-count b { color: var(--band-ink) !important; }
 .off-note, .sm-link { color: var(--band-muted) !important; }
 .off-note.off { color: #e6b043 !important; }
+.ep-guide .follow-k { color: var(--band-muted) !important; }
+.ep-guide .follow { border-top-color: color-mix(in srgb, var(--band-ink) 20%, transparent); }
 
 /* --- src/features/196-speed.css --- */
 /* Reserve the toolbar's final height so buttons arriving after load don't push the cover down. */
