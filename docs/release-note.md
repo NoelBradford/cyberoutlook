@@ -74,7 +74,7 @@ Still needed from you:
 2. **UX-10 is a proposal.** Confirm the three-card Start here, the role chips behind one control, the stat figures no longer being links, Search moving into the Tools menu, and the welcome-back and what's-new messages moving into the page flow.
 3. Extra standalone pages for other tools (My plan, five-and-five map, AI tool register, restore-test log, MFA tracker and others): the hub links to them in the report for now. Say which you want.
 4. The version label and date for the version history line (`index.html` has a "next" entry for you to complete).
-5. Whether to update the last LinkedIn carousel slide to point at `/check/` (not done, PDF not regenerated).
+5. The LinkedIn carousel's last slide now says "Take the two-minute check" and `cyberoutlook.sbcsg.uk/check`, and the PDF is re-rendered (still 10 pages, tagged, English (UK); slides 1 to 9 have identical text to the old PDF). Please review it before it goes anywhere. Ligatures are switched off in the carousel's CSS, because Chromium's PDF otherwise stores "fi" and "ff" as glyphs that copy, search and screen readers cannot read.
 
 ## QR codes and PDFs
 
