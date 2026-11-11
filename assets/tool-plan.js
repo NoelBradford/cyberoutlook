@@ -252,7 +252,9 @@ CV.ready(function () {
   CV.addTool(tb, true);
   function syncTool() { var n = CV.plan.count(); tb.querySelector('.plan-count').textContent = n; tb.setAttribute('aria-label', 'My plan, ' + n + ' action' + (n === 1 ? '' : 's')); }
   // Dialog
-  var SA = !!CV.standalone; // a page of its own (/plan/): inline, with a list of the report's actions to add from
+  // True only on the plan page itself (/plan/): the plan is drawn inline there, with a list of the report's actions to add from.
+  // On another tool page (for example /check/) it stays a dialog, opened by that page's next step.
+  var SA = !!CV.standalone && ((CV.$('#main') || document.body).getAttribute('data-slug') === 'plan');
   var PLAN_NOTE = 'Your plan stays in this browser and nothing is sent anywhere. Browsers can clear it if you don’t visit for a while (Safari after seven days), so print it or add the dates to your calendar to keep a copy.';
   var dlg = SA ? CV.inlineHost({ id: 'plan', label: 'My plan', note: PLAN_NOTE, onopen: render }) : CV.dialog({ id: 'plan', title: 'My plan', wide: true, note: PLAN_NOTE, onopen: render });
   CV.planDialog = dlg;
