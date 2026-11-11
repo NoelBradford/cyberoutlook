@@ -144,6 +144,19 @@ main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 1rem; }
 .cv-inline .cv-pre { max-height: none; overflow: visible; }
 @media (max-width: 560px) { .page-nav { width: 100%; justify-content: space-between; } }
 
+/* Rules that a tool borrows from another tool's feature file. A tool page only carries the features it lists, so they are copied here.
+   If the originals change, change these too. */
+.qz-h { font: 700 1.3rem var(--font-head); text-transform: uppercase; margin: 0.4rem 0 0; }
+.qz-opt-inline { display: grid; grid-template-columns: 1.6rem 1fr; align-items: start; gap: 0.3rem; }
+.qz-opt-inline input { width: 1.2rem; height: 1.2rem; margin: 0.15rem 0 0; accent-color: var(--accent); }
+.ce-fix { font-size: 0.86rem; border-left: 3px solid var(--signal); padding-left: 0.6rem; }
+.plan-sum { display: grid; gap: 0.4rem; }
+.plan-sum p { font-size: 0.95rem; }
+.plan-bar { height: 8px; background: var(--rule); border-radius: 4px; overflow: hidden; }
+.plan-bar span { display: block; height: 100%; background: var(--accent); }
+.plan-rm { width: 44px; height: 36px; font: 400 1.4rem/1 var(--font-ui); color: var(--muted); background: none; border: 1px solid transparent; border-radius: 2px; cursor: pointer; }
+.plan-rm:hover { border-color: var(--rule); color: var(--ink); }
+
 /* --- src/core.css --- */
 /* Shared styles for the interactive layer. Uses the report's own tokens. */
 .cv-offscreen { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
