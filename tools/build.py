@@ -125,6 +125,11 @@ def hub_html(hub, where):
     return out
 
 seen, wanted_files, listing = set(), set(), []
+# Titles, descriptions and addresses must be unique across pages and the report, so no two links preview the same way.
+titles, descriptions, urls = {}, {}, {SITE_URL: 'the report'}
+m_t = re.search(r'<title>(.*?)</title>', s, re.S); m_d = re.search(r'<meta name="description" content="(.*?)">', s, re.S)
+if m_t: titles[m_t.group(1).strip()] = 'the report'
+if m_d: descriptions[m_d.group(1).strip()] = 'the report'
 for i, e in enumerate(manifest):
     where = f'pages.json entry {i + 1}'
     for k in ('slug', 'title', 'description'):
@@ -144,6 +149,12 @@ for i, e in enumerate(manifest):
     if not isinstance(opn, str) or not OPEN_RE.match(opn): fail(f'{where}: "open" must be a dotted function path such as CV.openCheck')
     hk = e.get('hashKey')
     if hk is not None and (not isinstance(hk, str) or not re.search(r'\b' + re.escape(hk) + r':\s*function', rd(os.path.join(ROOT, 'src', 'features', '171-tool-links.js')))): fail(f'{where}: hashKey "{hk}" is not a route in src/features/171-tool-links.js')
+    lm = e.get('lastmod')
+    if not isinstance(lm, str) or not re.match(r'^\d{4}-\d{2}-\d{2}$', lm): fail(f'{where}: "lastmod" must be a date such as 2026-11-11 (kept by hand so the build is the same every day)')
+    for field, bucket in (('title', titles), ('description', descriptions), ('url', urls)):
+        val = e[field] if field != 'url' else f'{SITE_URL}{slug}/'
+        if val in bucket: fail(f'{where}: {field} is already used by "{bucket[val]}"')
+        bucket[val] = slug
     og = e.get('ogImage', 'assets/og-image.png')
     if not isinstance(og, str) or og.startswith('/') or '..' in og or not os.path.isfile(os.path.join(ROOT, *og.split('/'))): fail(f'{where}: ogImage must be an existing file path inside the repo')
     pjs, pcss = page_bundles(ids)
@@ -176,6 +187,18 @@ for f in glob.glob(os.path.join(ROOT, 'assets', 'tool-*.js')) + glob.glob(os.pat
 for f in glob.glob(os.path.join(ROOT, '*', 'index.html')):
     rel = os.path.relpath(f, ROOT).replace(os.sep, '/')
     if rel not in wanted_files and rd(f).startswith('<!DOCTYPE html>\n' + MARK): os.remove(f)
+
+# sitemap.xml: the report, every page in pages.json, then the PDFs. lastmod comes from the data files, not the clock.
+def sm_entry(path, lm):
+    return f'  <url>\n    <loc>{SITE_URL}{path}</loc>\n    <lastmod>{lm}</lastmod>\n  </url>\n'
+extra = json.loads(rd(os.path.join(PAGES_DIR, 'sitemap.json')))
+for f_ in [extra['home']] + extra['files']:
+    if not re.match(r'^\d{4}-\d{2}-\d{2}$', f_['lastmod']): fail(f'sitemap.json: bad lastmod for "{f_["path"]}"')
+    if f_['path'] and not os.path.isfile(os.path.join(ROOT, *f_['path'].split('/'))): fail(f'sitemap.json: "{f_["path"]}" is not a file in the repo')
+wr(os.path.join(ROOT, 'sitemap.xml'), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+   + sm_entry(extra['home']['path'], extra['home']['lastmod'])
+   + ''.join(sm_entry(e['slug'] + '/', e['lastmod']) for e in manifest)
+   + ''.join(sm_entry(f_['path'], f_['lastmod']) for f_ in extra['files']) + '</urlset>\n')
 
 # One source of truth for CI: tools/pages.txt is generated from pages.json.
 wr(os.path.join(ROOT, 'tools', 'pages.txt'),

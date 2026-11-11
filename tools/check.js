@@ -51,6 +51,11 @@ const { chromium } = require('playwright');
           cv: !!window.CV,
           h1: document.querySelectorAll('h1').length,
           title: document.title.trim(),
+          desc: ((document.querySelector('meta[name="description"]') || {}).content || '').trim(),
+          canonical: (document.querySelector('link[rel="canonical"]') || {}).href || '',
+          ogImage: (document.querySelector('meta[property="og:image"]') || {}).content || '',
+          twImage: (document.querySelector('meta[name="twitter:image"]') || {}).content || '',
+          pathname: location.pathname,
           hasMain: !!main,
           visible,
         };
@@ -59,6 +64,16 @@ const { chromium } = require('playwright');
       if (!r.cv) problems.push(`${w}: CV core missing`);
       if (r.h1 !== 1) problems.push(`${w}: expected exactly one h1, found ${r.h1}`);
       if (!r.title) problems.push(`${w}: empty title`);
+      if (!r.desc) problems.push(`${w}: empty meta description`);
+      // Social preview: the canonical address is this page's own, and the image is an absolute address of a 1200 by 630 PNG in the repo.
+      if (new URL(r.canonical || 'http://x/').pathname !== r.pathname) problems.push(`${w}: canonical ${r.canonical} is not this page (${r.pathname})`);
+      if (!/^https:\/\/cyberoutlook\.sbcsg\.uk\/assets\/[\w.-]+\.png$/.test(r.ogImage)) problems.push(`${w}: og:image is not an absolute site address: ${r.ogImage}`);
+      if (r.twImage !== r.ogImage) problems.push(`${w}: twitter:image differs from og:image`);
+      if (/^https:\/\/cyberoutlook\.sbcsg\.uk\//.test(r.ogImage)) {
+        const img = await ctx.request.get(new URL(new URL(r.ogImage).pathname, origin).href).catch(() => null);
+        if (!img || img.status() !== 200) problems.push(`${w}: og:image file missing (${r.ogImage})`);
+        else { const b = await img.body(); if (b.length < 24 || b.readUInt32BE(16) !== 1200 || b.readUInt32BE(20) !== 630) problems.push(`${w}: og:image is not 1200 by 630`); }
+      }
       // Every same-site link on the page must resolve (fragments are ignored, mailto and other schemes are skipped).
       const hrefs = await p.evaluate(() => [...new Set([...document.querySelectorAll('a[href]')].map(a => a.href))]);
       for (const href of hrefs) {

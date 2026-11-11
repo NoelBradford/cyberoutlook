@@ -18,7 +18,9 @@
       "promise": "Ten questions, a score out of 10 and your gaps in order.",
       "time": "About two minutes"
     },
-    "hashKey": "check"
+    "hashKey": "check",
+    "ogImage": "assets/og-check.png",
+    "lastmod": "2026-11-11"
   },
   {
     "slug": "readiness",
@@ -33,7 +35,9 @@
       "promise": "Five questions on the Cyber Essentials changes. See what to fix before you book an assessment.",
       "time": "About a minute"
     },
-    "hashKey": "readiness"
+    "hashKey": "readiness",
+    "ogImage": "assets/og-readiness.png",
+    "lastmod": "2026-11-11"
   },
   {
     "slug": "it-provider-email",
@@ -51,7 +55,9 @@
       "promise": "The four questions for your IT provider, plus one about backups, as an email you can copy or open in your mail app.",
       "time": "About 30 seconds"
     },
-    "hashKey": "itmail"
+    "hashKey": "itmail",
+    "ogImage": "assets/og-it-provider-email.png",
+    "lastmod": "2026-11-11"
   },
   {
     "slug": "call-back-poster",
@@ -67,7 +73,9 @@
       "promise": "A printable A4 poster for the call-back rule, with your business name and who to ask.",
       "time": "Prints on one A4 page"
     },
-    "hashKey": "poster"
+    "hashKey": "poster",
+    "ogImage": "assets/og-call-back-poster.png",
+    "lastmod": "2026-11-11"
   },
   {
     "slug": "tools",
@@ -119,6 +127,8 @@
           "promise": "Print a team pack or everything you have filled in, present the report to your team, and get calendar reminders."
         }
       ]
-    }
+    },
+    "ogImage": "assets/og-tools.png",
+    "lastmod": "2026-11-11"
   }
 ]
