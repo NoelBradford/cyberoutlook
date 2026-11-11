@@ -10,7 +10,7 @@
 .rp-step:hover, .rp-step:focus-visible { border-color: var(--signal); }
 .rp-step span { flex: 0 0 auto; display: grid; place-items: center; width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--signal); color: var(--ink); font: 700 1rem var(--font-head); }
 @media (max-width: 560px) { .rp { grid-template-columns: 1fr; } }
-.rp-det > summary { cursor: pointer; display: inline-block; font: 600 0.82rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--paper); padding: 0.55rem 0.9rem; min-height: 40px; border: 1px solid color-mix(in srgb, var(--paper) 35%, transparent); border-radius: 3px; }
+.rp-det > summary { cursor: pointer; display: inline-block; font: 600 0.82rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--band-ink, var(--paper)); padding: 0.55rem 0.9rem; min-height: 40px; border: 1px solid color-mix(in srgb, currentColor 35%, transparent); border-radius: 3px; }
 .rp-det > summary:hover { border-color: var(--signal); }
 .rp-det[open] > summary { margin-bottom: 0.9rem; }
 .rp-det .rp { border-top: 0; padding-top: 0; }

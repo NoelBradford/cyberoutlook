@@ -124,3 +124,10 @@ main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 1rem; }
 .hub-card a { color: var(--ink); }
 .hub-meta { color: var(--muted); font-size: 0.8rem !important; letter-spacing: 0.06em; text-transform: uppercase; }
 .hub-sub { font-size: clamp(1.5rem, 4vw, 2rem); margin: 2rem 0 0.4rem; }
+@media print {
+  .hub-list { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+  .hub-card { break-inside: avoid; padding: 0.5rem 0.7rem; }
+  .hub-card h2, .hub-card h3 { font-size: 1.1rem; }
+  .hub-card p { font-size: 0.8rem; }
+  .hub-sub { margin-top: 1rem; }
+}

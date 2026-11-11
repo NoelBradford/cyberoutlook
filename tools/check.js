@@ -5,9 +5,11 @@
 //   report (default)  the full report page: script errors, CSP violations, sideways scrolling, fewer than 14
 //                     sections, missing window.CV, broken in-page links, duplicate ids, a broken theme toggle.
 //   tool              a standalone tool page: no script error, no CSP violation or "CV feature failed" warning,
-//                     no sideways scrolling, window.CV present, exactly one h1, a non-empty title, a <main>
-//                     landmark, the tool's content visible without any click, and no 4xx or 5xx from same-origin
-//                     requests.
+//                     no sideways scrolling, window.CV present, exactly one h1 and no skipped heading levels, a
+//                     non-empty title, a <main> landmark, a skip link that reaches it, the tool's content visible
+//                     without any click, nothing animating under prefers-reduced-motion, in-page anchors that
+//                     resolve, same-site links that resolve, unique social tags, and no 4xx or 5xx from same-origin
+//                     requests or request to another site (web fonts excepted).
 // --path is resolved against baseUrl, so `check.js http://127.0.0.1:8080/ --profile tool --path /check/` tests /check/.
 const { chromium } = require('playwright');
 (async () => {
@@ -60,6 +62,22 @@ const { chromium } = require('playwright');
           visible,
         };
       });
+      const q = await p.evaluate(() => {
+        const shown = e => e.getClientRects().length > 0 && getComputedStyle(e).visibility !== 'hidden';
+        const levels = [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')].filter(shown).map(h => +h.tagName[1]);
+        let skipped = null; for (let i = 1; i < levels.length; i++) if (levels[i] > levels[i - 1] + 1) { skipped = `h${levels[i - 1]} then h${levels[i]}`; break; }
+        const skip = document.querySelector('a.skip');
+        const skipTarget = skip ? document.getElementById((skip.getAttribute('href') || '').slice(1)) : null;
+        return {
+          skipped, hasSkip: !!skip, skipOk: !!skipTarget && skipTarget.tagName === 'MAIN',
+          running: document.getAnimations().filter(a => a.playState === 'running').map(a => (a.effect && a.effect.target ? a.effect.target.className || a.effect.target.tagName : '?') + ':' + (a.animationName || a.transitionProperty || 'animation')),
+          brokenAnchors: [...new Set([...document.querySelectorAll('a[href^="#"]')].map(a => a.getAttribute('href').slice(1)).filter(id => id && !id.includes('=') && !document.getElementById(id)))],
+        };
+      });
+      if (q.skipped) problems.push(`${w}: skipped heading level (${q.skipped})`);
+      if (!q.hasSkip) problems.push(`${w}: no skip link`); else if (!q.skipOk) problems.push(`${w}: the skip link does not point at <main>`);
+      if (q.running.length) problems.push(`${w}: animating under prefers-reduced-motion: ${q.running.slice(0, 3).join(', ')}`);
+      if (q.brokenAnchors.length) problems.push(`${w}: in-page anchors with no target: ${q.brokenAnchors.join(', ')}`);
       if (r.overflow > 1) problems.push(`${w}: horizontal overflow ${r.overflow}px`);
       if (!r.cv) problems.push(`${w}: CV core missing`);
       if (r.h1 !== 1) problems.push(`${w}: expected exactly one h1, found ${r.h1}`);

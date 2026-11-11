@@ -1,7 +1,7 @@
-.wb { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; justify-content: space-between; padding: 0.8rem 0.9rem; border-left: 5px solid var(--signal); background: color-mix(in srgb, var(--paper) 8%, transparent); color: var(--paper); font: 400 0.95rem/1.4 var(--font-ui); }
+.wb { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; justify-content: space-between; padding: 0.8rem 0.9rem; border-left: 5px solid var(--signal); background: color-mix(in srgb, currentColor 8%, transparent); color: var(--band-ink, var(--paper)); font: 400 0.95rem/1.4 var(--font-ui); }
 .wb p { margin: 0; flex: 1 1 280px; }
-.wb .tool { color: var(--paper); border-color: color-mix(in srgb, var(--paper) 35%, transparent); }
+.wb .tool { color: var(--band-ink, var(--paper)); border-color: color-mix(in srgb, currentColor 35%, transparent); }
 .wb .tool.primary { background: var(--signal); color: var(--ink); border-color: var(--signal); }
-.wb-x { width: 40px; height: 40px; font: 400 1.5rem/1 var(--font-ui); color: var(--paper); background: none; border: 0; cursor: pointer; }
+.wb-x { width: 40px; height: 40px; font: 400 1.5rem/1 var(--font-ui); color: var(--band-ink, var(--paper)); background: none; border: 0; cursor: pointer; }
 .start.slim .start-inner > .wb { display: flex !important; }
 @media print { .wb { display: none !important; } }
