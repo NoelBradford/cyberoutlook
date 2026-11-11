@@ -10,7 +10,8 @@ const path = require('path');
 const pages = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'src', 'pages', 'pages.json'), 'utf8'));
 const WITH_PAGE = pages.filter(p => p.hashKey).map(p => [p.hashKey, p.slug]);
 // Tool keys with no page. Each opens a dialog (the incident card is a full-screen overlay instead).
-const NO_PAGE = ['plan', 'fivefive', 'aitools', 'mfa', 'restore', 'toolkit', 'share', 'glossary', 'notes', 'search', 'mydata', 'progress'];
+const HAS_PAGE = new Set(WITH_PAGE.map(x => x[0]));
+const NO_PAGE = ['plan', 'fivefive', 'aitools', 'mfa', 'restore', 'toolkit', 'share', 'glossary', 'notes', 'search', 'mydata', 'progress'].filter(k => !HAS_PAGE.has(k));
 const SECTIONS = ['mvc', 'rules', 'summary', 'theme-1', 'theme-3'];
 
 (async () => {

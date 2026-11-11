@@ -68,7 +68,8 @@ p, li { text-wrap: pretty; }
 .page-brand { display: inline-flex; align-items: center; gap: 0.6rem; color: var(--ink); text-decoration: none; font: 700 1.15rem var(--font-head); letter-spacing: 0.02em; text-transform: uppercase; }
 .page-brand img { border-radius: 4px; }
 .page-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; font: 500 0.92rem var(--font-ui); }
-main { max-width: 1240px; margin: 0 auto; padding: 2rem max(16px, 4vw) 3rem; min-height: 50vh; }
+/* The content column is as wide as the header's and footer's (1240px), so its left edge lines up with the logo above it. */
+main { max-width: calc(1240px + 2 * max(16px, 4vw)); margin: 0 auto; padding: 2rem max(16px, 4vw) 3rem; min-height: 50vh; }
 main:focus { outline: none; }
 main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 1rem; }
 .page-foot { border-top: 1px solid var(--rule); padding: 0 max(16px, 4vw); font: 0.92rem var(--font-ui); color: var(--muted); }
@@ -134,6 +135,15 @@ main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 1rem; }
   .hub-sub { margin-top: 1rem; }
 }
 
+/* Printing a generated sheet (the five-and-five map, the AI register): the sheet is shown, everything else on the page is hidden. */
+.cv-sheet { display: none; }
+@media print { body.print-sheet > *:not(.cv-sheet) { display: none !important; } }
+
+/* UI pass: on a page of its own the email preview shows in full (no inner scroll), and on a phone the header's second row
+   puts the report link on the left and the theme toggle on the right, level with the content edges. */
+.cv-inline .cv-pre { max-height: none; overflow: visible; }
+@media (max-width: 560px) { .page-nav { width: 100%; justify-content: space-between; } }
+
 /* --- src/core.css --- */
 /* Shared styles for the interactive layer. Uses the report's own tokens. */
 .cv-offscreen { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
@@ -155,6 +165,8 @@ html.cv-modal-open { overflow: hidden; }
 .cv-field input:focus, .cv-field textarea:focus, .cv-field select:focus, .cv-input:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
 .cv-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
 .cv-grid2 { display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+/* A link that looks like a button ("Open in my email app", "Read why...") is not underlined like a text link. */
+a.tool { display: inline-block; text-decoration: none; }
 .tool.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .tool.primary:hover { background: var(--accent); border-color: var(--accent); }
 .cv-kicker { font: 600 0.72rem var(--font-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0; }

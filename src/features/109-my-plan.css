@@ -22,3 +22,9 @@ tr.in-plan td:first-child { box-shadow: inset 4px 0 0 var(--accent); padding-lef
 @media print { .plan-add { display: none !important; } tr.in-plan td:first-child { box-shadow: none; padding-left: 0; } }
 .plan-order { margin: 0.1rem 0 0.4rem; font: 400 0.85rem var(--font-ui); color: var(--muted); }
 .plan-th { color: var(--muted); }
+.plan-pick { margin-top: 1rem; }
+.plan-pick > summary { cursor: pointer; font: 600 0.82rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; padding: 0.55rem 0.9rem; min-height: 40px; display: inline-block; border: 1px solid var(--rule); border-radius: 3px; }
+.plan-pick-h { font: 700 1.1rem var(--font-head); text-transform: uppercase; margin: 1rem 0 0.3rem; color: var(--accent); }
+.plan-pick-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.plan-pick-list li { display: flex; gap: 0.8rem; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--rule); padding-bottom: 0.5rem; }
+.plan-pick-list li span { flex: 1 1 auto; }

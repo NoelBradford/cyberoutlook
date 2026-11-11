@@ -3,8 +3,9 @@
 CV.ready(function () {
   var saved = CV.store.get('fivefive', { s: [], c: [] });
   ['s', 'c'].forEach(function (k) { while (saved[k].length < 5) saved[k].push({ name: '', stops: '', impact: 0 }); });
-  var d = CV.dialog({ id: 'fivefive', title: 'Five-and-five map', wide: true,
-    note: 'From Theme 1: list your five most important suppliers and five most important customers, and write what stops if each disappears for two weeks. Stays in this browser.' });
+  var SA = !!CV.standalone; // a page of its own (/five-and-five/)
+  var NOTE = 'From Theme 1: list your five most important suppliers and five most important customers, and write what stops if each disappears for two weeks. Stays in this browser.';
+  var d = SA ? CV.inlineHost({ id: 'fivefive', label: 'Five-and-five map', note: NOTE }) : CV.dialog({ id: 'fivefive', title: 'Five-and-five map', wide: true, note: NOTE });
   var LEVELS = ['Not rated', 'Annoying', 'Painful', 'We stop trading'];
   function save() { CV.store.set('fivefive', saved); renderMap(); }
   var map = CV.h('div', { class: 'ff-map', 'aria-live': 'polite' });
@@ -35,15 +36,16 @@ CV.ready(function () {
     map.appendChild(grid);
   }
   d.body.appendChild(CV.h('div', { class: 'ff-sets' }, rows('s', 'Your five key suppliers'), rows('c', 'Your five key customers')));
-  d.body.appendChild(CV.h('h3', { class: 'qz-h' }, 'Your map'));
+  d.body.appendChild(CV.h(SA ? 'h2' : 'h3', { class: 'qz-h' }, 'Your map'));
   d.body.appendChild(map);
   d.body.appendChild(CV.h('div', { class: 'cv-row' },
     CV.button('Print the map', function () { var c = map.cloneNode(true); var sheet = CV.h('div', { class: 'ff-sheet' }, CV.h('h2', null, 'Five-and-five map'), CV.h('p', null, 'What stops if each disappears for two weeks. From the UK Small Business Cyber Outlook 2027.'), c); CV.printSheet(sheet); }, 'primary'),
-    CV.plan ? CV.button('Mark this action in my plan', function () { CV.plan.add('t1-1'); }) : null));
+    CV.plan ? CV.button('Mark this action in my plan', function () { CV.plan.add('t1-1'); }) : null,
+    SA ? CV.h('a', { class: 'tool', href: '../#theme-1' }, 'Read why this matters') : null));
   renderMap();
   CV.openFiveFive = function () { d.open(); };
   var tw = CV.$('#theme-1 .table-wrap');
-  if (tw) tw.after(CV.h('div', { class: 'cta-card cv-noprint' },
+  if (tw && !SA) tw.after(CV.h('div', { class: 'cta-card cv-noprint' },
     CV.h('div', null, CV.h('p', { class: 'cv-kicker' }, 'Tool'), CV.h('p', { class: 'cta-title' }, 'Map your five and five'),
       CV.h('p', { class: 'cta-sub' }, 'Name your key suppliers and customers, rate what stops, and see your weak spots.')),
     CV.button('Start the map', function () { d.open(); }, 'primary')));

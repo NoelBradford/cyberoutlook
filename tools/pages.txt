@@ -4,4 +4,8 @@
 /readiness/
 /it-provider-email/
 /call-back-poster/
+/plan/
+/mfa-tracker/
+/five-and-five/
+/ai-tool-register/
 /tools/

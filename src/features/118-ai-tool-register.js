@@ -2,8 +2,9 @@
 // @sel #theme-2 .table-wrap
 CV.ready(function () {
   var saved = CV.store.get('aitools', { tools: [], rule: '' });
-  var d = CV.dialog({ id: 'aitools', title: 'AI tool register', wide: true,
-    note: 'Based on Theme 2: for any AI tool that can read your data, process outside content, and send messages out, switch off at least one of the three. Stays in this browser.' });
+  var SA = !!CV.standalone; // a page of its own (/ai-tool-register/)
+  var NOTE = 'Based on Theme 2: for any AI tool that can read your data, process outside content, and send messages out, switch off at least one of the three. Stays in this browser.';
+  var d = SA ? CV.inlineHost({ id: 'aitools', label: 'AI tool register', note: NOTE }) : CV.dialog({ id: 'aitools', title: 'AI tool register', wide: true, note: NOTE });
   var ABIL = [['data', 'Reads our data'], ['outside', 'Processes outside content'], ['send', 'Sends messages out']];
   var list = CV.h('div', { class: 'ai-list' });
   var rule = CV.h('textarea', { placeholder: 'e.g. No client personal data goes into any AI tool that isn’t on this list.' }); rule.value = saved.rule || '';
@@ -43,11 +44,12 @@ CV.ready(function () {
     var t = CV.h('table', null, CV.h('thead', null, CV.h('tr', null, ['Tool', 'Who uses it', 'Reads our data', 'Outside content', 'Sends out'].map(function (x) { return CV.h('th', null, x); }))));
     var tb = CV.h('tbody'); saved.tools.forEach(function (x) { tb.appendChild(CV.h('tr', null, CV.h('td', null, x.name || ''), CV.h('td', null, x.who || ''), ABIL.map(function (a) { return CV.h('td', null, x[a[0]] ? 'Yes' : 'No'); }))); }); t.appendChild(tb);
     CV.printSheet(CV.h('div', { class: 'ai-sheet' }, CV.h('h2', null, 'AI tool register'), t, CV.h('h3', null, 'Client data rule'), CV.h('p', null, saved.rule || '______________________________________________'), CV.h('p', { class: 'pst-src' }, 'From the UK Small Business Cyber Outlook 2027 · cyberoutlook.sbcsg.uk')));
-  }, 'primary'), CV.plan ? CV.button('Add this action to my plan', function () { CV.plan.add('t2-1'); }) : null));
+  }, 'primary'), CV.plan ? CV.button('Add this action to my plan', function () { CV.plan.add('t2-1'); }) : null,
+    SA ? CV.h('a', { class: 'tool', href: '../#theme-2' }, 'Read why the rule of three matters') : null));
   render();
   CV.openAiTools = function () { d.open(); };
   var tw = CV.$('#theme-2 .table-wrap');
-  if (tw) tw.after(CV.h('div', { class: 'cta-card cv-noprint' },
+  if (tw && !SA) tw.after(CV.h('div', { class: 'cta-card cv-noprint' },
     CV.h('div', null, CV.h('p', { class: 'cv-kicker' }, 'Tool'), CV.h('p', { class: 'cta-title' }, 'Build your AI tool register'),
       CV.h('p', { class: 'cta-sub' }, 'List the tools, tick what each can do, and spot any with all three risky abilities.')),
     CV.button('Start the register', function () { d.open(); }, 'primary')));

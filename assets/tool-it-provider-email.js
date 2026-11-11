@@ -197,8 +197,22 @@ CV.inlineHost = function (opts) {
   if (opts.note) el.appendChild(CV.h('p', { class: 'cv-dialog-note' }, opts.note));
   el.close = function () {};
   (CV.$('#tool-root') || document.body).appendChild(el);
-  return { dialog: el, body: body, open: function () { el.hidden = false; }, close: function () {} };
+  // Like CV.dialog, opening runs opts.onopen(body) first (a tool that draws itself when opened).
+  return { dialog: el, body: body, open: function () { if (opts.onopen) opts.onopen(body); el.hidden = false; }, close: function () {} };
 };
+
+// Printing one generated sheet on its own. The report gets this from the call-back poster feature, which a tool page may not load.
+// A feature that defines CV.printSheet itself replaces this with the same thing.
+CV.printSheet = function (el) {
+  CV.$$('.cv-sheet').forEach(function (n) { n.remove(); });
+  el.classList.add('cv-sheet'); document.body.appendChild(el);
+  document.body.classList.add('print-sheet');
+  setTimeout(function () { window.print(); }, 60);
+};
+window.addEventListener('afterprint', function () { document.body.classList.remove('print-sheet'); });
+
+// There is no report on this page to scroll to, so "go to this action" opens the report at it. 108-exposure-check replaces this.
+CV.goToAction = function (id) { location.href = '../#act-' + id; };
 
 /* --- src/features/115-it-provider-email.js --- */
 // @msg IT provider email builder: the four questions plus the backup question, ready to send
