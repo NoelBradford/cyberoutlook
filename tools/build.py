@@ -80,6 +80,13 @@ mc = re.search(r"const CACHE = '([^']+)'", rd(os.path.join(ROOT, 'sw.js')))
 if not mc: fail('could not find the CACHE name in sw.js')
 CACHE_NAME = mc.group(1)   # tool pages write into the service worker's cache, so the name comes from sw.js
 
+# The report's three action tables, lifted from index.html so a tool page that needs them (the check and My plan read
+# them through CV.actions()) never carries its own copy of the wording. Ids are positional (t1-1, t3-6), so the
+# order and count matter: fail unless there are exactly three.
+tables = re.findall(r'<table class="actions">.*?</table>', s, re.S)
+if len(tables) != 3: fail(f'expected exactly three <table class="actions"> blocks in index.html, found {len(tables)}')
+ACTIONS_HTML = '<div id="report-actions" hidden>\n' + '\n'.join(tables) + '\n</div>\n'
+
 seen, wanted_files, listing = set(), set(), []
 for i, e in enumerate(manifest):
     where = f'pages.json entry {i + 1}'
@@ -104,9 +111,16 @@ for i, e in enumerate(manifest):
     v = hashlib.sha1((pjs + pcss).encode()).hexdigest()[:10]
     wr(os.path.join(ROOT, 'assets', f'tool-{slug}.js'), HEADER + pjs)
     wr(os.path.join(ROOT, 'assets', f'tool-{slug}.css'), HEADER + pcss)
+    intro = e.get('intro', '')
+    if not isinstance(intro, str): fail(f'{where}: "intro" must be a string')
+    needs_actions = e.get('reportActions', False)
+    if not isinstance(needs_actions, bool): fail(f'{where}: "reportActions" must be true or false')
     values = {'CSP': CSP, 'TITLE': e['title'], 'HEADING': e['title'], 'DESCRIPTION': e['description'], 'URL': f'{SITE_URL}{slug}/',
               'OG_IMAGE': SITE_URL + og, 'SLUG': slug, 'HASH': v, 'OPEN': opn, 'CACHE': CACHE_NAME}
     out = shell
+    # These two are markup, filled before the escaped plain-text values. Their own text is escaped here.
+    out = out.replace('{{INTRO}}', f'<p class="page-intro">{esc(intro)}</p>\n' if intro.strip() else '')
+    out = out.replace('{{ACTIONS}}', ACTIONS_HTML if needs_actions else '')
     for k, val in values.items(): out = out.replace('{{' + k + '}}', esc(val))
     if '{{' in out: fail(f'{where}: shell.html has a placeholder build.py does not fill')
     out = out.replace('<!DOCTYPE html>\n', '<!DOCTYPE html>\n' + MARK + '\n', 1)

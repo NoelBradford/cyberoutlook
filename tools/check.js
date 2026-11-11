@@ -40,7 +40,9 @@ const { chromium } = require('playwright');
         if (main) {
           const cs = getComputedStyle(main), box = main.getBoundingClientRect();
           const hiddenAncestor = main.closest('[aria-hidden="true"], [hidden], dialog:not([open])');
-          visible = cs.display !== 'none' && cs.visibility !== 'hidden' && box.width > 0 && box.height > 0 && !hiddenAncestor && main.innerText.trim().length >= 40;
+          // Text alone is not enough: a page whose tool only opens in a dialog also has an intro. Something to press or fill in must be on screen.
+          const control = [...main.querySelectorAll('button, input:not([type=hidden]), select, textarea, a[href]')].some(e => { const r = e.getBoundingClientRect(), c = getComputedStyle(e); return r.width > 0 && r.height > 0 && c.visibility !== 'hidden' && c.display !== 'none' && !e.closest('[hidden], dialog:not([open])'); });
+          visible = cs.display !== 'none' && cs.visibility !== 'hidden' && box.width > 0 && box.height > 0 && !hiddenAncestor && main.innerText.trim().length >= 40 && control;
         }
         return {
           overflow: document.documentElement.scrollWidth - window.innerWidth,
@@ -56,7 +58,7 @@ const { chromium } = require('playwright');
       if (r.h1 !== 1) problems.push(`${w}: expected exactly one h1, found ${r.h1}`);
       if (!r.title) problems.push(`${w}: empty title`);
       if (!r.hasMain) problems.push(`${w}: no main landmark`);
-      else if (!r.visible) problems.push(`${w}: tool content not visible without a click (main is hidden, empty or inside a closed dialog)`);
+      else if (!r.visible) problems.push(`${w}: tool content not visible without a click (main is hidden, empty, has nothing to press or fill in, or is inside a closed dialog)`);
     } else {
       const r = await p.evaluate(() => {
         const ids = new Set([...document.querySelectorAll('[id]')].map(e => e.id));

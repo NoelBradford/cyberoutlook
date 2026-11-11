@@ -68,8 +68,39 @@ p, li { text-wrap: pretty; }
 .page-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; font: 500 0.92rem var(--font-ui); }
 main { max-width: 1240px; margin: 0 auto; padding: 2rem max(16px, 4vw) 3rem; min-height: 50vh; }
 main:focus { outline: none; }
-main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); }
+main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 1rem; }
 .page-foot { border-top: 1px solid var(--rule); padding: 0 max(16px, 4vw); font: 0.92rem var(--font-ui); color: var(--muted); }
 .page-foot-in { max-width: 1240px; margin: 0 auto; padding: 1.25rem 0 2rem; }
 .page-foot p { margin: 0 0 0.4rem; }
 @media print { .page-head nav, .skip, .theme-toggle { display: none !important; } }
+
+/* Copied from the inline style in index.html: status messages, the chips used in My plan, high contrast and print. */
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px); opacity: 0; visibility: hidden; background: var(--ink); color: var(--paper); font: 500 0.88rem var(--font-ui); padding: 0.6rem 1rem; border-radius: 3px; z-index: 30; transition: transform 0.2s, opacity 0.2s, visibility 0.2s; max-width: calc(100vw - 32px); }
+.toast.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
+@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+.chip { display: inline-block; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 2px; border: 1px solid currentColor; }
+.chip.none { color: var(--accent); }
+.chip.modest { color: var(--ink); background: #f3e2bd; background: color-mix(in srgb, var(--signal) 22%, transparent); border-color: var(--signal); }
+.chip.planned { color: var(--paper); background: var(--ink); border-color: var(--ink); }
+.page-intro { font-size: 1.2rem; max-width: 40rem; margin: 0.8rem 0 1.4rem; }
+@media (prefers-contrast: more) {
+  :root { --muted: #3b474e; --rule: #8a9897; }
+  :root[data-theme="dark"] { --muted: #c3cfd2; --rule: #5b6d74; }
+}
+@media print {
+  :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
+    --paper: #ffffff; --ink: #15222b; --muted: #4a5960; --accent: #0d5b60; --signal: #c68a0c; --rule: #c7d1d0;
+    color-scheme: light;
+  }
+  @page { size: A4; margin: 18mm 16mm 20mm 16mm; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-size: 10.5pt; line-height: 1.45; background: #fff; color: var(--ink); }
+  a { text-decoration: none; }
+  .toast { display: none !important; }
+}
+
+/* Exposure check on its own page: h2 where the report's dialog uses h3, and the same look. */
+.qz-result h2 { font: 700 1.9rem/1 var(--font-head); text-transform: uppercase; margin: 0.2rem 0 0.4rem; }
+.qz-result h2:focus { outline: none; }
+.qz-inline { max-width: 46rem; border: 1px solid var(--rule); border-radius: 3px; }
+.qz-start { padding: 0.2rem 0; }

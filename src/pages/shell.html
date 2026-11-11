@@ -49,7 +49,9 @@
 </header>
 <main id="main" data-open="{{OPEN}}" data-slug="{{SLUG}}" tabindex="-1">
 <h1>{{HEADING}}</h1>
+{{INTRO}}<div id="tool-root"></div>
 </main>
+{{ACTIONS}}
 <footer class="page-foot">
   <div class="page-foot-in">
     <p>By <a href="https://thesmallbusinesscybersecurityguy.co.uk">Noel Bradford, The Small Business Cyber Security Guy</a>. Nothing you enter on this page leaves your browser.</p>
@@ -80,6 +82,14 @@
   });
   if (mq && mq.addEventListener) mq.addEventListener('change', function () { if (!root.getAttribute('data-theme')) label(); });
   label();
+})();
+// Short status messages, as on the report (CV.toast calls window.cvToast).
+window.cvToast = (function () {
+  var el = document.createElement('div');
+  el.className = 'toast'; el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite');
+  document.body.appendChild(el);
+  var t;
+  return function (msg) { el.textContent = msg; el.classList.add('show'); clearTimeout(t); t = setTimeout(function () { el.classList.remove('show'); }, 2400); };
 })();
 // Open the tool named in data-open once the interactive layer is ready. The tool code lives in the bundle above.
 (function () {

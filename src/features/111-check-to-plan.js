@@ -11,12 +11,13 @@ CV.ready(function () {
       var fresh = ids.filter(function (id) { return !CV.plan.has(id); });
       box.appendChild(CV.h('div', null, CV.h('p', { class: 'cv-kicker' }, 'Next step'),
         CV.h('p', null, fresh.length ? 'Turn your ' + ids.length + ' gap' + (ids.length === 1 ? '' : 's') + ' into a plan, with owners and dates.' : 'Your gaps are already in your plan.')));
-      box.appendChild(CV.button(fresh.length ? 'Add my gaps to my plan' : 'Open my plan', function () {
+      box.appendChild(CV.button(fresh.length ? (CV.standalone ? 'Turn these gaps into your plan' : 'Add my gaps to my plan') : 'Open my plan', function () {
         fresh.forEach(function (id) { CV.plan.add(id, true); });
         if (fresh.length) CV.toast(fresh.length + ' action' + (fresh.length === 1 ? '' : 's') + ' added to your plan');
         d.close(); CV.plan.open();
       }, 'primary'));
-      var anchor = body.querySelector('.qz-h');
+      // On the report the next step sits above the gaps. On a page of its own it closes the result, above Retake and the link to the report.
+      var anchor = CV.standalone ? body.querySelector('.qz-nav') : body.querySelector('.qz-h');
       body.insertBefore(box, anchor || null);
     }
   });

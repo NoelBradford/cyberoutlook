@@ -5,6 +5,7 @@ CV.ready(function () {
   A.forEach(function (a) { if (!a.row.id) a.row.id = 'act-' + a.id; });
   CV.actionById = function (id) { for (var i = 0; i < A.length; i++) if (A[i].id === id) return A[i]; return null; };
   CV.goToAction = function (id) {
+    if (CV.standalone) { location.href = '../#act-' + id; return; } // no report on this page: open it at the action
     var a = CV.actionById(id); if (!a) return;
     a.row.scrollIntoView({ block: 'center', behavior: CV.reduced() ? 'auto' : 'smooth' });
     a.row.classList.remove('cv-flash'); void a.row.offsetWidth; a.row.classList.add('cv-flash');
@@ -26,8 +27,20 @@ CV.ready(function () {
     { q: 'Do you know what personal data you hold, where it lives and who can reach it?', act: 't3-6' }
   ];
   var saved = CV.store.get('check', {});
-  var d = CV.dialog({ id: 'check', title: 'Two-minute exposure check', wide: true,
-    note: 'Your answers stay in this browser. Benchmarks are from the Cyber Security Breaches Survey 2025/26 [source 1].' });
+  var SA = !!CV.standalone; // a page of its own (/check/): render inline in <main> instead of in a modal
+  var NOTE = 'Your answers stay in this browser. Benchmarks are from the Cyber Security Breaches Survey 2025/26 [source 1].';
+  // Same shape as CV.dialog (body, open, close), and the same hooks 111-check-to-plan looks for: #check, .cv-dialog-body, close().
+  function inlineHost() {
+    var el = CV.h('section', { id: 'check', class: 'qz-inline', 'aria-label': 'Two-minute exposure check', hidden: true });
+    var body = CV.h('div', { class: 'cv-dialog-body' });
+    el.appendChild(body); el.appendChild(CV.h('p', { class: 'cv-dialog-note' }, NOTE));
+    el.close = function () {};
+    (CV.$('#tool-root') || document.body).appendChild(el);
+    return { dialog: el, body: body, open: function () { el.hidden = false; }, close: function () {} };
+  }
+  var d = SA ? inlineHost() : CV.dialog({ id: 'check', title: 'Two-minute exposure check', wide: true, note: NOTE });
+  var H = SA ? 'h2' : 'h3'; // the page already has an h1
+  function intro(show) { var i = CV.$('.page-intro'); if (i) i.hidden = !show; }
   var step = 0;
   function answers() { return saved.a || {}; }
   function save() { CV.store.set('check', saved); CV.emit('check', saved); }
@@ -74,14 +87,15 @@ CV.ready(function () {
     saved.done = true; save();
     b.appendChild(CV.h('div', { class: 'qz-result' },
       CV.h('div', { class: 'qz-score', 'aria-label': s + ' out of ' + Q.length }, CV.h('b', null, String(s)), CV.h('span', null, '/ ' + Q.length)),
-      CV.h('div', null, CV.h('p', { class: 'cv-kicker' }, 'Your result'), CV.h('h3', null, bd[0]), CV.h('p', null, bd[1]))));
+      CV.h('div', null, CV.h('p', { class: 'cv-kicker' }, 'Your result'), CV.h(H, null, bd[0]), CV.h('p', null, bd[1]))));
     var gaps = CV.checkGaps();
     if (gaps.length) {
-      b.appendChild(CV.h('h3', { class: 'qz-h' }, 'Your gaps, in order'));
+      b.appendChild(CV.h(H, { class: 'qz-h' }, 'Your gaps, in order'));
       var ol = CV.h('ol', { class: 'qz-gaps' });
       gaps.forEach(function (g) {
         var li = CV.h('li', null, CV.h('p', null, g.q.q + ' ', CV.h('span', { class: 'qz-ans qz-' + g.a }, g.a === 'no' ? 'No' : 'Not sure')));
         if (g.q.bench) li.appendChild(CV.h('p', { class: 'qz-bench' }, g.q.bench + ' [1]'));
+        if (SA) { li.appendChild(standaloneGapRow(g)); ol.appendChild(li); return; }
         var go = g.q.act ? CV.button('Show the action →', function () { d.close(); CV.goToAction(g.q.act); backPill(); })
           : CV.button((g.q.goLabel || 'Go') + ' →', function () { d.close(); location.hash = g.q.go; backPill(); });
         li.appendChild(CV.h('div', { class: 'cv-row' }, go));
@@ -89,17 +103,40 @@ CV.ready(function () {
       });
       b.appendChild(ol);
     } else b.appendChild(CV.h('p', null, 'No gaps. Print the one-page plan and run a one-hour tabletop against it.'));
-    b.appendChild(CV.h('div', { class: 'cv-row qz-nav' }, CV.button('Start again', function () { saved = {}; save(); step = 0; renderQ(); })));
-    var rh = b.querySelector('.qz-result h3'); if (rh) { rh.setAttribute('tabindex', '-1'); rh.focus(); }
+    b.appendChild(CV.h('div', { class: 'cv-row qz-nav' }, CV.button(SA ? 'Retake' : 'Start again', function () { saved = {}; save(); step = 0; focusQ = SA; renderQ(); }),
+      SA ? CV.h('a', { class: 'tool', href: '../' }, 'Read the full report') : null));
+    var rh = b.querySelector('.qz-result ' + H); if (rh) { rh.setAttribute('tabindex', '-1'); rh.focus(); }
     CV.emit('check-result', { score: s, gaps: gaps });
+  }
+  // A standalone result has no report to jump around in: each gap links to where the report explains it, and can go in My plan.
+  var planSyncs = [];
+  if (SA) CV.on('plan', function () { planSyncs.forEach(function (f) { f(); }); });
+  function standaloneGapRow(g) {
+    var row = CV.h('div', { class: 'cv-row' });
+    row.appendChild(CV.h('a', { class: 'tool', href: g.q.act ? '../#act-' + g.q.act : '../' + g.q.go }, 'Why this matters'));
+    var pid = g.q.act || g.q.planAct;
+    if (pid && CV.plan && CV.plan.byId[pid]) {
+      var btn = CV.h('button', { type: 'button', class: 'tool qz-add' });
+      var sync = function () { var on = CV.plan.has(pid); btn.textContent = on ? '✓ In My plan' : 'Add to My plan'; btn.setAttribute('aria-pressed', on ? 'true' : 'false'); btn.setAttribute('aria-label', (on ? 'Remove from My plan: ' : 'Add to My plan: ') + g.q.q); };
+      btn.addEventListener('click', function () { if (CV.plan.has(pid)) CV.plan.remove(pid); else CV.plan.add(pid); });
+      planSyncs.push(sync); sync(); row.appendChild(btn);
+    }
+    return row;
+  }
+  function renderStart(partial) {
+    var b = d.body; b.innerHTML = ''; intro(true);
+    b.appendChild(CV.h('div', { class: 'cv-row qz-start' }, CV.button(partial ? 'Continue' : 'Start', function () { intro(false); focusQ = true; renderQ(); }, 'primary')));
   }
   // Opening the check never throws away answers: a finished check shows its result, a half-finished one resumes.
   // Only "Start again" clears it.
   CV.openCheck = function () {
     if (pill) pill.remove();
-    if (saved.done) { d.open(); renderResult(); return; }
+    planSyncs.length = 0;
+    if (saved.done) { d.open(); if (SA) intro(false); renderResult(); return; }
     var ans = answers(); step = 0; while (step < Q.length - 1 && ans[step]) step++;
-    d.open(); renderQ();
+    d.open();
+    if (SA) { renderStart(Object.keys(ans).length > 0); return; } // the page's own heading and intro sit above the Start button
+    renderQ();
   };
   // After jumping from a gap to its fix, offer a way back that doesn't rely on the browser's Back button.
   var pill = null;
@@ -119,5 +156,8 @@ CV.ready(function () {
     if (card) { card.querySelector('b').textContent = 'Your exposure check'; card.querySelector('.p-sub').textContent = 'See your result and your gaps again.'; }
     var cc = CV.$('.cc-btn'); if (cc) cc.textContent = 'See your check result';
   }
-  if (location.hash === '#check') CV.openCheck();
+  if (!SA && location.hash === '#check') CV.openCheck();
+  // Row ids are added above, after the browser has already looked for the target, so a link such as /#act-t3-1 needs a nudge.
+  var hit = /^#act-(t\d+-\d+)$/.exec(location.hash);
+  if (!SA && hit) setTimeout(function () { CV.goToAction(hit[1]); }, 300);
 });

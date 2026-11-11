@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "slug": "check",
+    "title": "Two-minute exposure check",
+    "description": "Ten quick questions for UK firms with five to 50 staff. Get a score out of 10 and your cyber security gaps in order. Your answers stay in your browser.",
+    "intro": "Ten quick questions, about two minutes, for UK firms with five to 50 staff. You get a score out of 10 and your gaps in order, with a way to turn them into a plan.",
+    "features": ["108", "109", "110", "111"],
+    "open": "CV.openCheck",
+    "reportActions": true
+  }
+]
