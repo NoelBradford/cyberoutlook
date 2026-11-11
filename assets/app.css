@@ -1170,3 +1170,18 @@ html:not(.cv-ready) .cover .tools > * { visibility: hidden; }
   .cover .tools .theme-toggle { font-size: 0; padding: 0.45rem 0.7rem; }
   .cover .tools .theme-toggle span { font-size: 1.05rem; line-height: 1; }
 }
+
+/* --- src/features/219-email-capture.css --- */
+.cap { display: grid; gap: 0.7rem; padding: 0.9rem 1rem; border: 1px solid var(--rule); border-radius: 3px; }
+.cap-h { font: 700 1.3rem var(--font-head); text-transform: uppercase; margin: 0; }
+.cap-form { display: grid; gap: 0.7rem; }
+.cap-sends, .cap-status, .cap-done, .cap-err { margin: 0; font-size: 0.88rem; }
+.cap-err { color: var(--ink); border-left: 3px solid var(--signal); padding-left: 0.6rem; }
+.cap-err[hidden] { display: none; }
+.cap-sends { color: var(--muted); }
+.cap-row { display: flex; flex-wrap: wrap; gap: 0.8rem 1.2rem; align-items: center; }
+.cap-priv { font: 500 0.88rem var(--font-ui); }
+.cap-done { padding: 0.8rem 0.9rem; border-left: 4px solid var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--paper)); }
+.cap-done:focus { outline: none; }
+.cap-gate-intro { margin: 0 0 0.6rem; }
+@media print { .cap, .cap-form, .cap-done { display: none !important; } }

@@ -76,6 +76,16 @@ Still needed from you:
 4. The version label and date for the version history line (`index.html` has a "next" entry for you to complete).
 5. The LinkedIn carousel's last slide now says "Take the two-minute check" and `cyberoutlook.sbcsg.uk/check`, and the PDF is re-rendered (still 10 pages, tagged, English (UK); slides 1 to 9 have identical text to the old PDF). Please review it before it goes anywhere. Ligatures are switched off in the carousel's CSS, because Chromium's PDF otherwise stores "fi" and "ff" as glyphs that copy, search and screen readers cannot read.
 
+## Email capture and measurement (UX-12 and UX-13): built, switched off
+
+Decided by the owner on 11 November 2026: email me my result, a separate unticked newsletter box and an update-notice box, SBCSG Enterprises Ltd as controller, result-email addresses kept 30 days, newsletter until unsubscribe, the PDFs behind an email gate, Cloudflare's own metrics plus the signup count.
+
+What exists: the Worker core in `worker/` (12 tests, not deployed) and the page side behind a switch in `src/pages/config.json`. The switch is **off**: nothing is drawn, nothing is sent, the PDF links work as before, and the privacy promise is unchanged. `tools/capture-check.js` tests the page side against a mock endpoint, and it runs in CI.
+
+What is still needed before it can be switched on: the sending provider (and newsletter service if separate), the wording for the emails and both boxes, the privacy notice (`/privacy/`) and preference page, an adviser's check, the registered name and address of SBCSG Enterprises Ltd, Workers Paid if Cloudflare sends the mail, the Worker deployed behind the same origin, and the PDFs moved to private storage and out of the repo (until then the gate only hides the links). Every statement of the privacy promise then needs updating together.
+
+Measurement: no code on the pages. Signup counts come from the Worker's `counts` table and visit numbers from Cloudflare's dashboard (what the free plan shows is not verified).
+
 ## QR codes and PDFs
 
 The three QR codes in `index.html` decode to `https://cyberoutlook.sbcsg.uk/?utm_source=print&utm_medium=qr&utm_campaign=cover`, `https://cyberoutlook.sbcsg.uk/#mvc` and `...&utm_campaign=back`. None of them points at a URL this work changed, so the PDFs do not need regenerating.

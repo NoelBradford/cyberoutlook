@@ -33,6 +33,10 @@ export function cleanEmail(raw) {
   return e.length <= 254 && /^[^\s@<>()[\]\\,;:"]+@[^\s@<>()[\]\\,;:"]+\.[^\s@<>()[\]\\,;:"]{2,}$/.test(e) ? e : null;
 }
 const q = (env, sql, ...args) => env.DB.prepare(sql).bind(...args);
+// Counts only: no address and no identifier, kept after the purge. field is 'asked' or 'confirmed'.
+const bump = (env, now, topic, source, field) => q(env,
+  `INSERT INTO counts (day, topic, source, ${field}) VALUES (?, ?, ?, 1) ON CONFLICT(day, topic, source) DO UPDATE SET ${field} = ${field} + 1`,
+  new Date(now).toISOString().slice(0, 10), topic, source).run();
 
 // ---- links the emails carry ------------------------------------------------------------------------------------------
 export async function unsubscribeUrl(env, subscriberId, topic) {
@@ -51,9 +55,13 @@ export async function subscribe(env, body, now = Date.now()) {
   if (!topics.length || topics.some(t => !TOPICS[t])) return { status: 400, error: 'Choose what you want us to send.' };
   const source = String(body.source || '').slice(0, 60);
   if (!/^\/[a-z0-9\-/]*$/.test(source)) return { status: 400, error: 'Unknown page.' };
-  const wording = String(body.wording || '').slice(0, 40);
-  // A marketing topic only counts if the box was ticked, which means the page sent it, with the id of the wording it showed.
-  if (topics.some(t => TOPICS[t].marketing) && !/^[a-z0-9\-.]{2,40}$/.test(wording)) return { status: 400, error: 'Consent wording is missing.' };
+  // A marketing topic only counts if the box was ticked, which means the page sent it, with the id of the wording shown beside that box:
+  // body.wordings = { newsletter: 'id', 'report-updates': 'id' }. (A single body.wording string is still accepted and applies to all.)
+  const wordings = {};
+  for (const t of topics.filter(t => TOPICS[t].marketing)) {
+    wordings[t] = String((body.wordings && body.wordings[t]) || body.wording || '').slice(0, 40);
+    if (!/^[a-z0-9\-.]{2,40}$/.test(wordings[t])) return { status: 400, error: 'Consent wording is missing.' };
+  }
   const files = topics.includes('download') ? (Array.isArray(body.files) ? [...new Set(body.files)] : []) : [];
   if (topics.includes('download') && (!files.length || files.some(f => !FILES[f]))) return { status: 400, error: 'Choose a file.' };
   let result = null;
@@ -68,7 +76,10 @@ export async function subscribe(env, body, now = Date.now()) {
   const sub = await q(env, 'SELECT id FROM subscribers WHERE email_hash = ?', hash).first();
   const recent = await q(env, "SELECT COUNT(*) AS n FROM tokens WHERE subscriber_id = ? AND purpose = 'confirm' AND created_at > ?", sub.id, now - HOUR).first();
   if (recent.n >= MAX_CONFIRMS_PER_HOUR) return { status: 200, ok: true }; // looks the same, sends nothing
-  for (const topic of topics) await q(env, 'INSERT INTO consents (subscriber_id, topic, wording, source, asked_at) VALUES (?, ?, ?, ?, ?)', sub.id, topic, TOPICS[topic].marketing ? wording : '-', source, now).run();
+  for (const topic of topics) {
+    await q(env, 'INSERT INTO consents (subscriber_id, topic, wording, source, asked_at) VALUES (?, ?, ?, ?, ?)', sub.id, topic, TOPICS[topic].marketing ? wordings[topic] : '-', source, now).run();
+    await bump(env, now, topic, source, 'asked');
+  }
   const token = newToken();
   await q(env, 'INSERT INTO tokens (token_hash, purpose, subscriber_id, payload, created_at, expires_at) VALUES (?, ?, ?, ?, ?, ?)',
     await sha256(token), 'confirm', sub.id, JSON.stringify({ topics, files, result, source }), now, now + CONFIRM_TTL).run();
@@ -95,9 +106,10 @@ export async function confirm(env, token, now = Date.now()) {
   const row = await q(env, "SELECT * FROM tokens WHERE token_hash = ? AND purpose = 'confirm'", await sha256(String(token || ''))).first();
   if (!row || row.used_at || row.expires_at < now) return { status: 410, error: 'This link has expired or was already used. Ask for a new one.' };
   await q(env, 'UPDATE tokens SET used_at = ? WHERE token_hash = ? AND used_at IS NULL', now, row.token_hash).run();
-  const { topics, files, result } = JSON.parse(row.payload);
+  const { topics, files, result, source } = JSON.parse(row.payload);
   const sub = await q(env, 'SELECT id, email, email_hash FROM subscribers WHERE id = ?', row.subscriber_id).first();
   for (const topic of topics) {
+    await bump(env, now, topic, source, 'confirmed');
     await q(env, 'UPDATE consents SET confirmed_at = ? WHERE subscriber_id = ? AND topic = ? AND confirmed_at IS NULL AND asked_at <= ?', now, sub.id, topic, row.created_at).run();
     // a fresh, confirmed opt-in lifts an earlier unsubscribe from that topic
     if (TOPICS[topic].marketing) await q(env, 'DELETE FROM suppressions WHERE email_hash = ? AND topic = ?', sub.email_hash, topic).run();

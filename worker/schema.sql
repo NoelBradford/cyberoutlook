@@ -34,6 +34,17 @@ CREATE TABLE IF NOT EXISTS tokens (
 );
 CREATE INDEX IF NOT EXISTS tokens_subscriber ON tokens(subscriber_id, created_at);
 
+-- Signup counts, and nothing else (UX-13). No address, no identifier: one row per day, topic and page. These are the only numbers kept after the
+-- purge, so the signup count survives the deletion of the addresses.
+CREATE TABLE IF NOT EXISTS counts (
+  day       TEXT NOT NULL,                  -- YYYY-MM-DD, UTC
+  topic     TEXT NOT NULL,
+  source    TEXT NOT NULL,                  -- the page the form was on
+  asked     INTEGER NOT NULL DEFAULT 0,     -- confirmation emails requested
+  confirmed INTEGER NOT NULL DEFAULT 0,     -- confirmation links opened
+  PRIMARY KEY (day, topic, source)
+);
+
 -- Do not contact. Holds a hash, not the address, so it can stay after the address is deleted.
 CREATE TABLE IF NOT EXISTS suppressions (
   email_hash TEXT NOT NULL,

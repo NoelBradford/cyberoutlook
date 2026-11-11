@@ -38,6 +38,14 @@ test('a bad address, an unknown topic or a missing wording is refused', async ()
   assert.equal(env.mailer.sent.length, 0);
 });
 
+test('each marketing topic records its own wording id, and a topic without one is refused', async () => {
+  const env = makeEnv();
+  assert.equal((await subscribe(env, { email: 'a@b.co', topics: ['newsletter', 'report-updates'], wordings: { newsletter: 'nl-1' }, source: '/' }, NOW)).status, 400);
+  assert.equal((await subscribe(env, { email: 'a@b.co', topics: ['newsletter', 'report-updates'], wordings: { newsletter: 'nl-1', 'report-updates': 'ru-1' }, source: '/' }, NOW)).status, 200);
+  const rows = env.DB.raw.prepare('SELECT topic, wording FROM consents ORDER BY topic').all();
+  assert.deepEqual(rows.map(r => `${r.topic}=${r.wording}`), ['newsletter=nl-1', 'report-updates=ru-1']);
+});
+
 test('subscribing sends one confirmation and nothing else, and records the request unconfirmed', async () => {
   const env = makeEnv();
   const r = await subscribe(env, { email: ' Sam@Example.CO ', topics: ['newsletter'], wording: 'nl-v1', source: '/check/' }, NOW);
@@ -134,6 +142,21 @@ test('a fresh confirmed opt-in lifts an earlier unsubscribe from that topic only
   await confirm(env, tokenFrom(env.mailer.sent.at(-1).text), NOW + 3 * HOUR + 1000);
   assert.equal(count(env, "SELECT COUNT(*) AS n FROM suppressions WHERE email_hash = ? AND topic = 'newsletter'", hash), 0);
   assert.equal(count(env, "SELECT COUNT(*) AS n FROM suppressions WHERE email_hash = ? AND topic = 'report-updates'", hash), 1);
+});
+
+test('signup counts hold no address and survive the purge', async () => {
+  const env = makeEnv();
+  await subscribe(env, { email: 'a@b.co', topics: ['result', 'newsletter'], wordings: { newsletter: 'nl-1' }, source: '/check/', result: { score: 4, band: 'Halfway there', gaps: [2] } }, NOW);
+  await confirm(env, tokenFrom(env.mailer.sent[0].text), NOW + 1000);
+  await subscribe(env, { email: 'c@d.co', topics: ['download'], files: ['report'], source: '/' }, NOW + 2000); // never confirmed
+  const rows = () => env.DB.raw.prepare('SELECT topic, source, asked, confirmed FROM counts ORDER BY topic').all().map(r => `${r.topic}|${r.source}|${r.asked}|${r.confirmed}`);
+  const expected = ['download|/|1|0', 'newsletter|/check/|1|1', 'result|/check/|1|1'];
+  assert.deepEqual(rows(), expected);
+  await purge(env, NOW + 60 * DAY);
+  assert.equal(count(env, "SELECT COUNT(*) AS n FROM subscribers WHERE email = 'c@d.co'"), 0, 'the unconfirmed address is gone');
+  assert.deepEqual(rows(), expected, 'the counts are still there');
+  const cols = env.DB.raw.prepare("PRAGMA table_info(counts)").all().map(c => c.name);
+  assert.deepEqual(cols, ['day', 'topic', 'source', 'asked', 'confirmed'], 'no column could hold an address');
 });
 
 test('the purge deletes a transactional address after 30 days and an unconfirmed one after the link expires, but keeps live marketing consent and suppression hashes', async () => {

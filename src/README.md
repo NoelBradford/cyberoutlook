@@ -73,6 +73,20 @@ Check for the anchor you need rather than for `CV.standalone`; use the flag only
 
 Only one message shows at a time: a message asks `CV.notice.claim(key)` before it shows itself (first to ask wins), and a dismissal is stored with `CV.notice.dismiss(key, token)` (saved as `cv:dismissed`). Messages sit in the flow of Start here, never fixed over the page.
 
+### Optional email capture and the PDF gate (off by default)
+
+`src/pages/config.json` holds the switch. While `captureEndpoint` is empty (as shipped) nothing is drawn and nothing is sent, and the PDF links work as before. To switch it on, set all of:
+
+- `captureEndpoint`: a path on this site such as `/api` (the Worker answers at `/api/subscribe`). `tools/build.py` refuses anything else, so the Content-Security-Policy (`connect-src 'self'`) never has to be widened.
+- `privacyUrl`: a path on this site to the privacy notice, linked beside every form. The build refuses an endpoint without it.
+- `wording.newsletter` and `wording.updates`: each `{ "id": "...", "text": "..." }`, the exact text shown beside an **unticked** box. The id is stored with each consent, so change it whenever the text changes. These need an adviser's approval before they are set.
+
+What it does when on: `219-email-capture.js` adds an optional "Email me my result" form under the result on `/check/` (after the result is shown), and `220-report-gate.js` makes a click on a link to either PDF (the cover, the Tools menu, the Share hub) open a short form instead. Each form sends only the address, the topics asked for, the page, and for the result the score, the band and the numbers of the questions with a gap, never the answers, in one request with no cookies and no retry. A failed request shows a plain message and the page is unchanged. `tools/capture-check.js` tests all of this against a mock endpoint (and that it does nothing when off). It runs in CI.
+
+The gate only stops the links on the page. The two PDFs stay public files (in the repo and on the site) until they are moved to private storage and removed from the repo, so it is not a real gate until then.
+
+Measurement (UX-13): there is no code on the pages that measures visitors. Signup numbers come from the Worker's `counts` table (`worker/stats.sql`), and visit numbers from Cloudflare's own dashboard once the site is there. If that ever changes, the privacy statements below must change with it.
+
 ### Privacy
 
 The promise is unchanged: nothing a reader enters leaves their browser, with no accounts, cookies or analytics. The tool profile of `tools/check.js` fails on any request to another site (web fonts excepted). Email capture and measurement (UX-12 and UX-13) have not been decided, so nothing here sends data anywhere.

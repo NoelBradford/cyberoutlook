@@ -1,16 +1,17 @@
 # Email Worker (not deployed)
 
-The core of the owner's own list and email system, written ahead of the open decisions. It is **not deployed, not called by any page, and sends nothing**. The design, the findings behind it and the open points are in [`docs/email-platform-design.md`](../docs/email-platform-design.md) and issue #18 in `NoelBradford/outlook-2027`.
+The core of the owner's own list and email system, written ahead of the open decisions. It is **not deployed and sends nothing**, and the page side that would call it is built but switched off (see below). The design, the findings behind it and the open points are in [`docs/email-platform-design.md`](../docs/email-platform-design.md) and issue #18 in `NoelBradford/outlook-2027`.
 
 ## What is here
 
 | File | What it does |
 |---|---|
-| `schema.sql` | D1 tables: `subscribers`, `consents` (who agreed to what, the wording id, the page, when asked, confirmed, withdrawn), `tokens` (single-use, hashed), `suppressions` (a hash of the address, so it can outlive the address). |
+| `schema.sql` | D1 tables: `subscribers`, `consents` (who agreed to what, the wording id, the page, when asked, confirmed, withdrawn), `tokens` (single-use, hashed), `suppressions` (a hash of the address, so it can outlive the address) and `counts` (signup numbers by day, topic and page, with no address in them, kept after the purge). |
+| `stats.sql` | Signup numbers from `counts` only. Visits and request numbers come from Cloudflare's own dashboard. |
 | `src/core.js` | The logic, with no Cloudflare imports: `subscribe`, `confirm`, `download`, `unsubscribe`, `purge`. |
 | `src/index.js` | The HTTP routes under `/api/` and the daily purge, using the core. |
 | `src/mailer.js` | One interface, `send({ to, subject, text, headers })`. A memory mailer for tests and a Cloudflare Email Sending stand-in. The provider is not chosen. |
-| `test/core.test.js` | 10 tests on SQLite (the engine D1 uses). Run: `node --test worker/test/*.test.js` (Node 22.5 or newer). They run in CI. |
+| `test/core.test.js` | 12 tests on SQLite (the engine D1 uses). Run: `node --test worker/test/*.test.js` (Node 22.5 or newer). They run in CI. |
 | `wrangler.toml` | How it would be set up. All ids are placeholders. |
 
 ## What it enforces
@@ -27,5 +28,6 @@ The core of the owner's own list and email system, written ahead of the open dec
 - No broadcast or campaign sending, no admin screen, no segments, no templates, no reporting, no bounce or complaint handling. Those are phases 2 and 3 of the design.
 - No sending provider is chosen. `cloudflareMailer` follows Cloudflare's beta documentation as read on 11 November 2026 and has not been run.
 - Turnstile is optional here and has not been tried.
-- No page uses it. Wiring the `/check/` form, the front page gate, the privacy notice (`/privacy/`) and the preference page (`/preferences/`) needs the owner's decisions on wording and the privacy promise, and an adviser's check of the wording.
+- The pages can call it, but the switch is off. `src/features/219-email-capture.js` (the result form on `/check/`) and `220-report-gate.js` (the PDF gate) do nothing until `src/pages/config.json` has an endpoint, a privacy notice address and both wordings (see `src/README.md`). They are tested against a mock endpoint (`tools/capture-check.js`), never against this Worker.
+- The privacy notice (`/privacy/`) and the preference page (`/preferences/`) are not built. The notice needs the owner's wording and an adviser's check, and the preference page needs more routes here.
 - The PDFs are still public static files in the repo. The gate is not real until they move to R2 and out of the repo (and its history).

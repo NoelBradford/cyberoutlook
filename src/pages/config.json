@@ -1,0 +1,6 @@
+{
+  "_note": "Optional email capture (UX-12). Off while captureEndpoint is empty: nothing is shown and nothing is sent. To switch it on all of captureEndpoint (a same-origin path such as /api), privacyUrl and both wordings must be set. The wordings are the exact text shown beside each unticked box and must be approved before use; change an id whenever the text changes, because the id is stored with each consent.",
+  "captureEndpoint": "",
+  "privacyUrl": "",
+  "wording": {}
+}

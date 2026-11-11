@@ -36,7 +36,8 @@ Everything a reader types or ticks stays in their own browser. There are no acco
 | `tools/build.py` | Builds the bundles, the tool pages, `sitemap.xml` and `tools/pages.txt`, and stamps `index.html`. |
 | `tools/og.js` | Renders the social image for each tool page (`node tools/og.js`). |
 | `tools/measure.js` | Page weight and clutter metrics as JSON. `docs/ux-baseline.json` is the recorded baseline for the web edition. |
-| `tools/chrome-check.js`, `tools/links-check.js` | Checks of the report's phone chrome and of the old `/#key` links. |
+| `tools/chrome-check.js`, `tools/links-check.js`, `tools/capture-check.js` | Checks of the report's phone chrome, of the old `/#key` links, and of the optional email capture and PDF gate (against a mock endpoint). |
+| `worker/` | The email Worker's core (not deployed, switched off on the site). See [`worker/README.md`](worker/README.md). |
 | `tools/qa-matrix.js` | The release QA matrix (widths, themes, visitor states, axe, keyboard, print, offline). `npm run qa` runs it. |
 | `tools/check.js` | Smoke test, run by `.github/workflows/check.yml` on every push. `--profile report` (the default) tests the report; `--profile tool --path /check/` tests a tool page. |
 | `docs/` | `ux-baseline.json` and the release note for the tool pages work. |
