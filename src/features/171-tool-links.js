@@ -7,7 +7,8 @@ CV.ready(function () {
     aitools: function () { CV.openAiTools && CV.openAiTools(); }, readiness: function () { CV.openCE && CV.openCE(); }, progress: function () { CV.openProgress && CV.openProgress(); },
     forecasts: function () { CV.openForecasts && CV.openForecasts(); }, glossary: function () { CV.openGlossary && CV.openGlossary(); }, notes: function () { CV.openNotes && CV.openNotes(); },
     search: function () { CV.openSearch && CV.openSearch(); }, present: function () { CV.present && CV.present(); }, restore: function () { CV.openRestore && CV.openRestore(); },
-    mfa: function () { CV.openMfa && CV.openMfa(); }, incident: function () { CV.openIncident && CV.openIncident(); }, mydata: function () { CV.openMyData && CV.openMyData(); }
+    // toolkit: the Toolkit loads after this file, so on a cold visit wait for it
+    toolkit: function () { if (CV.openToolkit) CV.openToolkit(); else CV.on('ready', function () { CV.openToolkit && CV.openToolkit(); }); }, mfa: function () { CV.openMfa && CV.openMfa(); }, incident: function () { CV.openIncident && CV.openIncident(); }, mydata: function () { CV.openMyData && CV.openMyData(); }
   };
   CV.toolRoutes = Object.keys(R);
   function route() {

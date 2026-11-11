@@ -95,6 +95,25 @@ if not m_q: fail('could not find the "What to do" heading and its list in index.
 if m_q.group(1).count('<li>') != 4: fail(f'expected four questions in the "What to do" list, found {m_q.group(1).count("<li>")}')
 REPORT_PART_HTML['it-questions'] = '<div class="prose">\n<h3 id="h-what-to-do">' + re.search(r'<h3 id="h-what-to-do">(.*?)</h3>', s, re.S).group(1) + '</h3>\n' + m_q.group(1) + '\n</div>'
 
+def hub_html(hub, where):
+    # A list of plain links (no JavaScript needed). Cards come from the "card" of each tool page, in the order given.
+    if not isinstance(hub, dict) or not isinstance(hub.get('order'), list) or not isinstance(hub.get('reportTools', []), list): fail(f'{where}: "hub" needs "order" (list of slugs) and optionally "reportTools" (list)')
+    by_slug = {x.get('slug'): x for x in manifest}
+    items = []
+    for slug in hub['order']:
+        pg = by_slug.get(slug)
+        if not pg or not isinstance(pg.get('card'), dict) or not all(isinstance(pg['card'].get(k), str) and pg['card'][k].strip() for k in ('promise', 'time')): fail(f'{where}: hub order "{slug}" is not a page with a card (promise and time)')
+        items.append(f'<li class="hub-card"><h2><a href="../{slug}/">{esc(pg["title"])}</a></h2><p>{esc(pg["card"]["promise"])}</p><p class="hub-meta">{esc(pg["card"]["time"])}</p></li>')
+    out = '<ul class="hub-list">\n' + '\n'.join(items) + '\n</ul>\n'
+    routes = rd(os.path.join(ROOT, 'src', 'features', '171-tool-links.js'))
+    rep = []
+    for t in hub.get('reportTools', []):
+        if not isinstance(t, dict) or not all(isinstance(t.get(k), str) and t[k].strip() for k in ('key', 'name', 'promise')): fail(f'{where}: each reportTools entry needs key, name and promise')
+        if not re.search(r'\b' + re.escape(t['key']) + r':\s*function', routes): fail(f'{where}: reportTools key "{t["key"]}" is not a route in src/features/171-tool-links.js')
+        rep.append(f'<li class="hub-card"><h3><a href="../#{t["key"]}">{esc(t["name"])}</a></h3><p>{esc(t["promise"])}</p><p class="hub-meta">Opens in the report</p></li>')
+    if rep: out += '<h2 class="hub-sub">More tools, inside the report</h2>\n<ul class="hub-list">\n' + '\n'.join(rep) + '\n</ul>\n'
+    return out
+
 seen, wanted_files, listing = set(), set(), []
 for i, e in enumerate(manifest):
     where = f'pages.json entry {i + 1}'
@@ -128,6 +147,7 @@ for i, e in enumerate(manifest):
     out = shell
     # These two are markup, filled before the escaped plain-text values. Their own text is escaped here.
     out = out.replace('{{INTRO}}', f'<p class="page-intro">{esc(intro)}</p>\n' if intro.strip() else '')
+    out = out.replace('{{HUB}}', hub_html(e['hub'], where) if 'hub' in e else '')
     out = out.replace('{{REPORT_PARTS}}', ('<div id="report-parts" hidden>\n' + '\n'.join(REPORT_PART_HTML[p_] for p_ in parts) + '\n</div>\n') if parts else '')
     for k, val in values.items(): out = out.replace('{{' + k + '}}', esc(val))
     if '{{' in out: fail(f'{where}: shell.html has a placeholder build.py does not fill')

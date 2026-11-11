@@ -4,3 +4,4 @@
 /readiness/
 /it-provider-email/
 /call-back-poster/
+/tools/

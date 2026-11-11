@@ -58,6 +58,6 @@ CV.ready(function () {
   CV.toolsMenu = { add: function (label, fn) { return add(label, fn); } };
   if (CV.openGlossary) add('Glossary', CV.openGlossary);
   if (CV.present) add('Present to my team', CV.present);
-  add('All tools', function () { CV.openToolkit && CV.openToolkit(); });
+  add('All tools', function () { location.href = 'tools/'; }); // the hub page; the Toolkit is still reachable at /#toolkit
   add('Listen from here', function () { if (CV.listenHere) CV.listenHere(); else CV.toast('Your browser can’t read aloud'); });
 });

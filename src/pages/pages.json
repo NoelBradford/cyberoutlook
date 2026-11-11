@@ -13,7 +13,11 @@
     "open": "CV.openCheck",
     "reportParts": [
       "actions"
-    ]
+    ],
+    "card": {
+      "promise": "Ten questions, a score out of 10 and your gaps in order.",
+      "time": "About two minutes"
+    }
   },
   {
     "slug": "readiness",
@@ -23,7 +27,11 @@
     "features": [
       "164"
     ],
-    "open": "CV.openCE"
+    "open": "CV.openCE",
+    "card": {
+      "promise": "Five questions on the Cyber Essentials changes. See what to fix before you book an assessment.",
+      "time": "About a minute"
+    }
   },
   {
     "slug": "it-provider-email",
@@ -36,7 +44,11 @@
     "open": "CV.openItMail",
     "reportParts": [
       "it-questions"
-    ]
+    ],
+    "card": {
+      "promise": "The four questions for your IT provider, plus one about backups, as an email you can copy or open in your mail app.",
+      "time": "About 30 seconds"
+    }
   },
   {
     "slug": "call-back-poster",
@@ -47,6 +59,62 @@
       "116",
       "169"
     ],
-    "open": "CV.openPoster"
+    "open": "CV.openPoster",
+    "card": {
+      "promise": "A printable A4 poster for the call-back rule, with your business name and who to ask.",
+      "time": "Prints on one A4 page"
+    }
+  },
+  {
+    "slug": "tools",
+    "title": "All tools",
+    "description": "Tools from the UK Small Business Cyber Outlook 2027: a two-minute exposure check, a Cyber Essentials readiness check, an IT provider email and a call-back rule poster.",
+    "intro": "Short tools that turn the report into something you can use. Start with the exposure check. Nothing you enter leaves your browser.",
+    "features": [],
+    "hub": {
+      "order": [
+        "check",
+        "readiness",
+        "it-provider-email",
+        "call-back-poster"
+      ],
+      "reportTools": [
+        {
+          "key": "plan",
+          "name": "My plan",
+          "promise": "Add actions from the report, give each an owner and a date, and put the dates in your calendar."
+        },
+        {
+          "key": "fivefive",
+          "name": "Five-and-five map",
+          "promise": "List your key suppliers and customers, rate what stops for two weeks, and see your weak spots."
+        },
+        {
+          "key": "aitools",
+          "name": "AI tool register",
+          "promise": "List your team's AI tools and flag any that has all three risky abilities at once."
+        },
+        {
+          "key": "mfa",
+          "name": "MFA rollout tracker",
+          "promise": "List your cloud services and mark each one off, from no MFA to passkeys."
+        },
+        {
+          "key": "restore",
+          "name": "Restore-test log",
+          "promise": "Record each time you get files back from backup, and get reminders for the next quarterly test."
+        },
+        {
+          "key": "incident",
+          "name": "It's happening now",
+          "promise": "Turn your one-page plan into a calm incident card with tap-to-call contacts and a timestamped log."
+        },
+        {
+          "key": "toolkit",
+          "name": "Toolkit: print and present",
+          "promise": "Print a team pack or everything you have filled in, present the report to your team, and get calendar reminders."
+        }
+      ]
+    }
   }
 ]

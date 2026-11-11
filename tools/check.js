@@ -59,6 +59,13 @@ const { chromium } = require('playwright');
       if (!r.cv) problems.push(`${w}: CV core missing`);
       if (r.h1 !== 1) problems.push(`${w}: expected exactly one h1, found ${r.h1}`);
       if (!r.title) problems.push(`${w}: empty title`);
+      // Every same-site link on the page must resolve (fragments are ignored, mailto and other schemes are skipped).
+      const hrefs = await p.evaluate(() => [...new Set([...document.querySelectorAll('a[href]')].map(a => a.href))]);
+      for (const href of hrefs) {
+        if (!/^https?:/.test(href) || !href.startsWith(origin)) continue;
+        const res = await ctx.request.get(href.split('#')[0]).catch(() => null);
+        if (!res || res.status() >= 400) problems.push(`${w}: broken link ${href} (${res ? res.status() : 'no response'})`);
+      }
       if (!r.hasMain) problems.push(`${w}: no main landmark`);
       else if (!r.visible) problems.push(`${w}: tool content not visible without a click (main is hidden, empty, has nothing to press or fill in, or is inside a closed dialog)`);
     } else {

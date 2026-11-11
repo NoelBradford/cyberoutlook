@@ -115,3 +115,12 @@ main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 1rem; }
 /* The poster preview sits on white in both themes. The report's gold on white is just under 3:1 for large text, so on a tool page the
    preview uses a darker gold. The printed sheet keeps the report's colours. */
 .cv-inline .poster h2 span { color: #8f6200; }
+
+/* The tools hub: a list of plain links. */
+.hub-list { list-style: none; margin: 0 0 2rem; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); }
+.hub-card { border: 1px solid var(--rule); border-radius: 3px; padding: 1rem 1.1rem; display: grid; gap: 0.35rem; align-content: start; }
+.hub-card h2, .hub-card h3 { font: 700 1.5rem/1.1 var(--font-head); margin: 0; }
+.hub-card p { margin: 0; font-family: var(--font-ui); font-size: 0.95rem; }
+.hub-card a { color: var(--ink); }
+.hub-meta { color: var(--muted); font-size: 0.8rem !important; letter-spacing: 0.06em; text-transform: uppercase; }
+.hub-sub { font-size: clamp(1.5rem, 4vw, 2rem); margin: 2rem 0 0.4rem; }
