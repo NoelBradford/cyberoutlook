@@ -33,12 +33,12 @@ jobs:
       - name: Install Playwright and Chromium
         run: |
           npm install --no-audit --no-fund
-          # The runners sometimes cannot reach Ubuntu's package mirrors (a temporary DNS failure). Retry, then fall back to the browser alone.
-          for i in 1 2 3; do
-            npx playwright install --with-deps chromium && break
-            echo "playwright install attempt $i failed"; sleep 20
-          done
+          # Install the browser on its own first. Only if it cannot start do we install system packages, with a time limit, because
+          # the runners sometimes cannot reach Ubuntu's package mirrors (a temporary DNS failure) and apt then hangs for minutes.
           npx playwright install chromium
+          if ! node -e "require('playwright').chromium.launch().then(b => b.close())"; then
+            timeout 300 npx playwright install --with-deps chromium
+          fi
       - name: Serve the site and run the smoke test
         run: |
           python3 -m http.server 8080 --bind 127.0.0.1 &
