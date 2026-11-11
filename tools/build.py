@@ -64,6 +64,7 @@ def page_bundles(ids):
     css.append(part(os.path.join(ROOT, 'src', 'core.css')))
     # core.js assigns window.CV outright, so the flag goes straight after it, not in the page.
     js.append('/* --- standalone page flag (tools/build.py) --- */\nCV.standalone = true;\n')
+    js.append(part(os.path.join(PAGES_DIR, 'standalone.js')))
     for fid in ids:
         fjs, fcss = feature_files(fid)
         for f in fjs: js.append(part(f))

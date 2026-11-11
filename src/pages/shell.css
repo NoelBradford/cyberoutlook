@@ -97,10 +97,15 @@ main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 1rem; }
   body { font-size: 10.5pt; line-height: 1.45; background: #fff; color: var(--ink); }
   a { text-decoration: none; }
   .toast { display: none !important; }
+  /* A printed result has no use for buttons or next-step prompts, and each item stays whole across a page break. */
+  .cv-inline .cv-row, .qz-plan { display: none !important; }
+  .cv-inline li { break-inside: avoid; }
+  main { min-height: 0; }
+  .cv-inline { border: 0; max-width: none; }
 }
 
 /* Exposure check on its own page: h2 where the report's dialog uses h3, and the same look. */
 .qz-result h2 { font: 700 1.9rem/1 var(--font-head); text-transform: uppercase; margin: 0.2rem 0 0.4rem; }
 .qz-result h2:focus { outline: none; }
-.qz-inline { max-width: 46rem; border: 1px solid var(--rule); border-radius: 3px; }
+.cv-inline { max-width: 46rem; border: 1px solid var(--rule); border-radius: 3px; }
 .qz-start { padding: 0.2rem 0; }

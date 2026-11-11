@@ -4,8 +4,23 @@
     "title": "Two-minute exposure check",
     "description": "Ten quick questions for UK firms with five to 50 staff. Get a score out of 10 and your cyber security gaps in order. Your answers stay in your browser.",
     "intro": "Ten quick questions, about two minutes, for UK firms with five to 50 staff. You get a score out of 10 and your gaps in order, with a way to turn them into a plan.",
-    "features": ["108", "109", "110", "111"],
+    "features": [
+      "108",
+      "109",
+      "110",
+      "111"
+    ],
     "open": "CV.openCheck",
     "reportActions": true
+  },
+  {
+    "slug": "readiness",
+    "title": "Cyber Essentials readiness check",
+    "description": "Five questions based on the Cyber Essentials v3.3 changes. See what to fix before you book an assessment.",
+    "intro": "Five questions, about a minute, based on the Cyber Essentials changes described in the report. See what to fix before you book an assessment.",
+    "features": [
+      "164"
+    ],
+    "open": "CV.openCE"
   }
 ]

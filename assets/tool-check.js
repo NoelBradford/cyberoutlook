@@ -183,6 +183,23 @@ window.CV = (function () {
 /* --- standalone page flag (tools/build.py) --- */
 CV.standalone = true;
 
+/* --- src/pages/standalone.js --- */
+// Helpers for tool pages only. tools/build.py adds this to each tool bundle straight after the CV.standalone flag,
+// and never to assets/app.js, so the report does not carry it.
+
+// A host for a tool that opens in a dialog on the report. It has the same shape as CV.dialog (body, open, close) and the hooks
+// other features look for: an element with the dialog's id, a .cv-dialog-body inside it, and close() on the element.
+// opts: id, label (accessible name), note (small print under the tool).
+CV.inlineHost = function (opts) {
+  var el = CV.h('section', { id: opts.id, class: 'cv-inline', 'aria-label': opts.label, hidden: true });
+  var body = CV.h('div', { class: 'cv-dialog-body' });
+  el.appendChild(body);
+  if (opts.note) el.appendChild(CV.h('p', { class: 'cv-dialog-note' }, opts.note));
+  el.close = function () {};
+  (CV.$('#tool-root') || document.body).appendChild(el);
+  return { dialog: el, body: body, open: function () { el.hidden = false; }, close: function () {} };
+};
+
 /* --- src/features/108-exposure-check.js --- */
 // Two-minute exposure check: ten yes / not sure / no questions built from the report's own actions.
 // Benchmarks quote only figures the report cites (CSBS 2025/26, source 1).
@@ -215,16 +232,8 @@ CV.ready(function () {
   var saved = CV.store.get('check', {});
   var SA = !!CV.standalone; // a page of its own (/check/): render inline in <main> instead of in a modal
   var NOTE = 'Your answers stay in this browser. Benchmarks are from the Cyber Security Breaches Survey 2025/26 [source 1].';
-  // Same shape as CV.dialog (body, open, close), and the same hooks 111-check-to-plan looks for: #check, .cv-dialog-body, close().
-  function inlineHost() {
-    var el = CV.h('section', { id: 'check', class: 'qz-inline', 'aria-label': 'Two-minute exposure check', hidden: true });
-    var body = CV.h('div', { class: 'cv-dialog-body' });
-    el.appendChild(body); el.appendChild(CV.h('p', { class: 'cv-dialog-note' }, NOTE));
-    el.close = function () {};
-    (CV.$('#tool-root') || document.body).appendChild(el);
-    return { dialog: el, body: body, open: function () { el.hidden = false; }, close: function () {} };
-  }
-  var d = SA ? inlineHost() : CV.dialog({ id: 'check', title: 'Two-minute exposure check', wide: true, note: NOTE });
+  // CV.inlineHost (src/pages/standalone.js) has the same shape as CV.dialog and the hooks 111-check-to-plan looks for.
+  var d = SA ? CV.inlineHost({ id: 'check', label: 'Two-minute exposure check', note: NOTE }) : CV.dialog({ id: 'check', title: 'Two-minute exposure check', wide: true, note: NOTE });
   var H = SA ? 'h2' : 'h3'; // the page already has an h1
   function intro(show) { var i = CV.$('.page-intro'); if (i) i.hidden = !show; }
   var step = 0;
