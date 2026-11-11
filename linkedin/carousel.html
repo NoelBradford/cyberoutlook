@@ -22,7 +22,7 @@
   --ui: "IBM Plex Sans", "Segoe UI", sans-serif;
 }
 @page { size: 1080px 1350px; margin: 0; }
-* { box-sizing: border-box; }
+* { box-sizing: border-box; font-variant-ligatures: none; } /* ligatures break text extraction (copy, search, screen readers) in the PDF */
 html, body { margin: 0; padding: 0; background: #888; }
 .slide {
   width: 1080px; height: 1350px; position: relative; overflow: hidden;
@@ -208,10 +208,10 @@ p.body { font-family: var(--body); font-size: 40px; line-height: 1.35; margin: 3
 
 <!-- 10. CTA -->
 <section class="slide dark">
-  <p class="kicker">Free to read · No sign-up</p>
-  <h2>Read the full outlook</h2>
-  <div class="cta-url">cyberoutlook.sbcsg.uk</div>
-  <p class="lede" style="max-width:24ch">The four questions for your IT provider, the one-page plan, and a 90-day start for 2027.</p>
+  <p class="kicker">Free to use · No sign-up</p>
+  <h2>Take the two-minute check</h2>
+  <div class="cta-url" style="font-size:76px">cyberoutlook.sbcsg.uk/check</div>
+  <p class="lede" style="max-width:26ch">Ten questions, a score out of 10 and your gaps in order, for UK firms with five to 50 staff.</p>
   <div class="cta-box">
     <img src="logo.jpg" alt="">
     <p><strong>Noel Bradford</strong><br>The Small Business Cyber Security Guy<br><span class="muted">Nine podcast episodes, Mondays from 2 November 2026</span></p>
