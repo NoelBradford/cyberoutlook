@@ -1,0 +1,31 @@
+# The email Worker. NOT DEPLOYED, and no page calls it yet. This file shows how it would be set up; nothing here has been run against
+# a real Cloudflare account. Every id below is a placeholder.
+name = "cyberoutlook-email"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+
+# Same origin as the site (the site moves to Cloudflare first), so /api/* needs no change to the page's Content-Security-Policy.
+# routes = [{ pattern = "cyberoutlook.sbcsg.uk/api/*", zone_name = "sbcsg.uk" }]
+
+[vars]
+SITE = "https://cyberoutlook.sbcsg.uk"
+SENDER_NAME = "SBCSG Enterprises Ltd"           # the controller named in the privacy notice (registered name still to confirm)
+SENDER_ADDRESS = "hello@sbcsg.uk"                 # placeholder: must be an address on a domain verified with the sending provider
+
+[[d1_databases]]
+binding = "DB"
+database_name = "cyberoutlook-email"
+database_id = "00000000-0000-0000-0000-000000000000"   # create with: wrangler d1 create cyberoutlook-email, then apply worker/schema.sql
+
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "cyberoutlook-gated-files"        # private bucket holding the two PDFs; never exposed directly
+
+# Secrets, set with `wrangler secret put` and never committed: SECRET (signs unsubscribe links), TURNSTILE_SECRET (optional).
+
+# Email Sending binding (beta, Workers Paid). Check the current Cloudflare documentation for the exact shape before enabling.
+# [[send_email]]
+# name = "EMAIL"
+
+[triggers]
+crons = ["17 3 * * *"]   # daily purge: expired links, unconfirmed requests, addresses past their 30 days
