@@ -70,6 +70,21 @@ async function finishCheck(p) {
     const dir = stage(cfg); let refused = false; try { build(dir); } catch (e) { refused = true; }
     check(refused, `the build accepted ${name}`); fs.rmSync(dir, { recursive: true, force: true });
   }
+  { // the deployed site and the sitemap: PDFs included while the gate is off, left out while it is on
+    const PDFS = ['assets/UK-Small-Business-Cyber-Outlook-2027.pdf', 'linkedin/CyberOutlook2027_LinkedIn_Carousel.pdf'];
+    for (const [label, cfg] of [['off', null], ['on', ON]]) {
+      const dir = stage(cfg); build(dir); const out = path.join(dir, '_staged');
+      cp.execFileSync(process.execPath, ['tools/stage-site.js', out, '--preview'], { cwd: dir, stdio: 'pipe' });
+      const sitemap = fs.readFileSync(path.join(dir, 'sitemap.xml'), 'utf8');
+      for (const f of PDFS) {
+        check(fs.existsSync(path.join(out, f)) === (label === 'off'), `STAGE ${label}: ${f} should be ${label === 'off' ? 'in' : 'left out of'} the deployed site`);
+        check(sitemap.includes(f) === (label === 'off'), `STAGE ${label}: ${f} should be ${label === 'off' ? 'in' : 'left out of'} the sitemap`);
+      }
+      check(fs.existsSync(path.join(out, 'check', 'index.html')) && fs.existsSync(path.join(out, 'tools', 'index.html')) && !fs.existsSync(path.join(out, 'src')) && !fs.existsSync(path.join(out, 'worker')) && !fs.existsSync(path.join(out, 'tools', 'build.py')), `STAGE ${label}: the deployed site is missing pages or contains source, the Worker or scripts`);
+      check(/noindex/.test(fs.readFileSync(path.join(out, '_headers'), 'utf8')), `STAGE ${label}: the preview has no noindex header`);
+      fs.rmSync(dir, { recursive: true, force: true });
+    }
+  }
   const b = await chromium.launch();
 
   { // OFF: the shipped config

@@ -213,7 +213,8 @@ for f_ in [extra['home']] + extra['files']:
 wr(os.path.join(ROOT, 'sitemap.xml'), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
    + sm_entry(extra['home']['path'], extra['home']['lastmod'])
    + ''.join(sm_entry(e['slug'] + '/', e['lastmod']) for e in manifest)
-   + ''.join(sm_entry(f_['path'], f_['lastmod']) for f_ in extra['files']) + '</urlset>\n')
+   # With the email capture on, the PDFs are behind the gate, so they are not listed (tools/stage-site.js also leaves them out of the deployed site).
+   + ''.join(sm_entry(f_['path'], f_['lastmod']) for f_ in extra['files'] if not CONFIG['captureEndpoint']) + '</urlset>\n')
 
 # One source of truth for CI: tools/pages.txt is generated from pages.json.
 wr(os.path.join(ROOT, 'tools', 'pages.txt'),

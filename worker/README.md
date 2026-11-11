@@ -31,4 +31,4 @@ The core of the owner's own list and email system, written ahead of the open dec
 - Turnstile is optional here and has not been tried.
 - The pages can call it, but the switch is off. `src/features/219-email-capture.js` (the result form on `/check/`) and `220-report-gate.js` (the PDF gate) do nothing until `src/pages/config.json` has an endpoint, a privacy notice address and both wordings (see `src/README.md`). They are tested against a mock endpoint (`tools/capture-check.js`), never against this Worker.
 - The privacy notice (`/privacy/`) is not built: a draft for the adviser is in `docs/privacy-notice-draft.md`. The preferences page is served by this Worker (`/api/preferences`), not by a static page.
-- The PDFs are still public static files in the repo. The gate is not real until they move to R2 and out of the repo (and its history).
+- The PDFs are still public static files in the repo. While the capture is on, `tools/stage-site.js` leaves them out of the site deployed to Cloudflare, but the gate is not real until they are in the private R2 bucket (not created or uploaded yet) and out of the repo and its history.
