@@ -1,11 +1,12 @@
 .cs { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; max-width: 620px; border-top: 2px solid var(--ink); }
 .cs li { border-right: 1px solid var(--rule); }
 .cs li:last-child { border-right: 0; }
-.cs a { display: grid; gap: 0.2rem; padding: 0.7rem 0.8rem 0.6rem 0; margin-left: 0.8rem; color: var(--ink); text-decoration: none; }
-.cs li:first-child a { margin-left: 0; }
+.cs a, .cs .cs-i { display: grid; gap: 0.2rem; padding: 0.7rem 0.8rem 0.6rem 0; margin-left: 0.8rem; color: var(--ink); text-decoration: none; }
+.cs li:first-child a, .cs li:first-child .cs-i { margin-left: 0; }
 .cs a:hover b { color: var(--signal); }
 .cs b { font: 700 clamp(1.8rem, 4.2vw, 2.6rem)/1 var(--font-head); color: var(--accent); transition: color 0.15s; }
 .cs span { font: 400 0.8rem/1.3 var(--font-ui); color: var(--muted); }
+.cs-src a { color: inherit; text-underline-offset: 0.18em; }
 .cs-src { margin: 0.4rem 0 0; font: 500 0.68rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-@media (max-width: 520px) { .cs b { font-size: 1.6rem; } .cs a { padding-right: 0.4rem; margin-left: 0.5rem; } .cs span { font-size: 0.72rem; } }
+@media (max-width: 520px) { .cs b { font-size: 1.6rem; } .cs a, .cs .cs-i { padding-right: 0.4rem; margin-left: 0.5rem; } .cs span { font-size: 0.72rem; } }
 @media print { .cs, .cs-src { display: none; } }

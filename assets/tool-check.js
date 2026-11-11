@@ -342,10 +342,7 @@ CV.ready(function () {
       CV.h('button', { type: 'button', class: 'qz-back-x', 'aria-label': 'Hide', onclick: function () { pill.remove(); pill = null; } }, '×'));
     document.body.appendChild(pill);
   }
-  // The check links on the cover and in Start here are in the page; wire them up.
-  CV.$$('a[data-path="check"]').forEach(function (a) {
-    a.addEventListener('click', function (e) { e.preventDefault(); CV.openCheck(); });
-  });
+  // The check links on the cover and in Start here go to /check/ (UX-10), so they are left as plain links.
   if (saved.done) {
     var card = CV.$('.path[data-path="check"]');
     if (card) { card.querySelector('b').textContent = 'Your exposure check'; card.querySelector('.p-sub').textContent = 'See your result and your gaps again.'; }

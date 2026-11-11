@@ -2,9 +2,9 @@
 // @sel .cover
 CV.ready(function () {
   var bar = CV.$('.cover .tools'); if (!bar) return;
-  var keep = ['My plan', 'Share', 'Search'];
+  var keep = ['My plan', 'Share']; // Search lives in the Tools menu and in the bar that appears once you scroll
   // The menu is deliberately short. Anything not listed here is either in the Toolkit or reachable from where it's used.
-  var MENU = { 'It’s happening now': 'In an incident', 'All tools': 'Your work', 'Your data': 'Your work',
+  var MENU = { 'It’s happening now': 'In an incident', 'All tools': 'Your work', 'Search': 'Your work', 'Your data': 'Your work',
     'Listen from here': 'Reading', 'Simple mode (just the report)': 'Reading', 'Reading settings': 'Reading', 'Glossary': 'Reading', 'Download the full PDF': 'Save' };
   var TOOLKIT = { 'Print a team pack': 'One copy per person: the five things, the call-back rule and who to call.',
     'Print my toolkit': 'Everything you have filled in, printed together.', 'Present to my team': 'The report as slides for a short team meeting.',

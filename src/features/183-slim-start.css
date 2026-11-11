@@ -6,3 +6,4 @@
 .start.slim { padding-top: 1rem; padding-bottom: 1rem; }
 .start.slim .start-inner > *:not(.ss):not(.aw) { display: none; }
 .start:not(.slim) .ss { padding-bottom: 1rem; border-bottom: 1px solid color-mix(in srgb, var(--paper) 18%, transparent); }
+.start:has(.ss) .start-things { display: none; }

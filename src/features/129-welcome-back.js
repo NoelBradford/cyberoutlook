@@ -18,13 +18,10 @@ CV.ready(function () {
   window.addEventListener('scroll', remember, { passive: true });
   if (!last || location.hash || !document.getElementById(last.id) || Date.now() - last.at < 60000) return;
   if (last.id === 'foreword' && last.r < 0.1) return;
-  var bits = [];
-  var five = 0; try { var s = JSON.parse(localStorage.getItem('cv-five-things') || '{}'); Object.keys(s).forEach(function (k) { if (s[k]) five++; }); } catch (e) {}
-  bits.push(five + ' of 5 things done');
-  if (CV.plan && CV.plan.count()) bits.push(CV.plan.count() + ' actions in your plan');
+  // Progress is said once, in the progress line in Start here, so this message only says where you were.
   var bar = CV.h('div', { class: 'wb', role: 'region', 'aria-label': 'Welcome back' },
     CV.h('div', { class: 'wb-in' },
-      CV.h('p', null, CV.h('b', null, 'Welcome back. '), 'You were reading ', CV.h('i', null, last.title), '. ', CV.h('span', { class: 'wb-p' }, bits.join(' · '))),
+      CV.h('p', null, CV.h('b', null, 'Welcome back. '), 'You were reading ', CV.h('i', null, last.title), '.'),
       CV.h('div', { class: 'cv-row' },
         CV.button('Carry on reading', function () {
           var sec = document.getElementById(last.id);

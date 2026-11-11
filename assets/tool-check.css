@@ -159,7 +159,7 @@ html.cv-modal-open { overflow: hidden; }
 .follow-k { margin: 0 !important; font: 600 0.72rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 
 /* --- src/features/108-exposure-check.css --- */
-.paths.four { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.paths.four, .paths.three { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
 .qz-bar { height: 6px; background: var(--rule); border-radius: 3px; overflow: hidden; }
 .qz-bar span { display: block; height: 100%; background: var(--accent); }
 .qz-q { border: 0; padding: 0; margin: 0; display: grid; gap: 0.6rem; }

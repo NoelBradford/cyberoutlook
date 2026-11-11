@@ -60,7 +60,7 @@ html.cv-modal-open { overflow: hidden; }
 html.simple .cover-cta { display: none; }
 
 /* --- src/features/108-exposure-check.css --- */
-.paths.four { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.paths.four, .paths.three { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
 .qz-bar { height: 6px; background: var(--rule); border-radius: 3px; overflow: hidden; }
 .qz-bar span { display: block; height: 100%; background: var(--accent); }
 .qz-q { border: 0; padding: 0; margin: 0; display: grid; gap: 0.6rem; }
@@ -420,6 +420,8 @@ body.ab-on main [id] { scroll-margin-top: 64px; }
 }
 @media (prefers-reduced-motion: reduce) { .ab { transition: none; } }
 @media print { .ab { display: none !important; } }
+a.ab-b { text-decoration: none; }
+.ab-i { display: inline-flex; }
 
 /* --- src/features/132-short-version.css --- */
 body.short-v .sv-x, body.short-v section.sv-hide-all > *:not(h2):not(.sec-num):not(.next-sec) { display: none !important; }
@@ -619,6 +621,10 @@ figure.bt-fig { max-width: 100%; margin: 1.6rem 0 2rem; display: grid; gap: 0.7r
 .rp-step:hover, .rp-step:focus-visible { border-color: var(--signal); }
 .rp-step span { flex: 0 0 auto; display: grid; place-items: center; width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--signal); color: var(--ink); font: 700 1rem var(--font-head); }
 @media (max-width: 560px) { .rp { grid-template-columns: 1fr; } }
+.rp-det > summary { cursor: pointer; display: inline-block; font: 600 0.82rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--paper); padding: 0.55rem 0.9rem; min-height: 40px; border: 1px solid color-mix(in srgb, var(--paper) 35%, transparent); border-radius: 3px; }
+.rp-det > summary:hover { border-color: var(--signal); }
+.rp-det[open] > summary { margin-bottom: 0.9rem; }
+.rp-det .rp { border-top: 0; padding-top: 0; }
 
 /* --- src/features/148-like-yours.css --- */
 .ly { display: grid; gap: 0.6rem; margin: 1rem 0 1.8rem; }
@@ -928,13 +934,14 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
 .cs { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; max-width: 620px; border-top: 2px solid var(--ink); }
 .cs li { border-right: 1px solid var(--rule); }
 .cs li:last-child { border-right: 0; }
-.cs a { display: grid; gap: 0.2rem; padding: 0.7rem 0.8rem 0.6rem 0; margin-left: 0.8rem; color: var(--ink); text-decoration: none; }
-.cs li:first-child a { margin-left: 0; }
+.cs a, .cs .cs-i { display: grid; gap: 0.2rem; padding: 0.7rem 0.8rem 0.6rem 0; margin-left: 0.8rem; color: var(--ink); text-decoration: none; }
+.cs li:first-child a, .cs li:first-child .cs-i { margin-left: 0; }
 .cs a:hover b { color: var(--signal); }
 .cs b { font: 700 clamp(1.8rem, 4.2vw, 2.6rem)/1 var(--font-head); color: var(--accent); transition: color 0.15s; }
 .cs span { font: 400 0.8rem/1.3 var(--font-ui); color: var(--muted); }
+.cs-src a { color: inherit; text-underline-offset: 0.18em; }
 .cs-src { margin: 0.4rem 0 0; font: 500 0.68rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-@media (max-width: 520px) { .cs b { font-size: 1.6rem; } .cs a { padding-right: 0.4rem; margin-left: 0.5rem; } .cs span { font-size: 0.72rem; } }
+@media (max-width: 520px) { .cs b { font-size: 1.6rem; } .cs a, .cs .cs-i { padding-right: 0.4rem; margin-left: 0.5rem; } .cs span { font-size: 0.72rem; } }
 @media print { .cs, .cs-src { display: none; } }
 
 /* --- src/features/180-pull-quote.css --- */
@@ -995,6 +1002,7 @@ figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em;
 .start.slim { padding-top: 1rem; padding-bottom: 1rem; }
 .start.slim .start-inner > *:not(.ss):not(.aw) { display: none; }
 .start:not(.slim) .ss { padding-bottom: 1rem; border-bottom: 1px solid color-mix(in srgb, var(--paper) 18%, transparent); }
+.start:has(.ss) .start-things { display: none; }
 
 /* --- src/features/184-author-card.css --- */
 .auth { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 1.4rem; align-items: start; margin: 0 0 1.6rem; padding: 1.3rem; border: 2px solid var(--ink); border-radius: 3px; background: var(--paper); }

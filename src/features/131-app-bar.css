@@ -26,3 +26,5 @@ body.ab-on main [id] { scroll-margin-top: 64px; }
 }
 @media (prefers-reduced-motion: reduce) { .ab { transition: none; } }
 @media print { .ab { display: none !important; } }
+a.ab-b { text-decoration: none; }
+.ab-i { display: inline-flex; }

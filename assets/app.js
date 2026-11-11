@@ -191,8 +191,9 @@ CV.ready(function () {
   function render() {
     var now = CV.today(), jan = new Date(2027, 0, 1), done = count();
     var days = Math.round((jan - now) / 86400000);
-    if (days > 0) el.innerHTML = '<b>' + days + '</b> days to January. ' + (done === 5 ? 'All five things done.' : done + ' of 5 things done.');
-    else el.textContent = done === 5 ? 'All five things done.' : 'It’s 2027. ' + done + ' of the five things done.';
+    // The count of things done is in its own span: once the progress line is on screen (a returning reader) it hides, so it is said once.
+    if (days > 0) el.innerHTML = '<b>' + days + '</b> days to January.<span class="start-things"> ' + (done === 5 ? 'All five things done.' : done + ' of 5 things done.') + '</span>';
+    else el.innerHTML = 'It’s 2027.<span class="start-things"> ' + (done === 5 ? 'All five things done.' : done + ' of the five things done.') + '</span>';
   }
   render();
   document.addEventListener('change', function (e) { if (e.target.closest && e.target.closest('#five')) render(); });
@@ -342,10 +343,7 @@ CV.ready(function () {
       CV.h('button', { type: 'button', class: 'qz-back-x', 'aria-label': 'Hide', onclick: function () { pill.remove(); pill = null; } }, '×'));
     document.body.appendChild(pill);
   }
-  // The check links on the cover and in Start here are in the page; wire them up.
-  CV.$$('a[data-path="check"]').forEach(function (a) {
-    a.addEventListener('click', function (e) { e.preventDefault(); CV.openCheck(); });
-  });
+  // The check links on the cover and in Start here go to /check/ (UX-10), so they are left as plain links.
   if (saved.done) {
     var card = CV.$('.path[data-path="check"]');
     if (card) { card.querySelector('b').textContent = 'Your exposure check'; card.querySelector('.p-sub').textContent = 'See your result and your gaps again.'; }
@@ -1212,13 +1210,10 @@ CV.ready(function () {
   window.addEventListener('scroll', remember, { passive: true });
   if (!last || location.hash || !document.getElementById(last.id) || Date.now() - last.at < 60000) return;
   if (last.id === 'foreword' && last.r < 0.1) return;
-  var bits = [];
-  var five = 0; try { var s = JSON.parse(localStorage.getItem('cv-five-things') || '{}'); Object.keys(s).forEach(function (k) { if (s[k]) five++; }); } catch (e) {}
-  bits.push(five + ' of 5 things done');
-  if (CV.plan && CV.plan.count()) bits.push(CV.plan.count() + ' actions in your plan');
+  // Progress is said once, in the progress line in Start here, so this message only says where you were.
   var bar = CV.h('div', { class: 'wb', role: 'region', 'aria-label': 'Welcome back' },
     CV.h('div', { class: 'wb-in' },
-      CV.h('p', null, CV.h('b', null, 'Welcome back. '), 'You were reading ', CV.h('i', null, last.title), '. ', CV.h('span', { class: 'wb-p' }, bits.join(' · '))),
+      CV.h('p', null, CV.h('b', null, 'Welcome back. '), 'You were reading ', CV.h('i', null, last.title), '.'),
       CV.h('div', { class: 'cv-row' },
         CV.button('Carry on reading', function () {
           var sec = document.getElementById(last.id);
@@ -1287,6 +1282,14 @@ CV.ready(function () {
     check: 'M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z'
   };
   function btn(label, icon, fn, extra) { var b = CV.h('button', { type: 'button', class: 'ab-b', 'aria-label': label, onclick: fn, html: ico(icon) + '<span class="ab-l">' + label + '</span>' }); if (extra) b.appendChild(extra); return b; }
+  // The check is a page of its own now, so the bar links to it. After the check is finished the same item reads "Your result".
+  function checkItem() {
+    var lab = CV.h('span', { class: 'ab-l' }, 'Check');
+    var a = CV.h('a', { class: 'ab-b', href: 'check/' }, CV.h('span', { class: 'ab-i', 'aria-hidden': 'true', html: ico(I.check) }), lab);
+    function sync() { var done = !!CV.store.get('check', {}).done; lab.textContent = done ? 'Your result' : 'Check'; }
+    CV.on('check', sync); sync();
+    return a;
+  }
   var count = CV.h('span', { class: 'ab-badge', 'aria-hidden': 'true' });
   var where = CV.h('span', { class: 'ab-where' });
   var pct = CV.h('span', { class: 'ab-pct', 'aria-hidden': 'true' });
@@ -1294,7 +1297,7 @@ CV.ready(function () {
     CV.h('a', { class: 'ab-title', href: '#top' }, CV.h('b', null, 'Cyber Outlook 2027'), where),
     CV.h('div', { class: 'ab-tools' },
       btn('Contents', I.toc, function () { var t = CV.$('#toc-h'); var tg = CV.$('.toc-toggle'); if (tg && tg.getAttribute('aria-expanded') === 'false') tg.click(); t.scrollIntoView({ behavior: CV.reduced() ? 'auto' : 'smooth' }); t.focus({ preventScroll: true }); }),
-      CV.openCheck ? btn('Check', I.check, function () { CV.openCheck(); }) : null,
+      checkItem(),
       btn('My plan', I.plan, function () { CV.plan && CV.plan.open(); }, count),
       btn('Search', I.search, function () { CV.openSearch && CV.openSearch(); }),
       btn('Share', I.share, function () { CV.openShare && CV.openShare(); })),
@@ -1827,10 +1830,10 @@ CV.ready(function () {
 CV.ready(function () {
   var start = CV.$('.start-inner'); if (!start) return;
   var ROUTES = {
-    owner: { label: 'Owner or director', steps: [['Take the two-minute check', function () { CV.openCheck && CV.openCheck(); }], ['Read the executive summary', '#summary'], ['Name who owns cyber on the one-page plan', '#mvc']] },
-    office: { label: 'Office manager', steps: [['Tick off the five things', '#h-if-you-do-five-things-before-january'], ['Print the call-back poster', function () { CV.openPoster && CV.openPoster(); }], ['Run the 90-day plan from your calendar', '#ninety']] },
+    owner: { label: 'Owner or director', steps: [['Take the two-minute check', 'check/'], ['Read the executive summary', '#summary'], ['Name who owns cyber on the one-page plan', '#mvc']] },
+    office: { label: 'Office manager', steps: [['Tick off the five things', '#h-if-you-do-five-things-before-january'], ['Print the call-back poster', 'call-back-poster/'], ['Run the 90-day plan from your calendar', '#ninety']] },
     it: { label: 'IT lead or provider', steps: [['See what the rules now ask for', '#rules'], ['Read the four questions you’ll be asked', '#h-what-to-do'], ['Check the AI tool rule of three', '#theme-2']] },
-    finance: { label: 'Finance or payments', steps: [['Read "Crime gets cheaper and faster"', '#theme-3'], ['Agree the call-back rule', function () { CV.openPoster && CV.openPoster(); }], ['Plan the spend', '#spend']] }
+    finance: { label: 'Finance or payments', steps: [['Read "Crime gets cheaper and faster"', '#theme-3'], ['Agree the call-back rule', 'call-back-poster/'], ['Plan the spend', '#spend']] }
   };
   var role = CV.store.get('role', '');
   var box = CV.h('div', { class: 'rp' });
@@ -1855,7 +1858,10 @@ CV.ready(function () {
   }
   box.appendChild(CV.h('p', { class: 'rp-q' }, 'I’m the…'));
   box.appendChild(seg); box.appendChild(route);
-  start.appendChild(box);
+  // The role chips sit behind one control so they stop competing with the path cards. A reader who has chosen a role sees it open.
+  var det = CV.h('details', { class: 'rp-det' }, CV.h('summary', null, 'Tailor this to my role'), box);
+  if (role) det.open = true;
+  start.appendChild(det);
   set(role);
 });
 
@@ -2078,9 +2084,9 @@ CV.ready(function () {
 // @sel .cover
 CV.ready(function () {
   var bar = CV.$('.cover .tools'); if (!bar) return;
-  var keep = ['My plan', 'Share', 'Search'];
+  var keep = ['My plan', 'Share']; // Search lives in the Tools menu and in the bar that appears once you scroll
   // The menu is deliberately short. Anything not listed here is either in the Toolkit or reachable from where it's used.
-  var MENU = { 'It’s happening now': 'In an incident', 'All tools': 'Your work', 'Your data': 'Your work',
+  var MENU = { 'It’s happening now': 'In an incident', 'All tools': 'Your work', 'Search': 'Your work', 'Your data': 'Your work',
     'Listen from here': 'Reading', 'Simple mode (just the report)': 'Reading', 'Reading settings': 'Reading', 'Glossary': 'Reading', 'Download the full PDF': 'Save' };
   var TOOLKIT = { 'Print a team pack': 'One copy per person: the five things, the call-back rule and who to call.',
     'Print my toolkit': 'Everything you have filled in, printed together.', 'Present to my team': 'The report as slides for a short team meeting.',

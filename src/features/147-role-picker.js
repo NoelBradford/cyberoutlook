@@ -3,10 +3,10 @@
 CV.ready(function () {
   var start = CV.$('.start-inner'); if (!start) return;
   var ROUTES = {
-    owner: { label: 'Owner or director', steps: [['Take the two-minute check', function () { CV.openCheck && CV.openCheck(); }], ['Read the executive summary', '#summary'], ['Name who owns cyber on the one-page plan', '#mvc']] },
-    office: { label: 'Office manager', steps: [['Tick off the five things', '#h-if-you-do-five-things-before-january'], ['Print the call-back poster', function () { CV.openPoster && CV.openPoster(); }], ['Run the 90-day plan from your calendar', '#ninety']] },
+    owner: { label: 'Owner or director', steps: [['Take the two-minute check', 'check/'], ['Read the executive summary', '#summary'], ['Name who owns cyber on the one-page plan', '#mvc']] },
+    office: { label: 'Office manager', steps: [['Tick off the five things', '#h-if-you-do-five-things-before-january'], ['Print the call-back poster', 'call-back-poster/'], ['Run the 90-day plan from your calendar', '#ninety']] },
     it: { label: 'IT lead or provider', steps: [['See what the rules now ask for', '#rules'], ['Read the four questions you’ll be asked', '#h-what-to-do'], ['Check the AI tool rule of three', '#theme-2']] },
-    finance: { label: 'Finance or payments', steps: [['Read "Crime gets cheaper and faster"', '#theme-3'], ['Agree the call-back rule', function () { CV.openPoster && CV.openPoster(); }], ['Plan the spend', '#spend']] }
+    finance: { label: 'Finance or payments', steps: [['Read "Crime gets cheaper and faster"', '#theme-3'], ['Agree the call-back rule', 'call-back-poster/'], ['Plan the spend', '#spend']] }
   };
   var role = CV.store.get('role', '');
   var box = CV.h('div', { class: 'rp' });
@@ -31,6 +31,9 @@ CV.ready(function () {
   }
   box.appendChild(CV.h('p', { class: 'rp-q' }, 'I’m the…'));
   box.appendChild(seg); box.appendChild(route);
-  start.appendChild(box);
+  // The role chips sit behind one control so they stop competing with the path cards. A reader who has chosen a role sees it open.
+  var det = CV.h('details', { class: 'rp-det' }, CV.h('summary', null, 'Tailor this to my role'), box);
+  if (role) det.open = true;
+  start.appendChild(det);
   set(role);
 });
