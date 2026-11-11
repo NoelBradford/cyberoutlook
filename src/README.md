@@ -7,14 +7,46 @@ The report itself is `index.html`. Everything interactive (the exposure check, M
 - `src/core.js` and `src/core.css`: the shared `CV` helper (saved state, dialogs, downloads, calendar files, the toolbar) and base styles.
 - `src/features/NNN-name.js` and `.css`: one file pair per feature, numbered by the iteration that added it. They load in number order.
 - `tools/build.py`: joins everything into `assets/app.js` and `assets/app.css` and stamps `index.html` with a version so browsers fetch the new files.
+- `src/pages/`: the standalone tool pages (see below). Nothing here goes into `assets/app.js` or `assets/app.css`.
 - `tools/check.js`: the smoke test GitHub runs on every push (see `.github/workflows/check.yml`).
 
 Features start in small slices when the browser is idle (`CV.ready`), so the page stays responsive while they load.
 
+## Standalone tool pages
+
+A tool can have its own page at `/<slug>/` instead of opening as a modal over the report.
+
+- `src/pages/pages.json` is the manifest, one entry per page. It starts empty. Fields:
+  - `slug`: lower case letters, digits and single hyphens. `assets`, `src`, `docs`, `linkedin` and `index` are reserved.
+  - `title` and `description`: used for the page title, the heading, the canonical link and the social preview text.
+  - `features`: the three-digit ids of the `src/features` files the page needs, for example `["108", "109"]`. The build fails if an id matches no file.
+  - `open`: optional dotted function the page calls once the interactive layer is ready, for example `CV.openCheck`.
+  - `ogImage`: optional path inside the repo, default `assets/og-image.png`.
+- `src/pages/shell.html` is the shared template (same `<meta>` set and Content-Security-Policy as the report, a slim header and footer, the dark mode toggle, the skip link). `src/pages/shell.css` holds the design tokens and page chrome. The tokens are copied from the inline style in `index.html`, so if the report's tokens change, change them there too.
+- `python3 tools/build.py` writes `<slug>/index.html`, `assets/tool-<slug>.js` and `assets/tool-<slug>.css` for each entry, prints their sizes, and regenerates `tools/pages.txt` (the list CI runs the tool profile on). A tool bundle is `src/core.*` plus only the listed features in number order. It never changes `assets/app.js` or `assets/app.css`. Commit the generated files with the source: CI fails if a fresh build leaves anything changed or untracked.
+- The Content-Security-Policy is read from `index.html` at build time, so a tool page can never carry a different policy.
+- Pages use `../`-relative URLs, because the policy sets `base-uri 'none'`.
+- Each page stores itself and its bundles in the service worker's cache after the first visit, so it opens offline. The cache name is read from `sw.js`.
+- The build removes generated files for pages that are no longer in the manifest. It never removes a folder.
+
+### `CV.standalone`
+
+On a tool page the build sets `CV.standalone = true` straight after `src/core.js` (core assigns `window.CV` as a whole, so it cannot be set earlier). On the report it is undefined. The report is not there on a tool page, so a feature that needs report anchors (for example a heading such as `#rules`, the cover toolbar or the Start Here card) must skip quietly instead of failing:
+
+```js
+CV.ready(function () {
+  var rules = CV.$('#rules');
+  if (!rules) return; // no report behind this page (CV.standalone), nothing to attach to
+  // ... attach to the report here
+});
+```
+
+Check for the anchor you need rather than for `CV.standalone`; use the flag only where behaviour should differ on a tool page, such as rendering the tool inline instead of in a dialog. A feature failing inside `CV.ready` shows up as a `CV feature failed` warning, which the tool profile of `tools/check.js` treats as a failure.
+
 ## Making a change
 
 1. Edit a file in `src/`. Don't edit `assets/app.js` or `assets/app.css` directly.
-2. Run `python3 tools/build.py`.
+2. Run `python3 tools/build.py` (on Windows without a `python3` command, `python tools/build.py` gives the same output).
 3. Check it: `python3 -m http.server 8080` in the repo root, open http://localhost:8080, then run `npm install` once and `npm run check`.
 4. Commit `src/`, `assets/app.*` and `index.html` together. GitHub fails the check if the bundle wasn’t rebuilt.
 

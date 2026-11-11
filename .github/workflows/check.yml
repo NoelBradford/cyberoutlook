@@ -22,7 +22,12 @@ jobs:
       - name: Rebuild the bundle and make sure it is committed
         run: |
           python3 tools/build.py
-          git diff --exit-code -- assets/app.js assets/app.css index.html || (echo "Run python3 tools/build.py and commit the result" && exit 1)
+          # git status (not git diff) so a generated page or tool bundle that was never added also fails the check.
+          if [ -n "$(git status --porcelain)" ]; then
+            git status --short
+            echo "Run python3 tools/build.py and commit the result, including any new files"
+            exit 1
+          fi
       - name: Install Playwright and Chromium
         run: |
           npm install --no-audit --no-fund

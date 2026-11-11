@@ -1,0 +1,75 @@
+/* Page chrome for standalone tool pages. Design tokens and base rules are copied from the inline <style> in
+   index.html, because the report keeps them there and not in src/core.css. If the report's tokens change,
+   change them here too. This file is added to each tool-<slug>.css before src/core.css and never to app.css. */
+@font-face { font-family: "Barlow Fallback"; src: local("Arial"), local("Helvetica"), local("Liberation Sans"), local("Roboto"); size-adjust: 72%; }
+@font-face { font-family: "Barlow Fallback"; font-weight: 700; src: local("Arial Bold"), local("Arial-BoldMT"), local("Helvetica Bold"), local("Liberation Sans Bold"), local("Roboto Bold"); size-adjust: 73%; }
+@font-face { font-family: "Plex Fallback"; src: local("Arial"), local("Helvetica"), local("Liberation Sans"), local("Roboto"); size-adjust: 94%; }
+:root {
+  --paper: #f3f6f5;
+  --ink: #15222b;
+  --muted: #56656d;
+  --accent: #0d5b60;
+  --signal: #c68a0c;
+  --rule: #c7d1d0;
+  --font-head: "Barlow Condensed", "Barlow Fallback", sans-serif;
+  --font-body: "Source Serif 4", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Plex Fallback", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e161b;
+    --ink: #e2e9e9;
+    --muted: #9aa9ae;
+    --accent: #62b8b5;
+    --signal: #e6b043;
+    --rule: #2b3a42;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e161b;
+  --ink: #e2e9e9;
+  --muted: #9aa9ae;
+  --accent: #62b8b5;
+  --signal: #e6b043;
+  --rule: #2b3a42;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.62;
+  font-optical-sizing: auto;
+  overflow-wrap: break-word;
+}
+a { color: var(--accent); text-underline-offset: 0.18em; text-decoration-thickness: 1px; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
+a:hover { text-decoration-thickness: 2px; text-decoration-color: currentColor; }
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; border-radius: 2px; }
+h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.08; text-wrap: balance; margin: 0; font-weight: 700; letter-spacing: 0.005em; }
+p, li { text-wrap: pretty; }
+.skip { position: absolute; left: -9999px; }
+.skip:focus { left: 16px; top: 16px; background: var(--paper); padding: 0.5rem 0.75rem; z-index: 10; }
+.theme-toggle, .tool { font: 500 0.78rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); background: transparent; border: 1px solid var(--rule); padding: 0.45rem 0.8rem; border-radius: 2px; cursor: pointer; }
+.theme-toggle:hover, .tool:hover { border-color: var(--ink); }
+@media (pointer: coarse) { .tool, .theme-toggle { min-height: 44px; } }
+
+/* Standalone page chrome */
+.page-head { border-bottom: 3px solid var(--ink); padding: 0 max(16px, 4vw); }
+.page-head-in { max-width: 1240px; margin: 0 auto; padding: 0.85rem 0; display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; align-items: center; justify-content: space-between; }
+.page-brand { display: inline-flex; align-items: center; gap: 0.6rem; color: var(--ink); text-decoration: none; font: 700 1.15rem var(--font-head); letter-spacing: 0.02em; text-transform: uppercase; }
+.page-brand img { border-radius: 4px; }
+.page-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; font: 500 0.92rem var(--font-ui); }
+main { max-width: 1240px; margin: 0 auto; padding: 2rem max(16px, 4vw) 3rem; min-height: 50vh; }
+main:focus { outline: none; }
+main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); }
+.page-foot { border-top: 1px solid var(--rule); padding: 0 max(16px, 4vw); font: 0.92rem var(--font-ui); color: var(--muted); }
+.page-foot-in { max-width: 1240px; margin: 0 auto; padding: 1.25rem 0 2rem; }
+.page-foot p { margin: 0 0 0.4rem; }
+@media print { .page-head nav, .skip, .theme-toggle { display: none !important; } }
