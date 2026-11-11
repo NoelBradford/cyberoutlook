@@ -28,6 +28,8 @@ const { chromium } = require('playwright');
     p.on('pageerror', e => problems.push(`${w}: pageerror ${e.message}`));
     p.on('console', m => { if ((m.type() === 'error' || (m.type() === 'warning' && /CV feature failed|Content Security Policy|Refused/.test(m.text())))) problems.push(`${w}: console ${m.type()} ${m.text().slice(0, 220)}`); });
     p.on('response', r => { if (r.status() >= 400 && r.url().startsWith(origin)) problems.push(`${w}: HTTP ${r.status()} ${r.url()}`); });
+    // Tool profile only: nothing a reader types may leave the browser, so no request may go to another site (web fonts excepted).
+    if (profile === 'tool') p.on('request', r => { const u = r.url(); if (/^https?:/.test(u) && !u.startsWith(origin) && !/^https:\/\/fonts\.(googleapis|gstatic)\.com\//.test(u)) problems.push(`${w}: request to another site ${u.slice(0, 80)}`); });
     const nav = await p.goto(target, { waitUntil: 'networkidle' });
     if (profile === 'tool' && nav && nav.status() >= 400) problems.push(`${w}: HTTP ${nav.status()} ${target}`);
     await p.waitForTimeout(400);

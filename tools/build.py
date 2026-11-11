@@ -81,12 +81,19 @@ mc = re.search(r"const CACHE = '([^']+)'", rd(os.path.join(ROOT, 'sw.js')))
 if not mc: fail('could not find the CACHE name in sw.js')
 CACHE_NAME = mc.group(1)   # tool pages write into the service worker's cache, so the name comes from sw.js
 
-# The report's three action tables, lifted from index.html so a tool page that needs them (the check and My plan read
-# them through CV.actions()) never carries its own copy of the wording. Ids are positional (t1-1, t3-6), so the
-# order and count matter: fail unless there are exactly three.
+# Parts of the report that a tool reads from the page (CV.actions() reads the action tables, the IT provider email reads
+# the four questions). They are lifted from index.html and put in a hidden block, so a tool page never carries its own
+# copy of the wording. A page lists the parts it needs in "reportParts" in pages.json.
+REPORT_PART_HTML = {}
+# The three action tables. Ids are positional (t1-1, t3-6), so the order and count matter: fail unless there are exactly three.
 tables = re.findall(r'<table class="actions">.*?</table>', s, re.S)
 if len(tables) != 3: fail(f'expected exactly three <table class="actions"> blocks in index.html, found {len(tables)}')
-ACTIONS_HTML = '<div id="report-actions" hidden>\n' + '\n'.join(tables) + '\n</div>\n'
+REPORT_PART_HTML['actions'] = '\n'.join(tables)
+# The "What to do" heading and its numbered list of questions for an IT provider (the email builder finds the list from the heading).
+m_q = re.search(r'<h3 id="h-what-to-do">.*?</h3>.*?(<ol>.*?</ol>)', s, re.S)
+if not m_q: fail('could not find the "What to do" heading and its list in index.html')
+if m_q.group(1).count('<li>') != 4: fail(f'expected four questions in the "What to do" list, found {m_q.group(1).count("<li>")}')
+REPORT_PART_HTML['it-questions'] = '<div class="prose">\n<h3 id="h-what-to-do">' + re.search(r'<h3 id="h-what-to-do">(.*?)</h3>', s, re.S).group(1) + '</h3>\n' + m_q.group(1) + '\n</div>'
 
 seen, wanted_files, listing = set(), set(), []
 for i, e in enumerate(manifest):
@@ -114,14 +121,14 @@ for i, e in enumerate(manifest):
     wr(os.path.join(ROOT, 'assets', f'tool-{slug}.css'), HEADER + pcss)
     intro = e.get('intro', '')
     if not isinstance(intro, str): fail(f'{where}: "intro" must be a string')
-    needs_actions = e.get('reportActions', False)
-    if not isinstance(needs_actions, bool): fail(f'{where}: "reportActions" must be true or false')
+    parts = e.get('reportParts', [])
+    if not isinstance(parts, list) or not all(p_ in REPORT_PART_HTML for p_ in parts): fail(f'{where}: "reportParts" must be a list of: ' + ', '.join(sorted(REPORT_PART_HTML)))
     values = {'CSP': CSP, 'TITLE': e['title'], 'HEADING': e['title'], 'DESCRIPTION': e['description'], 'URL': f'{SITE_URL}{slug}/',
               'OG_IMAGE': SITE_URL + og, 'SLUG': slug, 'HASH': v, 'OPEN': opn, 'CACHE': CACHE_NAME}
     out = shell
     # These two are markup, filled before the escaped plain-text values. Their own text is escaped here.
     out = out.replace('{{INTRO}}', f'<p class="page-intro">{esc(intro)}</p>\n' if intro.strip() else '')
-    out = out.replace('{{ACTIONS}}', ACTIONS_HTML if needs_actions else '')
+    out = out.replace('{{REPORT_PARTS}}', ('<div id="report-parts" hidden>\n' + '\n'.join(REPORT_PART_HTML[p_] for p_ in parts) + '\n</div>\n') if parts else '')
     for k, val in values.items(): out = out.replace('{{' + k + '}}', esc(val))
     if '{{' in out: fail(f'{where}: shell.html has a placeholder build.py does not fill')
     out = out.replace('<!DOCTYPE html>\n', '<!DOCTYPE html>\n' + MARK + '\n', 1)

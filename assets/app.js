@@ -649,13 +649,17 @@ CV.ready(function () {
   var qs = CV.$$('li', ol).map(CV.text);
   var backup = 'Where are our backups held, by whom, and is there a copy with a different supplier?';
   var saved = CV.store.get('itmail', {});
-  var d = CV.dialog({ id: 'itmail', title: 'Email your IT provider', wide: true, note: 'Nothing is sent from this page. Copy the email, or open it in your own email app.' });
+  var SA = !!CV.standalone; // a page of its own (/it-provider-email/): the questions come from a hidden copy of the report's list
+  var NOTE = 'Nothing is sent from this page. Copy the email, or open it in your own email app.';
+  var d = SA ? CV.inlineHost({ id: 'itmail', label: 'Email your IT provider', note: NOTE }) : CV.dialog({ id: 'itmail', title: 'Email your IT provider', wide: true, note: NOTE });
   var prov = CV.h('input', { type: 'text', id: 'im-prov', autocomplete: 'organization', placeholder: 'e.g. Acme IT' });
   var who = CV.h('input', { type: 'text', id: 'im-who', autocomplete: 'name', placeholder: 'Your name' });
   var firm = CV.h('input', { type: 'text', id: 'im-firm', autocomplete: 'organization', placeholder: 'Your business' });
   var inclB = CV.h('input', { type: 'checkbox', id: 'im-b' }); inclB.checked = saved.b !== false;
   prov.value = saved.prov || ''; who.value = saved.who || ''; firm.value = saved.firm || '';
   var pre = CV.h('pre', { class: 'cv-pre', 'aria-live': 'polite' });
+  // On a page of its own the preview can scroll sideways, so keyboard users need to be able to reach it.
+  if (SA) { pre.setAttribute('tabindex', '0'); pre.setAttribute('role', 'region'); pre.setAttribute('aria-label', 'Email preview'); }
   function body() {
     var list = qs.slice(); if (inclB.checked) list.push(backup);
     return 'Hi' + (prov.value ? ' ' + prov.value.trim() + ' team' : '') + ',\n\nAs part of our cyber security review for 2027, could you answer these ' + list.length + ' questions in writing?\n\n' +
@@ -673,14 +677,15 @@ CV.ready(function () {
   d.body.appendChild(CV.h('div', { class: 'qz-opt-inline' }, inclB, CV.h('label', { for: 'im-b' }, 'Include the fifth question about backups (recommended for 2027)')));
   d.body.appendChild(pre);
   d.body.appendChild(CV.h('div', { class: 'cv-row' }, CV.button('Copy email', function () { CV.copy('Subject: ' + subject() + '\n\n' + body(), 'Email copied'); }, 'primary'), mail,
-    CV.plan ? CV.button('Add "send the questions" to my plan', function () { CV.plan.add('t1-2'); }) : null));
+    CV.plan ? CV.button('Add "send the questions" to my plan', function () { CV.plan.add('t1-2'); }) : null,
+    SA ? CV.h('a', { class: 'tool', href: '../#theme-1' }, 'Read why these questions matter') : null));
   refresh();
   var cta = CV.h('div', { class: 'cta-card cv-noprint' },
     CV.h('div', null, CV.h('p', { class: 'cv-kicker' }, 'Tool'), CV.h('p', { class: 'cta-title' }, 'Turn these into an email in 30 seconds'),
       CV.h('p', { class: 'cta-sub' }, 'Add your IT provider’s name and yours. Copy it or open it in your email app.')),
     CV.button('Write the email', function () { d.open(); prov.focus(); }, 'primary'));
   var after = ol.nextElementSibling && ol.nextElementSibling.tagName === 'P' ? ol.nextElementSibling : ol;
-  after.after(cta);
+  if (!SA) after.after(cta);
   CV.openItMail = function () { d.open(); };
 });
 

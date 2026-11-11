@@ -11,7 +11,9 @@
       "111"
     ],
     "open": "CV.openCheck",
-    "reportActions": true
+    "reportParts": [
+      "actions"
+    ]
   },
   {
     "slug": "readiness",
@@ -22,5 +24,18 @@
       "164"
     ],
     "open": "CV.openCE"
+  },
+  {
+    "slug": "it-provider-email",
+    "title": "Email your IT provider",
+    "description": "The four questions every small business should ask its IT provider, plus a fifth about backups, turned into an email you can copy or open in your own mail app.",
+    "intro": "Add your IT provider's name and your own, then copy the email or open it in your mail app. The questions come from the report. Nothing is sent from this page.",
+    "features": [
+      "115"
+    ],
+    "open": "CV.openItMail",
+    "reportParts": [
+      "it-questions"
+    ]
   }
 ]
