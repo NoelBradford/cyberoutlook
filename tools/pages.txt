@@ -1,0 +1,3 @@
+# Standalone tool pages for the tool profile of tools/check.js, one path per line.
+# CI runs: node tools/check.js http://127.0.0.1:8080/ --profile tool --path <path>
+# Blank lines and lines starting with # are ignored. Filled in from UX-03 onwards.

@@ -32,3 +32,16 @@ jobs:
           python3 -m http.server 8080 --bind 127.0.0.1 &
           sleep 1
           npm run check
+      - name: Run the tool profile on every page in tools/pages.txt
+        run: |
+          python3 -m http.server 8081 --bind 127.0.0.1 &
+          sleep 1
+          status=0
+          while IFS= read -r page || [ -n "$page" ]; do
+            page="${page%%#*}"
+            page="$(echo "$page" | tr -d '[:space:]')"
+            [ -z "$page" ] && continue
+            echo "Tool profile: $page"
+            node tools/check.js http://127.0.0.1:8081/ --profile tool --path "$page" || status=1
+          done < tools/pages.txt
+          exit $status
