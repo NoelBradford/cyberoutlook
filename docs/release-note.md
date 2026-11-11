@@ -82,6 +82,8 @@ Decided by the owner on 11 November 2026: email me my result, a separate unticke
 
 What exists: the Worker core in `worker/` (12 tests, not deployed) and the page side behind a switch in `src/pages/config.json`. The switch is **off**: nothing is drawn, nothing is sent, the PDF links work as before, and the privacy promise is unchanged. `tools/capture-check.js` tests the page side against a mock endpoint, and it runs in CI.
 
+Also built: preferences and "delete my data" routes in the Worker (signed links, no account), a draft privacy notice for the adviser (`docs/privacy-notice-draft.md`), and an end-to-end test that runs the real Worker behind the real pages (`tools/capture-check.js`).
+
 What is still needed before it can be switched on: the sending provider (and newsletter service if separate), the wording for the emails and both boxes, the privacy notice (`/privacy/`) and preference page, an adviser's check, the registered name and address of SBCSG Enterprises Ltd, Workers Paid if Cloudflare sends the mail, the Worker deployed behind the same origin, and the PDFs moved to private storage and out of the repo (until then the gate only hides the links). Every statement of the privacy promise then needs updating together.
 
 Measurement: no code on the pages. Signup counts come from the Worker's `counts` table and visit numbers from Cloudflare's dashboard (what the free plan shows is not verified).

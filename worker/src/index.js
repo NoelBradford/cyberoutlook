@@ -1,6 +1,6 @@
 // HTTP layer for the email Worker. Routes sit under /api/ on the same origin as the site, so the page's Content-Security-Policy
 // (connect-src 'self') does not need to change. Not deployed, and not called by any page yet.
-import { subscribe, confirm, download, unsubscribe, purge } from './core.js';
+import { subscribe, confirm, download, unsubscribe, purge, preferences, erase } from './core.js';
 import { cloudflareMailer } from './mailer.js';
 
 const json = (o, status = 200) => new Response(JSON.stringify(o), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
@@ -44,6 +44,17 @@ export default {
         if (request.method === 'GET') { // a person following the link: confirm with one button, no account
           return page('Unsubscribe', `<p>Stop these emails?</p><form method="post" action="/api/unsubscribe?s=${esc(s)}&amp;topic=${esc(topic)}&amp;sig=${esc(sig)}"><button type="submit">Unsubscribe</button></form>`);
         }
+      }
+      if (path === '/api/preferences' && request.method === 'GET') {
+        const s = url.searchParams.get('s'), sig = url.searchParams.get('sig');
+        const r = await preferences(env, s, sig);
+        if (r.error) return page('Link not valid', `<p>${esc(r.error)}</p>`, r.status);
+        const items = r.active.map(a => `<li>${esc(a.topic === 'newsletter' ? 'The newsletter' : 'An email when the report is updated')}: <form method="post" action="${esc(new URL(a.unsubscribe).pathname + new URL(a.unsubscribe).search)}" style="display:inline"><button type="submit">Unsubscribe</button></form></li>`).join('');
+        return page('Your emails', `${r.erased ? '<p>We hold nothing for this address.</p>' : (items ? `<p>You are on:</p><ul>${items}</ul>` : '<p>You are not on any list.</p>')}${r.erased ? '' : `<form method="post" action="/api/erase?s=${esc(s)}&amp;sig=${esc(sig)}"><p>You can also ask us to delete everything we hold about this address.</p><button type="submit">Delete my data</button></form>`}`);
+      }
+      if (path === '/api/erase' && request.method === 'POST') {
+        const r = await erase(env, url.searchParams.get('s'), url.searchParams.get('sig'));
+        return r.error ? page('Link not valid', `<p>${esc(r.error)}</p>`, r.status) : page('Deleted', '<p>Your address and everything linked to it has been deleted. You will not hear from us again unless you ask.</p>');
       }
       return json({ error: 'Not found.' }, 404);
     } catch (e) {

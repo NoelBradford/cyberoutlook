@@ -44,6 +44,9 @@ export async function unsubscribeUrl(env, subscriberId, topic) {
   return `${env.SITE}/api/unsubscribe?s=${subscriberId}&topic=${encodeURIComponent(topic)}&sig=${sig}`;
 }
 const marketingHeaders = async (env, id, topic) => { const u = await unsubscribeUrl(env, id, topic); return { 'List-Unsubscribe': `<${u}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' }; };
+// The page a person reaches from the footer of a marketing email, to see what they are on, stop any of it, or have their data deleted.
+export async function preferencesUrl(env, subscriberId) { return `${env.SITE}/api/preferences?s=${subscriberId}&sig=${await hmac(env.SECRET, `prefs|${subscriberId}`)}`; }
+const footer = async (env, id) => `Manage your emails or delete your data: ${await preferencesUrl(env, id)}`;
 
 // ---- 1. a form is submitted: record the request and send a confirmation, nothing more -------------------------------
 // body: { email, topics: [...], source, wording, files?: ['report','deck'], result?: { score, band, gaps: [...] } }
@@ -133,7 +136,7 @@ export async function confirm(env, token, now = Date.now()) {
     await env.mailer.send({
       to: sub.email,
       subject: topic === 'newsletter' ? 'You are on the newsletter list' : 'You will be told when the report is updated',
-      text: `You confirmed: ${describe([topic], [])}. You can stop any time with one click:\n${await unsubscribeUrl(env, sub.id, topic)}\n\n${env.SENDER_NAME}\n${env.SENDER_ADDRESS}`,
+      text: `You confirmed: ${describe([topic], [])}. You can stop any time with one click:\n${await unsubscribeUrl(env, sub.id, topic)}\n\n${await footer(env, sub.id)}\n\n${env.SENDER_NAME}\n${env.SENDER_ADDRESS}`,
       headers: await marketingHeaders(env, sub.id, topic),
     });
     out.sent.push(topic);
@@ -162,6 +165,32 @@ export async function unsubscribe(env, subscriberId, topic, sig, now = Date.now(
   for (const t of topics) {
     await q(env, 'INSERT OR REPLACE INTO suppressions (email_hash, topic, at) VALUES (?, ?, ?)', sub.email_hash, t, now).run();
     await q(env, 'UPDATE consents SET withdrawn_at = ? WHERE subscriber_id = ? AND topic = ? AND withdrawn_at IS NULL', now, id, t).run();
+  }
+  return { status: 200, ok: true };
+}
+
+// ---- 4b. what am I on, and delete my data -------------------------------------------------------------------------------------
+// Both are reached only through a signed link (sent in our emails), so there is no account and no login.
+export async function preferences(env, subscriberId, sig) {
+  const id = Number(subscriberId);
+  if (!Number.isInteger(id) || sig !== await hmac(env.SECRET, `prefs|${id}`)) return { status: 400, error: 'This link is not valid.' };
+  const sub = await q(env, 'SELECT id FROM subscribers WHERE id = ?', id).first();
+  if (!sub) return { status: 200, active: [], erased: true }; // deleted already: nothing is held
+  const rows = (await q(env, 'SELECT DISTINCT topic FROM consents WHERE subscriber_id = ? AND confirmed_at IS NOT NULL AND withdrawn_at IS NULL', id).all()).results;
+  const active = [];
+  for (const { topic } of rows) if (TOPICS[topic].marketing) active.push({ topic, unsubscribe: await unsubscribeUrl(env, id, topic) });
+  return { status: 200, active, all: await unsubscribeUrl(env, id, '*') };
+}
+// Deletes the address, its consents and its links. What stays: the suppression hashes (so an unsubscribe is still honoured) and the counts,
+// neither of which can identify anyone.
+export async function erase(env, subscriberId, sig) {
+  const id = Number(subscriberId);
+  if (!Number.isInteger(id) || sig !== await hmac(env.SECRET, `prefs|${id}`)) return { status: 400, error: 'This link is not valid.' };
+  const sub = await q(env, 'SELECT email_hash FROM subscribers WHERE id = ?', id).first();
+  if (sub) {
+    // anything they had not yet unsubscribed from is recorded as stopped, by hash, so no later send can reach them without a fresh opt-in
+    for (const t of Object.keys(TOPICS).filter(t => TOPICS[t].marketing)) await q(env, 'INSERT OR IGNORE INTO suppressions (email_hash, topic, at) VALUES (?, ?, ?)', sub.email_hash, t, Date.now()).run();
+    await q(env, 'DELETE FROM subscribers WHERE id = ?', id).run();
   }
   return { status: 200, ok: true };
 }

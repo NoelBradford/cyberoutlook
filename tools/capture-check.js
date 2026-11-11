@@ -5,8 +5,12 @@
 //   - ON: the form on /check/ and the gate on the PDF links send exactly the documented fields, nothing is pre-ticked, a bad address is
 //     refused before any request, a failed request makes one request and a plain message, and no request goes to another site.
 //   - The build refuses a capture endpoint that is not a path on this site, and one with no privacy notice or wording.
+//   - END TO END: the same pages talk to the real Worker handler (worker/src/index.js) on SQLite with a memory mailer, so the page and the
+//     Worker are shown to agree: confirmation email, confirm link, result email, marketing welcome with one-click unsubscribe, a gated
+//     download that works once, the preferences page, and "delete my data".
 const { chromium } = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path'), os = require('os'), cp = require('child_process');
+const { pathToFileURL } = require('url');
 const ROOT = path.resolve(__dirname, '..');
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.pdf': 'application/pdf', '.xml': 'application/xml', '.ico': 'image/x-icon', '.webmanifest': 'application/manifest+json', '.txt': 'text/plain' };
 const ON = { captureEndpoint: '/api', privacyUrl: '/privacy/', wording: {
@@ -29,7 +33,13 @@ function serve(dir, state) {
       const u = new URL(req.url, 'http://x');
       if (u.pathname.startsWith('/api/')) {
         let raw = ''; req.on('data', c => raw += c); req.on('end', () => {
-          state.api.push({ method: req.method, path: u.pathname, body: raw ? JSON.parse(raw) : null, ct: req.headers['content-type'], cookie: req.headers.cookie || '' });
+          state.api.push({ method: req.method, path: u.pathname, body: raw && req.headers['content-type'] && /json/.test(req.headers['content-type']) ? JSON.parse(raw) : null, ct: req.headers['content-type'], cookie: req.headers.cookie || '' });
+          if (state.real && !state.fail) { // hand the request to the real Worker
+            const headers = new Headers(); for (const [k, v] of Object.entries(req.headers)) if (k !== 'host' && typeof v === 'string') headers.set(k, v);
+            const fetchReq = new Request('http://' + req.headers.host + req.url, { method: req.method, headers, body: ['GET', 'HEAD'].includes(req.method) ? undefined : raw });
+            state.real.worker.fetch(fetchReq, state.real.env).then(async res => { rsp.writeHead(res.status, Object.fromEntries(res.headers)); rsp.end(Buffer.from(await res.arrayBuffer())); });
+            return;
+          }
           rsp.writeHead(state.fail ? 500 : 200, { 'Content-Type': 'application/json' }); rsp.end(JSON.stringify(state.fail ? { error: 'x' } : { ok: true }));
         }); return;
       }
@@ -129,6 +139,70 @@ async function finishCheck(p) {
     await g.p.click('.tm-btn'); await g.p.click('.tm-i:has-text("Download the full PDF")'); await g.p.waitForTimeout(400);
     check(await g.p.evaluate(() => /full report/.test(document.querySelector('dialog[open]') ? document.querySelector('dialog[open]').textContent : '')), 'GATE: the Tools menu download was not gated');
     check(pdfHits.length === 0, 'GATE: a PDF was fetched from the page');
+    await g.ctx.close(); srv.close(); fs.rmSync(dir, { recursive: true, force: true });
+  }
+  { // END TO END: the real Worker behind the real pages
+    const W = await import(pathToFileURL(path.join(ROOT, 'worker', 'src', 'index.js')).href);
+    const S = await import(pathToFileURL(path.join(ROOT, 'worker', 'test', 'd1-shim.js')).href);
+    const M = await import(pathToFileURL(path.join(ROOT, 'worker', 'src', 'mailer.js')).href);
+    const mailer = M.memoryMailer(), db = S.makeDb();
+    const dir = stage(ON); build(dir); const state = { api: [], real: { worker: W.default, env: null } };
+    const { srv, origin } = await serve(dir, state);
+    state.real.env = { DB: db, mailer, FILES: S.makeFiles({ 'UK-Small-Business-Cyber-Outlook-2027.pdf': 'REPORT-BYTES', 'CyberOutlook2027_LinkedIn_Carousel.pdf': 'DECK-BYTES' }), SECRET: 'e2e-secret', SITE: origin, SENDER_NAME: 'SBCSG Enterprises Ltd', SENDER_ADDRESS: 'hello@example.test' };
+    const rows = sql => db.raw.prepare(sql).all();
+    const linkIn = (text, re) => (text.match(re) || [])[0];
+    // 1. the result, with the newsletter ticked
+    let { p, ctx } = await page(b, origin, state, '/check/'); await finishCheck(p);
+    await p.fill('.cap input[type=email]', 'Sam@Example.co.uk'); await p.check('.cap input[id$="-newsletter"]'); await p.click('.cap button[type=submit]'); await p.waitForTimeout(800);
+    check(await p.evaluate(() => /Now check your inbox/.test(document.querySelector('.cap').textContent)), 'E2E: the page did not accept the Worker\'s answer');
+    check(mailer.sent.length === 1 && /Confirm/.test(mailer.sent[0].subject) && mailer.sent[0].to === 'sam@example.co.uk', 'E2E: expected one confirmation email to the lower-cased address, saw ' + mailer.sent.map(m => m.subject).join('|'));
+    check(rows('SELECT confirmed_at FROM consents').every(r => r.confirmed_at === null) && rows('SELECT * FROM consents').length === 2, 'E2E: consent should be recorded but unconfirmed');
+    const confirmLink = mailer.sent[0] && linkIn(mailer.sent[0].text, /https?:\/\/[^\s]+\/api\/confirm\?t=[\w-]+/);
+    check(!!confirmLink, 'E2E: no confirm link in the confirmation email');
+    if (confirmLink) {
+      await p.goto(confirmLink); await p.waitForTimeout(400);
+      check(await p.evaluate(() => /Your address is confirmed/.test(document.body.textContent)), 'E2E: the confirm page did not load');
+      check(mailer.sent.length === 3 && mailer.sent.some(m => /3 out of 10/.test(m.subject) && /Questions with a gap: 1, 2, 4, 5, 7, 8, 10/.test(m.text)) , 'E2E: the result email is missing or wrong: ' + mailer.sent.map(m => m.subject).join('|'));
+      const welcome = mailer.sent.find(m => /newsletter list/.test(m.subject));
+      check(!!welcome && /List-Unsubscribe/.test(Object.keys(welcome.headers || {}).join()) && welcome.headers['List-Unsubscribe-Post'] === 'List-Unsubscribe=One-Click', 'E2E: the newsletter welcome has no one-click unsubscribe headers');
+      check(rows('SELECT confirmed_at FROM consents').every(r => r.confirmed_at !== null), 'E2E: consents are not confirmed after the link');
+      const wording = rows("SELECT wording FROM consents WHERE topic = 'newsletter'")[0];
+      check(wording && wording.wording === 'test-newsletter-1', 'E2E: the wording id was not stored with the newsletter consent');
+      await p.goto(confirmLink); check(await p.evaluate(() => /expired or was already used/.test(document.body.textContent)), 'E2E: the confirm link worked twice');
+      // preferences, then one-click unsubscribe, then delete my data
+      const prefs = welcome && linkIn(welcome.text, /https?:\/\/[^\s]+\/api\/preferences\?s=\d+&sig=[\w-]+/);
+      check(!!prefs, 'E2E: no preferences link in the marketing email');
+      if (prefs) {
+        await p.goto(prefs); check(await p.evaluate(() => /The newsletter/.test(document.body.textContent)), 'E2E: the preferences page does not list the newsletter');
+        const oneClick = welcome.headers['List-Unsubscribe'].replace(/^<|>$/g, '');
+        const rsp = await p.request.post(oneClick, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, data: 'List-Unsubscribe=One-Click' });
+        check(rsp.status() === 200 && rows("SELECT * FROM suppressions WHERE topic = 'newsletter'").length === 1, 'E2E: the one-click unsubscribe did not suppress the newsletter');
+        await p.goto(prefs); check(await p.evaluate(() => /not on any list/.test(document.body.textContent)), 'E2E: the preferences page still lists the newsletter after unsubscribing');
+        await p.click('button:has-text("Delete my data")'); await p.waitForTimeout(500);
+        check(await p.evaluate(() => /has been deleted/.test(document.body.textContent)), 'E2E: no confirmation after deleting data');
+        check(rows('SELECT * FROM subscribers').length === 0 && rows('SELECT * FROM consents').length === 0 && rows('SELECT * FROM tokens').length === 0, 'E2E: address data remains after deleting');
+        check(rows('SELECT * FROM counts').length > 0, 'E2E: the counts are gone after deleting');
+      }
+    }
+    await ctx.close();
+    // 2. the gated report, from the front page
+    mailer.sent.length = 0; state.api.length = 0;
+    const g = await page(b, origin, state, '/'); await g.p.click('a[href$="UK-Small-Business-Cyber-Outlook-2027.pdf"]'); await g.p.waitForTimeout(400);
+    await g.p.fill('dialog[open] input[type=email]', 'gate@example.co.uk'); await g.p.click('dialog[open] button[type=submit]'); await g.p.waitForTimeout(800);
+    const gl = mailer.sent[0] && linkIn(mailer.sent[0].text, /https?:\/\/[^\s]+\/api\/confirm\?t=[\w-]+/);
+    check(!!gl, 'E2E gate: no confirm link was emailed');
+    if (gl) {
+      await g.p.goto(gl); await g.p.waitForTimeout(400);
+      const dl = await g.p.evaluate(() => (document.querySelector('a[href*="/api/download/report"]') || {}).href);
+      check(!!dl, 'E2E gate: the confirm page has no download link');
+      if (dl) {
+        const a = await g.p.request.get(dl); const body = await a.text();
+        check(a.status() === 200 && body === 'REPORT-BYTES' && /attachment/.test(a.headers()['content-disposition'] || '') && /no-store/.test(a.headers()['cache-control'] || ''), 'E2E gate: the file did not download with the right headers');
+        check((await g.p.request.get(dl)).status() === 410, 'E2E gate: the download link worked twice');
+        check((await g.p.request.get(origin + '/api/download/report?t=guess')).status() === 410, 'E2E gate: a guessed link worked');
+      }
+    }
+    check(mailer.sent.every(m => !m.headers), 'E2E gate: the download email carried marketing headers');
     await g.ctx.close(); srv.close(); fs.rmSync(dir, { recursive: true, force: true });
   }
   await b.close();

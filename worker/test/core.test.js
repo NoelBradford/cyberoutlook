@@ -1,24 +1,10 @@
 // Run with: node --test worker/test/   (Node 22.5 or newer: it uses the built-in node:sqlite, the same engine as D1).
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DatabaseSync } from 'node:sqlite';
-import { readFileSync } from 'node:fs';
-import { subscribe, confirm, download, unsubscribe, purge, unsubscribeUrl, sha256, DAY, HOUR } from '../src/core.js';
+import { subscribe, confirm, download, unsubscribe, purge, unsubscribeUrl, preferencesUrl, preferences, erase, sha256, DAY, HOUR } from '../src/core.js';
 import { memoryMailer } from '../src/mailer.js';
+import { makeDb } from './d1-shim.js';
 
-const SCHEMA = readFileSync(new URL('../schema.sql', import.meta.url), 'utf8');
-
-// A just-enough D1: prepare(sql).bind(...).first() / all() / run().
-function makeDb() {
-  const db = new DatabaseSync(':memory:');
-  db.exec('PRAGMA foreign_keys = ON'); // D1 enforces foreign keys
-  db.exec(SCHEMA);
-  return { raw: db, prepare(sql) {
-    const st = db.prepare(sql); let args = [];
-    const o = { bind(...a) { args = a; return o; }, async first() { return st.get(...args) ?? null; }, async all() { return { results: st.all(...args) }; }, async run() { const r = st.run(...args); return { meta: { changes: r.changes } }; } };
-    return o;
-  } };
-}
 function makeEnv() {
   const files = new Map([['UK-Small-Business-Cyber-Outlook-2027.pdf', 'REPORT'], ['CyberOutlook2027_LinkedIn_Carousel.pdf', 'DECK']]);
   return { DB: makeDb(), mailer: memoryMailer(), SECRET: 'test-secret', SITE: 'https://example.test', SENDER_NAME: 'SBCSG Enterprises Ltd', SENDER_ADDRESS: 'hello@example.test',
@@ -157,6 +143,35 @@ test('signup counts hold no address and survive the purge', async () => {
   assert.deepEqual(rows(), expected, 'the counts are still there');
   const cols = env.DB.raw.prepare("PRAGMA table_info(counts)").all().map(c => c.name);
   assert.deepEqual(cols, ['day', 'topic', 'source', 'asked', 'confirmed'], 'no column could hold an address');
+});
+
+test('the preferences link shows what a person is on, only with a valid signature, and the marketing emails carry it', async () => {
+  const env = makeEnv();
+  await subscribe(env, { email: 'a@b.co', topics: ['newsletter', 'result'], wordings: { newsletter: 'nl-1' }, source: '/check/', result: { score: 6, band: 'Halfway there', gaps: [2] } }, NOW);
+  await confirm(env, tokenFrom(env.mailer.sent[0].text), NOW + 1000);
+  const welcome = env.mailer.sent.find(m => /newsletter list/.test(m.subject));
+  assert.match(welcome.text, /Manage your emails or delete your data: https:\/\/example\.test\/api\/preferences\?s=1&sig=/);
+  const p = new URL(await preferencesUrl(env, 1)).searchParams;
+  assert.equal((await preferences(env, p.get('s'), 'forged')).status, 400);
+  const r = await preferences(env, p.get('s'), p.get('sig'));
+  assert.deepEqual(r.active.map(a => a.topic), ['newsletter'], 'only marketing topics are listed');
+  assert.match(r.active[0].unsubscribe, /api\/unsubscribe\?s=1&topic=newsletter&sig=/);
+});
+
+test('erasing deletes the address and everything linked to it, keeps only hashes and counts, and needs a valid signature', async () => {
+  const env = makeEnv();
+  await subscribe(env, { email: 'a@b.co', topics: ['newsletter'], wordings: { newsletter: 'nl-1' }, source: '/', }, NOW);
+  await confirm(env, tokenFrom(env.mailer.sent[0].text), NOW + 1000);
+  const p = new URL(await preferencesUrl(env, 1)).searchParams;
+  assert.equal((await erase(env, p.get('s'), 'forged')).status, 400);
+  assert.equal(count(env, 'SELECT COUNT(*) AS n FROM subscribers'), 1);
+  assert.equal((await erase(env, p.get('s'), p.get('sig'))).status, 200);
+  for (const t of ['subscribers', 'consents', 'tokens']) assert.equal(count(env, `SELECT COUNT(*) AS n FROM ${t}`), 0, `${t} is empty`);
+  assert.equal(count(env, 'SELECT COUNT(*) AS n FROM suppressions WHERE email_hash = ?', await sha256('a@b.co')) > 0, true, 'a no-contact hash remains');
+  assert.equal(count(env, 'SELECT COUNT(*) AS n FROM counts') > 0, true, 'counts remain');
+  const again = await preferences(env, p.get('s'), p.get('sig'));
+  assert.equal(again.erased, true);
+  assert.equal((await erase(env, p.get('s'), p.get('sig'))).status, 200, 'doing it twice is harmless');
 });
 
 test('the purge deletes a transactional address after 30 days and an unconfirmed one after the link expires, but keeps live marketing consent and suppression hashes', async () => {
