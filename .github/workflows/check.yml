@@ -37,6 +37,7 @@ jobs:
           python3 -m http.server 8080 --bind 127.0.0.1 &
           sleep 1
           npm run check
+          node tools/chrome-check.js http://127.0.0.1:8080/
       - name: Run the tool profile on every page in tools/pages.txt
         run: |
           python3 -m http.server 8081 --bind 127.0.0.1 &

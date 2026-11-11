@@ -1159,6 +1159,16 @@ CV.ready(function () {
   if (li) li.replaceWith(btn); else CV.addTool(btn);
 });
 
+/* --- src/features/128-notice-slot.js --- */
+// One returning-visitor message at a time. Each message asks for the slot before it shows itself (first to ask wins on this page),
+// and a dismissal is remembered against a token (for example the time of the last visit), so the same message does not come back.
+CV.notice = {
+  taken: null,
+  claim: function (key) { if (CV.notice.taken) return false; CV.notice.taken = key; return true; },
+  dismissed: function (key, token) { return CV.store.get('dismissed', {})[key] === token; },
+  dismiss: function (key, token) { var d = CV.store.get('dismissed', {}); d[key] = token; CV.store.set('dismissed', d); }
+};
+
 /* --- src/features/128-send-to-colleague.js --- */
 // @msg Send to the right person: role-based messages for your IT provider, finance lead, co-director or team, each pointing to the part they need
 // @sel #start
@@ -1210,19 +1220,20 @@ CV.ready(function () {
   window.addEventListener('scroll', remember, { passive: true });
   if (!last || location.hash || !document.getElementById(last.id) || Date.now() - last.at < 60000) return;
   if (last.id === 'foreword' && last.r < 0.1) return;
-  // Progress is said once, in the progress line in Start here, so this message only says where you were.
+  // Progress is said once, in the progress line in Start here, so this message only says where you were. It sits in Start here (never
+  // fixed over the page), shows only if no other message has the slot, and a dismissal is remembered for this visit's position.
+  var token = String(last.at), startIn = CV.$('.start-inner');
+  if (!startIn || CV.notice.dismissed('wb', token) || !CV.notice.claim('wb')) return;
   var bar = CV.h('div', { class: 'wb', role: 'region', 'aria-label': 'Welcome back' },
-    CV.h('div', { class: 'wb-in' },
-      CV.h('p', null, CV.h('b', null, 'Welcome back. '), 'You were reading ', CV.h('i', null, last.title), '.'),
-      CV.h('div', { class: 'cv-row' },
-        CV.button('Carry on reading', function () {
-          var sec = document.getElementById(last.id);
-          var y = sec.getBoundingClientRect().top + window.scrollY + sec.offsetHeight * last.r - window.innerHeight * 0.3;
-          window.scrollTo({ top: Math.max(0, y), behavior: CV.reduced() ? 'auto' : 'smooth' }); bar.remove();
-        }, 'primary'),
-        CV.h('button', { type: 'button', class: 'wb-x', 'aria-label': 'Dismiss', onclick: function () { bar.remove(); } }, '×'))));
-  document.body.appendChild(bar);
-  setTimeout(function () { bar.classList.add('show'); }, 50);
+    CV.h('p', null, CV.h('b', null, 'Welcome back. '), 'You were reading ', CV.h('i', null, last.title), '.'),
+    CV.h('div', { class: 'cv-row' },
+      CV.button('Carry on reading', function () {
+        var sec = document.getElementById(last.id);
+        var y = sec.getBoundingClientRect().top + window.scrollY + sec.offsetHeight * last.r - window.innerHeight * 0.3;
+        window.scrollTo({ top: Math.max(0, y), behavior: CV.reduced() ? 'auto' : 'smooth' }); CV.notice.dismiss('wb', token); bar.remove();
+      }, 'primary'),
+      CV.h('button', { type: 'button', class: 'wb-x', 'aria-label': 'Dismiss', onclick: function () { CV.notice.dismiss('wb', token); bar.remove(); } }, '×')));
+  startIn.insertBefore(bar, startIn.firstChild);
 });
 
 /* --- src/features/130-search.js --- */
@@ -2255,7 +2266,7 @@ CV.ready(function () {
   // Inline, never fixed: it sits in the reading flow and can't cover the text or other buttons.
   function eligible() { return !CV.store.get('nudged', false) && !(CV.plan && CV.plan.count()) && !(CV.checkScore && CV.checkScore() != null); }
   if (!eligible()) return;
-  var host = CV.$$('#theme-3 .table-wrap').pop(); if (!host) return;
+  var host = CV.$$('#theme-3 .table-wrap').pop(); if (!host || !CV.notice.claim('nudge')) return;
   var card = CV.h('div', { class: 'nudge cv-noprint' },
     CV.h('p', { class: 'nudge-t' }, 'Turn what you’ve read into a plan'),
     CV.h('p', { class: 'nudge-s' }, 'Ten questions, about two minutes. Your gaps become actions you can give an owner and a date.'),
@@ -2521,7 +2532,7 @@ CV.ready(function () {
   var q = new URLSearchParams(location.search), src = (q.get('utm_source') || '').toLowerCase(), med = (q.get('utm_medium') || '').toLowerCase();
   var ref = document.referrer || '';
   var kind = med === 'qr' || src === 'print' ? 'print' : /linkedin/.test(src) || /linkedin\.com|lnkd\.in/.test(ref) ? 'linkedin' : /podcast/.test(src) || /thesmallbusinesscybersecurityguy/.test(ref) ? 'podcast' : '';
-  if (!kind || CV.store.get('welcomed-' + kind, false)) return;
+  if (!kind || CV.store.get('welcomed-' + kind, false) || !CV.notice.claim('arrival')) return;
   var M = {
     linkedin: ['Welcome from LinkedIn.', 'Short on time? The two-minute check finds your gaps and links each one to its fix.', 'Take the check', function () { CV.openCheck && CV.openCheck(); }],
     print: ['Welcome from the printed copy.', 'Online you can fill in the one-page plan, tick off the five things and add everything to your calendar.', 'Open the one-page plan', function () { location.hash = '#mvc'; }],
@@ -2665,21 +2676,26 @@ CV.ready(function () {
 });
 
 /* --- src/features/178-phone-section-chip.js --- */
-// @msg Phones always know where they are: a slim chip above the bottom dock names the current section and opens the contents in one tap
+// @msg Phones always know where they are: the Contents button in the bottom dock shows the number of the current section and opens the contents in one tap
 // @sel #theme-1
 CV.ready(function () {
   var ab = CV.$('.ab'); if (!ab) return;
-  var chip = CV.h('button', { type: 'button', class: 'ab-chip', 'aria-label': 'Current section. Open contents' });
-  ab.insertBefore(chip, ab.firstChild);
+  // The dock used to carry a second strip above it with the section name. That strip is gone: the section's number is the label of the
+  // Contents button (the first item), and its accessible name says which section you are in.
+  var contents = CV.$('.ab-b', ab), lab = contents && CV.$('.ab-l', contents);
+  if (!contents || !lab) return;
   var secs = CV.$$('main section.section[id]');
+  var phone = window.matchMedia ? window.matchMedia('(max-width: 900px)') : { matches: false };
   function sync() {
     var y = window.innerHeight * 0.3, cur = null; secs.forEach(function (s) { if (s.getBoundingClientRect().top <= y) cur = s; });
-    if (!cur) { chip.hidden = true; return; }
-    var num = CV.text(cur.querySelector('.sec-num')).match(/\d+/), t = CV.text(cur.querySelector('h2')).replace(/#$/, '').trim();
-    chip.hidden = false; chip.textContent = ''; chip.appendChild(CV.h('span', { class: 'ab-chip-n' }, num ? num[0] : '')); chip.appendChild(document.createTextNode(t)); chip.appendChild(CV.h('span', { class: 'ab-chip-c', 'aria-hidden': 'true' }, '▴'));
+    var num = cur && CV.text(cur.querySelector('.sec-num')).match(/\d+/), t = cur ? CV.text(cur.querySelector('h2')).replace(/#$/, '').trim() : '';
+    if (!cur || !phone.matches) { lab.textContent = 'Contents'; contents.setAttribute('aria-label', 'Contents'); contents.removeAttribute('title'); return; }
+    lab.textContent = num ? num[0] : 'Contents';
+    contents.setAttribute('aria-label', 'Contents. You are in section ' + (num ? num[0] + ', ' : '') + t);
+    contents.title = 'Contents (you are in ' + (num ? num[0] + ' ' : '') + t + ')';
   }
-  chip.addEventListener('click', function () { var tg = CV.$('.toc-toggle'); if (tg && tg.getAttribute('aria-expanded') === 'false') tg.click(); var h = CV.$('#toc-h'); h.scrollIntoView({ behavior: CV.reduced() ? 'auto' : 'smooth' }); h.focus({ preventScroll: true }); });
   var tk = false; window.addEventListener('scroll', function () { if (!tk) { tk = true; requestAnimationFrame(function () { tk = false; sync(); }); } }, { passive: true });
+  window.addEventListener('resize', sync);
   sync();
 });
 
@@ -2947,7 +2963,10 @@ CV.ready(function () {
   var newEps = CV.EPISODES.filter(function (e) { var d = CV.parseDate(e.date).getTime(); return d > prev.at && d <= CV.today().getTime(); });
   var days = Math.max(1, Math.round((Date.now() - prev.at) / 86400000));
   if (!gains.length && !newEps.length) return;
+  var token = String(prev.at);
+  if (CV.notice.dismissed('slv', token) || !CV.notice.claim('slv')) return;
   var box = CV.h('div', { class: 'slv' },
+    CV.h('button', { type: 'button', class: 'wb-x slv-x', 'aria-label': 'Dismiss', onclick: function () { CV.notice.dismiss('slv', token); box.remove(); } }, '×'),
     CV.h('p', { class: 'cv-kicker' }, 'Since your last visit, ' + days + ' day' + (days === 1 ? '' : 's') + ' ago'),
     gains.length ? CV.h('p', null, CV.h('b', null, gains.join(', ') + '.'), ' Good progress.') : null,
     newEps.length ? CV.h('p', null, 'New on the podcast: ', newEps.map(function (e) { return 'Ep ' + e.n + ', “' + e.title + '”'; }).join('; '), '. ', CV.h('a', { href: CV.PODCAST, rel: 'noopener', target: '_blank' }, 'Listen')) : null);
@@ -3013,7 +3032,16 @@ CV.ready(function () {
   if (CV.toolsMenu) CV.toolsMenu.add('What’s new', CV.openWhatsNew, 'More');
   // Show once to people who visited before the web edition (they have older saved data but haven't seen this).
   var returning = (function () { try { return !!(localStorage.getItem('cv-five-things') || localStorage.getItem('cv-plan-contacts') || localStorage.getItem('theme')); } catch (e) { return false; } })();
-  if (returning && !CV.store.get('seen-new', false) && !location.hash) { CV.store.set('seen-new', true); CV.store.set('toured', true); setTimeout(function () { if (!CV.$('dialog[open]')) d.open(); }, 1500); }
+  // A short note in Start here, not a dialog over the page. It shows only if no other message has the slot, and stays until it is used or dismissed.
+  var startIn = CV.$('.start-inner');
+  if (returning && !CV.store.get('seen-new', false) && !location.hash && startIn && CV.notice.claim('whatsnew')) {
+    var seen = function () { CV.store.set('seen-new', true); CV.store.set('toured', true); };
+    var note = CV.h('div', { class: 'aw', role: 'region', 'aria-label': 'New in the web edition' },
+      CV.h('p', null, CV.h('b', null, 'New in the web edition. '), 'A short tour of what you can now do with the report.'),
+      CV.h('div', { class: 'cv-row' }, CV.button('See what’s new', function () { seen(); note.remove(); d.open(); }, 'primary'),
+        CV.h('button', { type: 'button', class: 'wb-x', 'aria-label': 'Dismiss', onclick: function () { seen(); note.remove(); } }, '×')));
+    startIn.insertBefore(note, startIn.firstChild);
+  }
 });
 
 /* --- src/features/217-toolkit.js --- */

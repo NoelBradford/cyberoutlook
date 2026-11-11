@@ -14,5 +14,14 @@ CV.ready(function () {
   if (CV.toolsMenu) CV.toolsMenu.add('What’s new', CV.openWhatsNew, 'More');
   // Show once to people who visited before the web edition (they have older saved data but haven't seen this).
   var returning = (function () { try { return !!(localStorage.getItem('cv-five-things') || localStorage.getItem('cv-plan-contacts') || localStorage.getItem('theme')); } catch (e) { return false; } })();
-  if (returning && !CV.store.get('seen-new', false) && !location.hash) { CV.store.set('seen-new', true); CV.store.set('toured', true); setTimeout(function () { if (!CV.$('dialog[open]')) d.open(); }, 1500); }
+  // A short note in Start here, not a dialog over the page. It shows only if no other message has the slot, and stays until it is used or dismissed.
+  var startIn = CV.$('.start-inner');
+  if (returning && !CV.store.get('seen-new', false) && !location.hash && startIn && CV.notice.claim('whatsnew')) {
+    var seen = function () { CV.store.set('seen-new', true); CV.store.set('toured', true); };
+    var note = CV.h('div', { class: 'aw', role: 'region', 'aria-label': 'New in the web edition' },
+      CV.h('p', null, CV.h('b', null, 'New in the web edition. '), 'A short tour of what you can now do with the report.'),
+      CV.h('div', { class: 'cv-row' }, CV.button('See what’s new', function () { seen(); note.remove(); d.open(); }, 'primary'),
+        CV.h('button', { type: 'button', class: 'wb-x', 'aria-label': 'Dismiss', onclick: function () { seen(); note.remove(); } }, '×')));
+    startIn.insertBefore(note, startIn.firstChild);
+  }
 });

@@ -365,14 +365,12 @@ p.listen-src { position: absolute; left: -9999px; width: 1px; height: 1px; overf
 .col-tab[aria-pressed="true"] { background: var(--accent); color: var(--paper); border-color: var(--accent); }
 
 /* --- src/features/129-welcome-back.css --- */
-.wb { position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; padding: 0 max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); transform: translateY(110%); transition: transform 0.3s; pointer-events: none; }
-.wb.show { transform: none; }
-.wb-in { pointer-events: auto; max-width: 760px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; justify-content: space-between; background: var(--ink); color: var(--paper); border-radius: 3px; padding: 0.8rem 0.9rem; box-shadow: 0 14px 34px rgba(0,0,0,0.35); font: 400 0.92rem/1.4 var(--font-ui); }
-.wb-in p { margin: 0; flex: 1 1 280px; }
-.wb-p { color: var(--signal); font-weight: 600; }
+.wb { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; justify-content: space-between; padding: 0.8rem 0.9rem; border-left: 5px solid var(--signal); background: color-mix(in srgb, var(--paper) 8%, transparent); color: var(--paper); font: 400 0.95rem/1.4 var(--font-ui); }
+.wb p { margin: 0; flex: 1 1 280px; }
+.wb .tool { color: var(--paper); border-color: color-mix(in srgb, var(--paper) 35%, transparent); }
 .wb .tool.primary { background: var(--signal); color: var(--ink); border-color: var(--signal); }
 .wb-x { width: 40px; height: 40px; font: 400 1.5rem/1 var(--font-ui); color: var(--paper); background: none; border: 0; cursor: pointer; }
-@media (prefers-reduced-motion: reduce) { .wb { transition: none; } }
+.start.slim .start-inner > .wb { display: flex !important; }
 @media print { .wb { display: none !important; } }
 
 /* --- src/features/130-search.css --- */
@@ -918,16 +916,10 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
 .rh-list span { font-size: 0.85rem; color: var(--muted); }
 
 /* --- src/features/178-phone-section-chip.css --- */
-.ab-chip { display: none; }
+/* The strip above the bottom dock is gone (see 178-phone-section-chip.js), so the dock keeps its own padding. */
 @media (max-width: 900px) {
-  .ab { flex-wrap: wrap; gap: 0; }
-  .ab-chip { display: flex; align-items: center; gap: 0.5rem; width: calc(100% + 16px); margin: 0 -8px; padding: 0.4rem max(12px, env(safe-area-inset-left, 0px)); border: 0; border-bottom: 1px solid var(--rule); background: color-mix(in srgb, var(--accent) 8%, var(--paper)); color: var(--ink); font: 600 0.8rem var(--font-ui); text-align: left; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .ab-chip[hidden] { display: none; }
-  .ab-chip-n { flex: 0 0 auto; display: inline-grid; place-items: center; min-width: 1.6rem; height: 1.3rem; border-radius: 2px; background: var(--accent); color: var(--paper); font: 700 0.85rem var(--font-head); }
-  .ab-chip-c { margin-left: auto; color: var(--muted); }
-  body.ab-on { padding-bottom: 96px; }
-  body.ab-on .to-top { bottom: 108px; }
-  body.ab-on .toast { bottom: 112px; }
+  /* The "Contents" button after each section repeats the dock's Contents item, so it goes on phones. "Next section" stays. */
+  .next-sec .to-toc { display: none; }
 }
 
 /* --- src/features/179-cover-strip.css --- */
@@ -1000,7 +992,7 @@ figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em;
 .ss .tool { color: var(--paper); border-color: color-mix(in srgb, var(--paper) 35%, transparent); }
 .ss .tool.primary { background: var(--signal); color: var(--ink); border-color: var(--signal); }
 .start.slim { padding-top: 1rem; padding-bottom: 1rem; }
-.start.slim .start-inner > *:not(.ss):not(.aw) { display: none; }
+.start.slim .start-inner > *:not(.ss):not(.aw):not(.wb) { display: none; }
 .start:not(.slim) .ss { padding-bottom: 1rem; border-bottom: 1px solid color-mix(in srgb, var(--paper) 18%, transparent); }
 .start:has(.ss) .start-things { display: none; }
 
@@ -1071,6 +1063,8 @@ figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em;
 .slv .cv-kicker { color: var(--signal); }
 .slv a { color: var(--signal); }
 .start.slim .start-inner > .slv { display: grid !important; }
+.slv { position: relative; padding-right: 3rem; }
+.slv-x { position: absolute; top: 0.2rem; right: 0.2rem; }
 
 /* --- src/features/194-simple-mode.css --- */
 html.simple .start, html.simple .ab, html.simple .cta-card, html.simple .listen, html.simple .lnx, html.simple .ep-guide, html.simple .what-next, html.simple .nudge, html.simple .wb, html.simple .plan-add, html.simple .sc-btn, html.simple .tts-start, html.simple .ss-wrap, html.simple .fc-vote, html.simple .pl-btn, html.simple .sn, html.simple .lens-bar, html.simple .src-tools, html.simple .src-meta, html.simple .ly, html.simple .ft, html.simple .tp-min, html.simple .tp-ring, html.simple .next-sec, html.simple .sp-sum, html.simple .nd-tools, html.simple .plan-tools, html.simple .five-foot, html.simple .five-note, html.simple .h-anchor, html.simple .cs, html.simple .cs-src, html.simple .tour, html.simple .tour-ring, html.simple .ep-chip, html.simple .auth, html.simple .rp, html.simple .aw { display: none !important; }
@@ -1158,3 +1152,13 @@ html:not(.cv-ready) .cover .tools > * { visibility: hidden; }
 .tk-t { margin: 0; font-weight: 700; }
 .tk-s { margin: 0.15rem 0 0; font-size: 0.9rem; color: var(--muted); }
 @media (max-width: 520px) { .tk-list li { flex-wrap: wrap; } }
+
+/* --- src/features/218-phone-toolbar.css --- */
+/* The cover toolbar (My plan, Share, Tools, Dark mode) is one row on phones, down to 360px. Dark mode shows only its icon there. */
+@media (max-width: 560px) {
+  .cover .tools { flex-wrap: nowrap; gap: 6px; min-height: 44px; }
+  html:not(.cv-ready) .cover .tools { height: 44px; }
+  .cover .tools .tool, .cover .tools .theme-toggle { padding: 0.45rem 0.6rem; letter-spacing: 0.03em; white-space: nowrap; flex: 0 1 auto; }
+  .cover .tools .theme-toggle { font-size: 0; padding: 0.45rem 0.7rem; }
+  .cover .tools .theme-toggle span { font-size: 1.05rem; line-height: 1; }
+}

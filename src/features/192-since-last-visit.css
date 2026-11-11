@@ -3,3 +3,5 @@
 .slv .cv-kicker { color: var(--signal); }
 .slv a { color: var(--signal); }
 .start.slim .start-inner > .slv { display: grid !important; }
+.slv { position: relative; padding-right: 3rem; }
+.slv-x { position: absolute; top: 0.2rem; right: 0.2rem; }
