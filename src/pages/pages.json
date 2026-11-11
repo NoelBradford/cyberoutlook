@@ -17,7 +17,8 @@
     "card": {
       "promise": "Ten questions, a score out of 10 and your gaps in order.",
       "time": "About two minutes"
-    }
+    },
+    "hashKey": "check"
   },
   {
     "slug": "readiness",
@@ -31,7 +32,8 @@
     "card": {
       "promise": "Five questions on the Cyber Essentials changes. See what to fix before you book an assessment.",
       "time": "About a minute"
-    }
+    },
+    "hashKey": "readiness"
   },
   {
     "slug": "it-provider-email",
@@ -48,7 +50,8 @@
     "card": {
       "promise": "The four questions for your IT provider, plus one about backups, as an email you can copy or open in your mail app.",
       "time": "About 30 seconds"
-    }
+    },
+    "hashKey": "itmail"
   },
   {
     "slug": "call-back-poster",
@@ -63,7 +66,8 @@
     "card": {
       "promise": "A printable A4 poster for the call-back rule, with your business name and who to ask.",
       "time": "Prints on one A4 page"
-    }
+    },
+    "hashKey": "poster"
   },
   {
     "slug": "tools",

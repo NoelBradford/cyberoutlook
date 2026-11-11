@@ -12,8 +12,11 @@ CV.ready(function () {
   };
   CV.toolRoutes = Object.keys(R);
   function route() {
-    var k = location.hash.slice(1); if (!R[k] || k === 'check') return; // #check is handled by the check itself
-    history.replaceState(null, '', location.pathname + location.search);
+    var k = location.hash.slice(1);
+    // A tool with a page of its own goes there. (index.html does this before first paint; this covers a hash set after load.)
+    if (CV.pageRoutes && Object.prototype.hasOwnProperty.call(CV.pageRoutes, k)) { location.replace(CV.pageRoutes[k]); return; }
+    if (!R[k] || k === 'check') return; // #check is handled by the check itself
+    // The hash stays in the address bar so the link can be shared.
     setTimeout(R[k], 50);
   }
   window.addEventListener('hashchange', route);
