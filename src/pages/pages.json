@@ -37,5 +37,16 @@
     "reportParts": [
       "it-questions"
     ]
+  },
+  {
+    "slug": "call-back-poster",
+    "title": "Call-back rule poster",
+    "description": "Print an A4 poster for the office wall: no change to bank details or urgent payment without a phone call to a number you already hold.",
+    "intro": "Add your business name and who to ask, then print an A4 poster for everyone who touches payments. The rule is the one in the report. Nothing leaves your browser.",
+    "features": [
+      "116",
+      "169"
+    ],
+    "open": "CV.openPoster"
   }
 ]

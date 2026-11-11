@@ -103,7 +103,9 @@ main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 1rem; }
   .cv-inline .cv-row, .qz-plan { display: none !important; }
   .cv-inline li { break-inside: avoid; }
   main { min-height: 0; }
-  .cv-inline { border: 0; max-width: none; }
+  main .cv-inline { border: 0; max-width: none; }
+  /* A poster printed on a tool page uses the darker gold too, so "Call back." stays readable in black and white. */
+  body.standalone .cv-sheet.poster h2 span { color: #8f6200; }
 }
 
 /* Exposure check on its own page: h2 where the report's dialog uses h3, and the same look. */
@@ -111,6 +113,10 @@ main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 1rem; }
 .qz-result h2:focus { outline: none; }
 .cv-inline { max-width: 46rem; border: 1px solid var(--rule); border-radius: 3px; }
 .qz-start { padding: 0.2rem 0; }
+
+/* The poster preview sits on white in both themes. The report's gold on white is just under 3:1 for large text, so on a tool page the
+   preview uses a darker gold. The printed sheet keeps the report's colours. */
+.cv-inline .poster h2 span { color: #8f6200; }
 
 /* --- src/core.css --- */
 /* Shared styles for the interactive layer. Uses the report's own tokens. */
