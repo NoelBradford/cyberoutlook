@@ -4,7 +4,9 @@
   "description": "UK Small Business Cyber Outlook 2027 web edition. The site is static; this file only exists for the checks.",
   "scripts": {
     "build": "python3 tools/build.py",
-    "check": "node tools/check.js http://127.0.0.1:8080/"
+    "check": "node tools/check.js http://127.0.0.1:8080/",
+    "check:pages": "node tools/check.js http://127.0.0.1:8080/ --pages tools/pages.txt",
+    "measure": "node tools/measure.js http://127.0.0.1:8080/"
   },
   "devDependencies": {
     "playwright": "1.48.2"

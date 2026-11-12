@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "about": "Baseline for the UX epic (outlook-2027 issues #1 to #19). Re-create with: node tools/measure.js http://127.0.0.1:8080/ --out docs/ux-baseline.json",
+    "site": "release branch, Iteration 233",
+    "commit": "167da54c480aac753dbb5d6e5d1d8e53ad6359b6",
+    "measuredAt": "2026-11-12",
+    "playwright": "1.63.0",
+    "note": "Skip links are off-screen until focused, so they are not counted as visible controls."
+  },
+  "url": "http://127.0.0.1:8080/",
+  "method": "fresh visitor, service workers blocked, Google Fonts blocked, gzip computed at level 9, mid-reading = scrolled to 40% of the page",
+  "viewports": {
+    "desktop": {
+      "viewport": "1366x900",
+      "docHeightPx": 48589,
+      "controlsInFirstViewport": 10,
+      "controlLabelsInFirstViewport": [
+        "MY PLAN 0",
+        "SHARE",
+        "SEARCH /",
+        "TOOLS ▾",
+        "☾ DARK MODE",
+        "TAKE THE 2-MINUTE CHECK",
+        "1 in 5 UK businesses were victims of a c",
+        "1 in 33 once you take phishing out",
+        "21% of micro firms have a formal inciden",
+        "The Small Business Cyber Security Guy we"
+      ],
+      "buttonsInMain": 185,
+      "fixedChromeAtTop": {
+        "elements": [],
+        "coveredPx": 0,
+        "viewportHeight": 900,
+        "coveredPercent": 0
+      },
+      "fixedChromeMidReading": {
+        "elements": [
+          {
+            "el": ".ab.show",
+            "top": 0,
+            "height": 52
+          }
+        ],
+        "coveredPx": 52,
+        "viewportHeight": 900,
+        "coveredPercent": 5.8
+      },
+      "transfer": {
+        "html": {
+          "raw": 259238,
+          "gz": 118322,
+          "files": 1
+        },
+        "js": {
+          "raw": 238812,
+          "gz": 70127,
+          "files": 1
+        },
+        "css": {
+          "raw": 100422,
+          "gz": 18867,
+          "files": 1
+        },
+        "other": {
+          "raw": 0,
+          "gz": 0,
+          "files": 0
+        },
+        "totalRaw": 598472,
+        "totalGzip": 207316
+      }
+    },
+    "phone": {
+      "viewport": "390x844",
+      "docHeightPx": 64489,
+      "controlsInFirstViewport": 9,
+      "controlLabelsInFirstViewport": [
+        "MY PLAN 0",
+        "SHARE",
+        "SEARCH",
+        "TOOLS ▾",
+        "☾ DARK MODE",
+        "TAKE THE 2-MINUTE CHECK",
+        "1 in 5 UK businesses were victims of a c",
+        "1 in 33 once you take phishing out",
+        "21% of micro firms have a formal inciden"
+      ],
+      "buttonsInMain": 185,
+      "fixedChromeAtTop": {
+        "elements": [],
+        "coveredPx": 0,
+        "viewportHeight": 844,
+        "coveredPercent": 0
+      },
+      "fixedChromeMidReading": {
+        "elements": [
+          {
+            "el": ".ab.show",
+            "top": 750,
+            "height": 94
+          }
+        ],
+        "coveredPx": 94,
+        "viewportHeight": 844,
+        "coveredPercent": 11.1
+      },
+      "transfer": {
+        "html": {
+          "raw": 259238,
+          "gz": 118322,
+          "files": 1
+        },
+        "js": {
+          "raw": 238812,
+          "gz": 70127,
+          "files": 1
+        },
+        "css": {
+          "raw": 100422,
+          "gz": 18867,
+          "files": 1
+        },
+        "other": {
+          "raw": 0,
+          "gz": 0,
+          "files": 0
+        },
+        "totalRaw": 598472,
+        "totalGzip": 207316
+      }
+    }
+  }
+}
