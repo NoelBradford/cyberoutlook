@@ -196,6 +196,14 @@ Square and printed. Corners are 2px on controls, fields and panels, and 3px on d
 ### Navigation
 - **Contents list:** numbered rows in a two-column grid (section number in Muted Slate, tabular figures, label in Harbour Ink), hairline divider underneath, no underlines. Cover toolbar uses the same tool buttons.
 
+### Score Scale
+- **What it is:** ten flat bars rising left to right, one per question of the exposure check, drawn behind the headline area of `/check/` and, quieter, behind the report cover title.
+- **Behaviour:** bars fill in Teal Ink as the check progresses and show the score when it is done (the cover shows the saved result). Unfilled bars are Hairline.
+- **Rules:** decorative and `aria-hidden`, flat, palette colours only, behind the text at low strength, hidden in print and forced-colours. It is the one background graphic in the system, and it earns its place by showing real progress.
+
+### Entry headline
+- On `/check/` the title runs the full width of the page in one line (600px and up), sized from the text as drawn so it fits with web fonts or the fallback. It drops to a smaller heading once the result shows.
+
 ### Dialogs
 - 2px Harbour Ink border, 3px corners, Paper fill, 640px max width, the only shadowed surface.
 

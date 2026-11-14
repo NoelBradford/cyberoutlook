@@ -58,7 +58,6 @@ async function page(b, origin, state, path0) {
   return { p, ctx };
 }
 async function finishCheck(p) {
-  await p.click('#tool-root button');
   const ans = ['no', 'unsure', 'yes', 'no', 'no', 'yes', 'unsure', 'no', 'yes', 'no']; // score 3, gaps 1,2,4,5,7,8,10
   for (let i = 0; i < 10; i++) { await p.click(`#qz-${i}-${ans[i]}`); await p.waitForTimeout(120); }
   await p.waitForTimeout(300);
