@@ -362,6 +362,8 @@ CV.ready(function () {
     if (card) { card.querySelector('b').textContent = 'Your exposure check'; card.querySelector('.p-sub').textContent = 'See your result and your gaps again.'; }
     var cc = CV.$('.cc-btn'); if (cc) cc.textContent = 'See your check result';
   }
+  // The cover carries the same scale: it fills as the check progresses and shows the score once it is done.
+  if (!SA) { var coverScale = function () { var s = CV.checkScore(); scale(s === null ? Object.keys(answers()).length : s); }; coverScale(); CV.on('check', coverScale); }
   if (!SA && location.hash === '#check') CV.openCheck();
   // Row ids are added above, after the browser has already looked for the target, so a link such as /#act-t3-1 needs a nudge.
   var hit = /^#act-(t\d+-\d+)$/.exec(location.hash);

@@ -51,7 +51,7 @@ main:has(.entry-gets) .cv-inline { max-width: none; border: 2px solid var(--ink)
 .entry-gets[hidden], .entry-stat[hidden] { display: none; }
 .entry-gets { grid-area: gets; list-style: none; margin: 1.8rem 0 0; padding: 0; border-top: 2px solid var(--ink); font-family: var(--font-ui); }
 .entry-gets li { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 0.75rem; padding: 0.85rem 0; border-bottom: 1px solid var(--rule); font-size: 1.02rem; line-height: 1.4; }
-.eg-n { font: 600 0.85rem var(--font-ui); letter-spacing: 0.1em; color: var(--accent); font-variant-numeric: tabular-nums; padding-top: 0.12rem; }
+.eg-n { font: 600 0.85rem var(--font-ui); letter-spacing: 0.1em; color: var(--ink); font-variant-numeric: tabular-nums; padding-top: 0.12rem; }
 .entry-stat { grid-area: stat; margin: 2rem 0 0.5rem; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1.1rem; row-gap: 0.25rem; align-items: end; }
 .entry-stat b { grid-row: 1 / span 2; font: 700 clamp(3.6rem, 12vw, 5.8rem)/0.88 var(--font-head); color: var(--accent); letter-spacing: -0.01em; white-space: nowrap; }
 .entry-stat span { font: 500 1.05rem/1.3 var(--font-ui); max-width: 22ch; align-self: end; }
@@ -63,13 +63,20 @@ main:has(.entry-gets) .cv-inline { max-width: none; border: 2px solid var(--ink)
 /* The scale behind the page: ten bars, one per question. Flat, in palette colours, behind everything, and decorative only. */
 main:has(.entry-gets) { position: relative; isolation: isolate; }
 .entry-scale { grid-column: 1; grid-row: 1 / 3; align-self: stretch; z-index: -1; display: flex; align-items: flex-end; gap: clamp(6px, 1.4vw, 18px); pointer-events: none; }
-.entry-scale i { flex: 1 1 0; height: calc(14% + var(--n, 0) * 9.5%); background: var(--rule); opacity: 0.38; border-radius: 2px 2px 0 0; }
+.entry-scale i { flex: 1 1 0; height: calc(16% + var(--n, 0) * 9.3%); background: var(--rule); opacity: 0.7; border-radius: 2px 2px 0 0; }
 .entry-scale i:nth-child(1) { --n: 0; } .entry-scale i:nth-child(2) { --n: 1; } .entry-scale i:nth-child(3) { --n: 2; } .entry-scale i:nth-child(4) { --n: 3; } .entry-scale i:nth-child(5) { --n: 4; }
 .entry-scale i:nth-child(6) { --n: 5; } .entry-scale i:nth-child(7) { --n: 6; } .entry-scale i:nth-child(8) { --n: 7; } .entry-scale i:nth-child(9) { --n: 8; } .entry-scale i:nth-child(10) { --n: 9; }
-.entry-scale i.on { background: var(--accent); opacity: 0.24; }
+.entry-scale i.on { background: var(--accent); opacity: 0.5; }
 @media (prefers-reduced-motion: no-preference) { .entry-scale i { transition: background-color 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1); } }
 @media (min-width: 960px) { .entry-scale { grid-row: 1 / 4; } } /* headline, intro and the three rows: the bars end on the last divider */
 @media (forced-colors: active) { .entry-scale { display: none; } }
+/* The cover echo: behind the title only, quieter than on the check page so the cover's own text stays clear. */
+.cover-grid > div:first-child { position: relative; isolation: isolate; }
+.cover-scale { position: absolute; top: 0; left: 0; right: 0; grid-column: auto; grid-row: auto; align-self: auto; height: calc(clamp(2.7rem, 9vw, 6.4rem) * 3.9); gap: clamp(5px, 1.2vw, 14px); }
+.cover-scale i { opacity: 0.4; }
+.cover-scale i.on { opacity: 0.24; }
+@media (min-width: 900px) { .cover-scale { right: 6%; } }
+@media print { .cover-scale { display: none; } }
 /* Once the result shows, one column: the score is the first thing on the page. */
 main.is-done:has(.entry-gets) { grid-template-columns: minmax(0, 1fr); grid-template-areas: "h" "tool"; }
 main.is-done:has(.entry-gets) > h1 { font-size: clamp(2rem, 5.5vw, 3rem); margin-bottom: 1.2rem; }
