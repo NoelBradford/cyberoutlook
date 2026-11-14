@@ -106,6 +106,42 @@ tr.cv-flash td { animation: cv-row-flash 2.2s ease-out; }
 .qz-back button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 999px; }
 @media (max-width: 900px) { body.ab-on .qz-back { bottom: calc(108px + env(safe-area-inset-bottom, 0px)); } }
 
+/* The /check/ entry: a split screen on wide screens, the card straight after the intro on phones. Pages without an entry block are untouched. */
+main:has(.entry-gets) { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "h" "intro" "tool" "gets" "stat"; column-gap: 3.5rem; align-items: start; }
+main:has(.entry-gets) > h1 { grid-area: h; font-size: clamp(2.5rem, 9.5vw, 4.9rem); line-height: 0.93; text-transform: uppercase; letter-spacing: -0.005em; }
+main:has(.entry-gets) > .page-intro { grid-area: intro; font-size: clamp(1.12rem, 2.4vw, 1.35rem); line-height: 1.4; max-width: 30ch; margin: 1rem 0 1.4rem; }
+main:has(.entry-gets) > #tool-root { grid-area: tool; }
+main:has(.entry-gets) .cv-inline { max-width: none; border: 2px solid var(--ink); border-top: 8px solid var(--accent); border-radius: 3px; background: color-mix(in srgb, var(--accent) 5%, var(--paper)); }
+.entry-gets[hidden], .entry-stat[hidden] { display: none; }
+.entry-gets { grid-area: gets; list-style: none; margin: 1.8rem 0 0; padding: 0; border-top: 2px solid var(--ink); font-family: var(--font-ui); }
+.entry-gets li { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 0.75rem; padding: 0.85rem 0; border-bottom: 1px solid var(--rule); font-size: 1.02rem; line-height: 1.4; }
+.eg-n { font: 600 0.85rem var(--font-ui); letter-spacing: 0.1em; color: var(--accent); font-variant-numeric: tabular-nums; padding-top: 0.12rem; }
+.entry-stat { grid-area: stat; margin: 2rem 0 0.5rem; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1.1rem; row-gap: 0.25rem; align-items: end; }
+.entry-stat b { grid-row: 1 / span 2; font: 700 clamp(3.6rem, 12vw, 5.8rem)/0.88 var(--font-head); color: var(--accent); letter-spacing: -0.01em; white-space: nowrap; }
+.entry-stat span { font: 500 1.05rem/1.3 var(--font-ui); max-width: 22ch; align-self: end; }
+.entry-stat small { font: 400 0.82rem/1.3 var(--font-ui); color: var(--muted); align-self: start; }
+@media (min-width: 960px) {
+  main:has(.entry-gets) { grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); grid-template-areas: "h tool" "intro tool" "gets tool" "stat tool"; grid-template-rows: auto auto auto 1fr; }
+  main:has(.entry-gets) > #tool-root { position: sticky; top: 1.5rem; margin-top: 0.4rem; }
+}
+/* The scale behind the page: ten bars, one per question. Flat, in palette colours, behind everything, and decorative only. */
+main:has(.entry-gets) { position: relative; isolation: isolate; }
+.entry-scale { grid-column: 1; grid-row: 1 / 3; align-self: stretch; z-index: -1; display: flex; align-items: flex-end; gap: clamp(6px, 1.4vw, 18px); pointer-events: none; }
+.entry-scale i { flex: 1 1 0; height: calc(14% + var(--n, 0) * 9.5%); background: var(--rule); opacity: 0.38; border-radius: 2px 2px 0 0; }
+.entry-scale i:nth-child(1) { --n: 0; } .entry-scale i:nth-child(2) { --n: 1; } .entry-scale i:nth-child(3) { --n: 2; } .entry-scale i:nth-child(4) { --n: 3; } .entry-scale i:nth-child(5) { --n: 4; }
+.entry-scale i:nth-child(6) { --n: 5; } .entry-scale i:nth-child(7) { --n: 6; } .entry-scale i:nth-child(8) { --n: 7; } .entry-scale i:nth-child(9) { --n: 8; } .entry-scale i:nth-child(10) { --n: 9; }
+.entry-scale i.on { background: var(--accent); opacity: 0.24; }
+@media (prefers-reduced-motion: no-preference) { .entry-scale i { transition: background-color 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1); } }
+@media (min-width: 960px) { .entry-scale { grid-row: 1 / 4; } } /* headline, intro and the three rows: the bars end on the last divider */
+@media (forced-colors: active) { .entry-scale { display: none; } }
+/* Once the result shows, one column: the score is the first thing on the page. */
+main.is-done:has(.entry-gets) { grid-template-columns: minmax(0, 1fr); grid-template-areas: "h" "tool"; }
+main.is-done:has(.entry-gets) > h1 { font-size: clamp(2rem, 5.5vw, 3rem); margin-bottom: 1.2rem; }
+main.is-done:has(.entry-gets) > #tool-root { position: static; max-width: 46rem; margin-top: 0; }
+main.is-done:has(.entry-gets) > .entry-scale { display: none; }
+@media (min-width: 1100px) { main.is-done:has(.entry-gets) > .entry-scale { display: flex; justify-self: end; align-self: start; width: min(24rem, calc(100% - 49rem)); height: 24rem; margin-top: 0.5rem; } }
+@media print { .entry-gets, .entry-stat, .entry-scale { display: none; } }
+
 /* --- src/features/109-my-plan.css --- */
 .plan-add { display: inline-flex; align-items: center; margin-top: 0.45rem; font: 600 0.75rem var(--font-ui); letter-spacing: 0.04em; color: var(--accent); background: transparent; border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); border-radius: 2px; padding: 0.3rem 0.55rem; min-height: 32px; cursor: pointer; }
 .plan-add:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }

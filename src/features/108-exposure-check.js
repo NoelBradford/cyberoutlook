@@ -29,10 +29,15 @@ CV.ready(function () {
   var saved = CV.store.get('check', {});
   var SA = !!CV.standalone; // a page of its own (/check/): render inline in <main> instead of in a modal
   var NOTE = 'Your answers stay in this browser. Benchmarks are from the Cyber Security Breaches Survey 2025/26 [source 1].';
+  var NOTE_PAGE = 'Benchmarks are from the Cyber Security Breaches Survey 2025/26 [source 1].'; // the page's own promise sits beside question 1
   // CV.inlineHost (src/pages/standalone.js) has the same shape as CV.dialog and the hooks 111-check-to-plan looks for.
-  var d = SA ? CV.inlineHost({ id: 'check', label: 'Two-minute exposure check', note: NOTE }) : CV.dialog({ id: 'check', title: 'Two-minute exposure check', wide: true, note: NOTE });
+  var d = SA ? CV.inlineHost({ id: 'check', label: 'Two-minute exposure check', note: NOTE_PAGE }) : CV.dialog({ id: 'check', title: 'Two-minute exposure check', wide: true, note: NOTE });
   var H = SA ? 'h2' : 'h3'; // the page already has an h1
   function intro(show) { var i = CV.$('.page-intro'); if (i) i.hidden = !show; }
+  // The 'what you get' rows and the survey figure are for before and during the check; the result replaces them.
+  // The scale behind the page: one bar per question. It fills as you answer and shows your score at the end.
+  function scale(n) { CV.$$('.entry-scale i').forEach(function (b, i) { b.classList.toggle('on', i < n); }); }
+  function entry(show) { CV.$$('.entry-gets, .entry-stat').forEach(function (e) { e.hidden = !show; }); var m = CV.$('main'); if (m) m.classList.toggle('is-done', !show); }
   var step = 0;
   function answers() { return saved.a || {}; }
   function save() { CV.store.set('check', saved); CV.emit('check', saved); }
@@ -41,8 +46,9 @@ CV.ready(function () {
     var item = Q[step], a = answers()[step];
     var fresh = step === 0 && !Object.keys(answers()).length;
     // On the page itself the intro sits above question 1 only, and question 1 is there on arrival: no Start gate.
-    if (SA) intro(fresh);
-    if (SA && fresh) b.appendChild(CV.h('p', { class: 'qz-promise' }, 'Your answers stay in this browser. Nothing is sent anywhere.'));
+    // With the entry layout the intro stays put through the questions, so the page does not jump; it goes at the result.
+    if (SA) { intro(fresh || !!CV.$('.entry-gets')); entry(true); scale(Object.keys(answers()).length); }
+    if (SA && fresh) b.appendChild(CV.h('p', { class: 'qz-promise' }, 'Nothing you enter leaves your browser.'));
     if (SA && resumed) b.appendChild(CV.h('p', { class: 'qz-promise' }, 'Picking up where you left off. ',
       CV.button('Start again', function () { saved = {}; save(); step = 0; resumed = false; renderQ(); })));
     var bar = CV.h('div', { class: 'qz-bar', 'aria-hidden': 'true' }, CV.h('span', { style: 'width:' + (step / Q.length * 100) + '%' }));
@@ -82,6 +88,7 @@ CV.ready(function () {
     : s >= 4 ? ['Halfway there', 'The basics are partly in place. The gaps below are mostly free to fix.']
     : ['Start with the basics', 'Most of what’s missing costs nothing but an afternoon. Start at the top of the list below.']; }
   function renderResult() {
+    if (SA) { intro(false); entry(false); scale(score()); }
     var b = d.body; b.innerHTML = ''; var s = score(), bd = band(s);
     saved.done = true; save();
     b.appendChild(CV.h('div', { class: 'qz-result' },
