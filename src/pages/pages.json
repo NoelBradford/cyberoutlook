@@ -3,7 +3,11 @@
     "slug": "check",
     "title": "Two-minute exposure check",
     "description": "Ten quick questions for UK firms with five to 50 staff. Get a score out of 10 and your cyber security gaps in order. Your answers stay in your browser.",
-    "intro": "Ten quick questions, about two minutes, for UK firms with five to 50 staff. You get a score out of 10 and your gaps in order, with a way to turn them into a plan.",
+    "intro": "Ten quick questions, about two minutes, for UK firms with five to 50 staff.",
+    "entry": {
+      "gets": ["Ten questions you can answer in a tap.", "A score out of 10 and your gaps, in order.", "A plan with owners and dates, if you want one."],
+      "stat": {"figure": "1 in 5", "text": "UK businesses were victims of a cyber crime", "source": "Cyber Security Breaches Survey 2025/26"}
+    },
     "features": [
       "108",
       "109",

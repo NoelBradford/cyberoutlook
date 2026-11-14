@@ -101,7 +101,10 @@ if not isinstance(manifest, list): fail('src/pages/pages.json must be a list')
 shell = rd(os.path.join(PAGES_DIR, 'shell.html'))
 m = re.search(r'<meta http-equiv="Content-Security-Policy" content="([^"]+)"', s)
 if not m: fail('could not find the Content-Security-Policy meta tag in index.html')
-CSP = m.group(1)   # taken from index.html, so every tool page carries exactly the report page policy
+CSP = m.group(1)   # taken from index.html, so every tool page carries the report page policy
+# The report embeds its fonts (#31); the tool pages still load them from Google Fonts, so they also allow those two hosts.
+CSP = CSP.replace("style-src 'self' 'unsafe-inline';", "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;", 1).replace('font-src data:;', 'font-src data: https://fonts.gstatic.com;', 1)
+if 'fonts.googleapis.com' not in CSP or 'fonts.gstatic.com' not in CSP: fail('could not widen the tool page policy for Google Fonts; the report policy changed shape')
 mc = re.search(r"const CACHE = '([^']+)'", rd(os.path.join(ROOT, 'sw.js')))
 if not mc: fail('could not find the CACHE name in sw.js')
 CACHE_NAME = mc.group(1)   # tool pages write into the service worker's cache, so the name comes from sw.js
@@ -119,6 +122,19 @@ m_q = re.search(r'<h3 id="h-what-to-do">.*?</h3>.*?(<ol>.*?</ol>)', s, re.S)
 if not m_q: fail('could not find the "What to do" heading and its list in index.html')
 if m_q.group(1).count('<li>') != 4: fail(f'expected four questions in the "What to do" list, found {m_q.group(1).count("<li>")}')
 REPORT_PART_HTML['it-questions'] = '<div class="prose">\n<h3 id="h-what-to-do">' + re.search(r'<h3 id="h-what-to-do">(.*?)</h3>', s, re.S).group(1) + '</h3>\n' + m_q.group(1) + '\n</div>'
+
+def entry_html(en, where):
+    """The optional "entry" block on a tool page: what the visitor gets, and one survey figure. Plain text in, escaped markup out."""
+    if not isinstance(en, dict): fail(f'{where}: "entry" must be an object')
+    gets, stat = en.get('gets', []), en.get('stat')
+    if not isinstance(gets, list) or not (1 <= len(gets) <= 4) or not all(isinstance(g, str) and g.strip() for g in gets): fail(f'{where}: entry "gets" must be one to four non-empty strings')
+    html = '<div class="entry-scale" aria-hidden="true">' + '<i></i>' * 10 + '</div>' + chr(10)
+    html += '<ul class="entry-gets" aria-label="What you get">' + ''.join(f'<li><span class="eg-n" aria-hidden="true">{i:02d}</span><span>{esc(g)}</span></li>' for i, g in enumerate(gets, 1)) + '</ul>\n'
+    if stat is not None:
+        if not isinstance(stat, dict) or not all(isinstance(stat.get(k), str) and stat[k].strip() for k in ('figure', 'text', 'source')): fail(f'{where}: entry "stat" needs non-empty "figure", "text" and "source"')
+        html += f'<p class="entry-stat"><b>{esc(stat["figure"])}</b><span>{esc(stat["text"])}</span><small>{esc(stat["source"])}</small></p>\n'
+    return html
+
 
 def hub_html(hub, where):
     # A list of plain links (no JavaScript needed). Cards come from the "card" of each tool page, in the order given.
@@ -185,6 +201,7 @@ for i, e in enumerate(manifest):
     out = shell
     # These two are markup, filled before the escaped plain-text values. Their own text is escaped here.
     out = out.replace('{{INTRO}}', f'<p class="page-intro">{esc(intro)}</p>\n' if intro.strip() else '')
+    out = out.replace('{{ENTRY}}', entry_html(e['entry'], where) if 'entry' in e else '')
     out = out.replace('{{HUB}}', hub_html(e['hub'], where) if 'hub' in e else '')
     out = out.replace('{{REPORT_PARTS}}', ('<div id="report-parts" hidden>\n' + '\n'.join(REPORT_PART_HTML[p_] for p_ in parts) + '\n</div>\n') if parts else '')
     for k, val in values.items(): out = out.replace('{{' + k + '}}', esc(val))

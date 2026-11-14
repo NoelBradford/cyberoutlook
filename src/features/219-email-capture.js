@@ -47,6 +47,7 @@
       post(body).then(function () {
         form.replaceWith(CV.h('p', { class: 'cap-done', role: 'status', tabindex: '-1' }, 'Now check your inbox. We have sent a link to confirm your address, and nothing else is sent until you open it.'));
         var d = document.querySelector('.cap-done'); if (d) d.focus();
+        if (opts.onDone) opts.onDone();
       }, function () {
         go.disabled = false;
         status.textContent = 'That did not work, and nothing was sent. Your result is still on this page. Please try again later.';
@@ -55,15 +56,20 @@
     return form;
   };
 
-  // The check result by email, after the result is shown and only on /check/. The result is always free and fully visible first.
-  if (CV.standalone) CV.on('check-result', function (r) {
-    var body = document.querySelector('#check .cv-dialog-body'); if (!body) return;
-    var h = body.querySelector('.qz-result h2'), band = h ? h.textContent.trim() : '';
+  // The check result by email, only on /check/. Offered after the full result is showing: straight away when there is no soft gate,
+  // or once someone has chosen to see the rest without emailing. When the soft gate is up, its own form does this job instead.
+  function resultCard(r) {
+    var body = document.querySelector('#check .cv-dialog-body'); if (!body || body.querySelector('.cap')) return;
+    var h = body.querySelector('.qz-result h2'), band = r.band || (h ? h.textContent.trim() : '');
     var card = CV.h('section', { class: 'cap', 'aria-label': 'Email me my result' },
       CV.h('p', { class: 'cv-kicker' }, 'Optional'), CV.h('h2', { class: 'cap-h' }, 'Email me my result'),
       CV.capture.form({ source: '/check/', topics: ['result'], button: 'Email me my result',
         sends: 'your address, your score, your band and the numbers of the questions with a gap (not your answers).',
         result: { score: r.score, band: band, gaps: r.gaps.map(function (g) { return g.i + 1; }) } }));
     var nav = body.querySelector('.qz-nav'); body.insertBefore(card, nav || null);
-  });
+  }
+  if (CV.standalone) {
+    CV.on('check-result', function (r) { if (!r.locked) resultCard(r); });
+    CV.on('check-result-optional', resultCard);
+  }
 })();

@@ -22,10 +22,10 @@ html.cv-modal-open { overflow: hidden; }
 a.tool { display: inline-block; text-decoration: none; }
 .tool.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .tool.primary:hover { background: var(--accent); border-color: var(--accent); }
-.cv-kicker { font: 600 0.72rem var(--font-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0; }
+.cv-kicker { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0; }
 .cv-pre { font: 400 0.88rem/1.5 ui-monospace, "SFMono-Regular", Menlo, monospace; white-space: pre-wrap; background: color-mix(in srgb, var(--accent) 6%, var(--paper)); border: 1px solid var(--rule); padding: 0.8rem 0.9rem; border-radius: 2px; max-height: 40vh; overflow: auto; margin: 0; }
 @media print { .cv-dialog, .cv-noprint { display: none !important; } }
 .cv-dialog-head h2:focus { outline: none; }
-.cv-dialog-head h2:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
+.cv-dialog-head h2:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .follow { display: grid; gap: 0.45rem; margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px solid var(--rule); }
-.follow-k { margin: 0 !important; font: 600 0.72rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.follow-k { margin: 0 !important; font: 600 0.75rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }

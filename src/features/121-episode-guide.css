@@ -9,7 +9,7 @@
 .ep-main b { font-weight: 600; font-size: 0.95rem; }
 .ep-meta { font-size: 0.78rem; color: color-mix(in srgb, var(--paper) 70%, transparent); }
 .ep-meta a { color: inherit; }
-.ep-state { font: 600 0.66rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.45rem; border-radius: 2px; border: 1px solid color-mix(in srgb, var(--paper) 30%, transparent); white-space: nowrap; }
+.ep-state { font: 600 0.75rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.45rem; border-radius: 2px; border: 1px solid color-mix(in srgb, var(--paper) 30%, transparent); white-space: nowrap; }
 .ep.out .ep-state { background: var(--signal); color: var(--ink); border-color: var(--signal); }
 .ep.next .ep-state { border-color: var(--signal); color: var(--signal); }
 .ep-guide .tool { color: var(--paper); border-color: color-mix(in srgb, var(--paper) 35%, transparent); }

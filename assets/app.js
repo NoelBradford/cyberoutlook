@@ -235,17 +235,43 @@ CV.ready(function () {
   ];
   var saved = CV.store.get('check', {});
   var SA = !!CV.standalone; // a page of its own (/check/): render inline in <main> instead of in a modal
+  // With the email capture switched on, an address can leave the browser when someone asks for their result, so the page says so.
+  if (SA && CV.capture && CV.capture.enabled) { var fp = CV.$('.page-foot-in p'); if (fp && fp.lastChild && fp.lastChild.nodeType === 3) fp.lastChild.textContent = '. Your answers stay in this browser. Nothing is sent unless you ask for your result by email.'; }
   var NOTE = 'Your answers stay in this browser. Benchmarks are from the Cyber Security Breaches Survey 2025/26 [source 1].';
+  var NOTE_PAGE = 'Benchmarks are from the Cyber Security Breaches Survey 2025/26 [source 1].'; // the page's own promise sits beside question 1
   // CV.inlineHost (src/pages/standalone.js) has the same shape as CV.dialog and the hooks 111-check-to-plan looks for.
-  var d = SA ? CV.inlineHost({ id: 'check', label: 'Two-minute exposure check', note: NOTE }) : CV.dialog({ id: 'check', title: 'Two-minute exposure check', wide: true, note: NOTE });
+  var d = SA ? CV.inlineHost({ id: 'check', label: 'Two-minute exposure check', note: NOTE_PAGE }) : CV.dialog({ id: 'check', title: 'Two-minute exposure check', wide: true, note: NOTE });
   var H = SA ? 'h2' : 'h3'; // the page already has an h1
   function intro(show) { var i = CV.$('.page-intro'); if (i) i.hidden = !show; }
+  // The 'what you get' rows and the survey figure are for before and during the check; the result replaces them.
+  // The scale behind the page: one bar per question. It fills as you answer and shows your score at the end.
+  function scale(n) { CV.$$('.entry-scale i').forEach(function (b, i) { b.classList.toggle('on', i < n); }); }
+  // The headline fills the width on one line (600px and up). Measured from the text as it is actually drawn, so it holds with web fonts,
+  // with the fallback font, and after the web font arrives. Phones keep the CSS size, where the title wraps to two lines.
+  function fitTitle() {
+    var h = CV.$('main h1'); if (!SA || !h || !CV.$('.entry-gets')) return;
+    h.style.fontSize = '';
+    if (CV.$('main').classList.contains('is-done') || !window.matchMedia('(min-width: 600px)').matches) return;
+    var r = document.createRange(); r.selectNodeContents(h);
+    var w = r.getBoundingClientRect().width, fs = parseFloat(getComputedStyle(h).fontSize), avail = h.clientWidth;
+    if (w > 0 && avail > 0) h.style.fontSize = (fs * avail / w * 0.995).toFixed(2) + 'px';
+  }
+  if (SA) { var fitSoon; var fitLater = function () { clearTimeout(fitSoon); fitSoon = setTimeout(fitTitle, 80); };
+    window.addEventListener('resize', fitLater); if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle); window.addEventListener('load', fitTitle); }
+  function entry(show) { CV.$$('.entry-gets, .entry-stat').forEach(function (e) { e.hidden = !show; }); var m = CV.$('main'); if (m) m.classList.toggle('is-done', !show); fitTitle(); }
   var step = 0;
   function answers() { return saved.a || {}; }
   function save() { CV.store.set('check', saved); CV.emit('check', saved); }
   function renderQ() {
     var b = d.body; b.innerHTML = '';
     var item = Q[step], a = answers()[step];
+    var fresh = step === 0 && !Object.keys(answers()).length;
+    // On the page itself the intro sits above question 1 only, and question 1 is there on arrival: no Start gate.
+    // With the entry layout the intro stays put through the questions, so the page does not jump; it goes at the result.
+    if (SA) { intro(fresh || !!CV.$('.entry-gets')); entry(true); scale(Object.keys(answers()).length); }
+    if (SA && fresh) b.appendChild(CV.h('p', { class: 'qz-promise' }, CV.capture && CV.capture.enabled ? 'Your answers stay in this browser. Nothing is sent unless you ask for your result by email.' : 'Nothing you enter leaves your browser.'));
+    if (SA && resumed) b.appendChild(CV.h('p', { class: 'qz-promise' }, 'Picking up where you left off. ',
+      CV.button('Start again', function () { saved = {}; save(); step = 0; resumed = false; renderQ(); })));
     var bar = CV.h('div', { class: 'qz-bar', 'aria-hidden': 'true' }, CV.h('span', { style: 'width:' + (step / Q.length * 100) + '%' }));
     b.appendChild(CV.h('p', { class: 'cv-kicker' }, 'Question ' + (step + 1) + ' of ' + Q.length));
     b.appendChild(bar);
@@ -270,10 +296,11 @@ CV.ready(function () {
     nav.appendChild(nextBtn);
     b.appendChild(nav);
     // Focus the question itself so screen readers announce it; the answers follow in tab order.
-    if (focusQ) legend.focus(); else { var first = fs.querySelector('input:checked') || fs.querySelector('input'); if (first) first.focus(); }
-    focusQ = false;
+    // Arriving on the page is not an action, so leave focus where the browser put it; every later step moves it.
+    if (focusQ) legend.focus(); else if (!quiet) { var first = fs.querySelector('input:checked') || fs.querySelector('input'); if (first) first.focus(); }
+    focusQ = false; quiet = false; resumed = false;
   }
-  var focusQ = false;
+  var focusQ = false, quiet = false, resumed = false;
   function next() { if (!answers()[step]) return; if (step < Q.length - 1) { step++; focusQ = true; renderQ(); } else renderResult(); }
   function score() { var s = 0, ans = answers(); Object.keys(ans).forEach(function (k) { if (ans[k] === 'yes') s++; }); return s; }
   CV.checkScore = function () { var ans = answers(); return Object.keys(ans).length === Q.length ? score() : null; };
@@ -281,31 +308,69 @@ CV.ready(function () {
   function band(s) { return s >= 8 ? ['Strong foundations', 'You’ve done most of what this report asks. Close the last gaps and test your plan.']
     : s >= 4 ? ['Halfway there', 'The basics are partly in place. The gaps below are mostly free to fix.']
     : ['Start with the basics', 'Most of what’s missing costs nothing but an afternoon. Start at the top of the list below.']; }
+  // A UK figure sits behind a small disclosure on the page itself, so a long result stays short. The first gap shows its figure.
+  function figure(text, open) {
+    var dt = CV.h('details', { class: 'qz-fig' }, CV.h('summary', null, 'UK figure'), CV.h('p', { class: 'qz-bench' }, text + ' [1]'));
+    if (open) dt.open = true;
+    return dt;
+  }
+  // The soft gate. Only on the page itself, only with the email capture switched on, and only when there is more than one gap.
+  // The score, the band and the biggest gap are free. The other gaps, the plan and the printable copy come with an email address
+  // (the capture form sends the score, band and gap numbers, never the answers) or with a click on "Show me without emailing".
+  // It is a courtesy to the visitor, not a lock: the list is already on their device. Once opened it stays open for this result.
+  function gate(b, gaps, s, bandName) {
+    var more = gaps.length - 1;
+    var box = CV.h('section', { class: 'qz-gate cap', 'aria-label': 'Your other gaps' },
+      CV.h(H, { class: 'qz-gate-h' }, more === 1 ? 'See your other gap' : 'See your other ' + more + ' gaps'),
+      CV.h('p', null, 'In order, with why each matters, and a plan you can print with owners and dates. We email it to you and show it here at once.'));
+    function open(skipped) {
+      saved.open = true; save();
+      CV.$$('.qz-gaps li', b).forEach(function (li) { li.hidden = false; });
+      var gh = b.querySelector('.qz-h'); if (gh) gh.textContent = 'Your gaps, in order';
+      var plan = b.querySelector('.qz-plan'); if (plan) plan.hidden = false;
+      if (skipped) {
+        box.remove();
+        CV.emit('check-result-optional', { score: s, band: bandName, gaps: gaps });
+        if (gh) gh.focus();
+      } else box.classList.add('is-sent');
+    }
+    box.appendChild(CV.capture.form({ source: '/check/', topics: ['result'], button: 'Email my result and show the rest',
+      sends: 'your address, your score, your band and the numbers of the questions with a gap (not your answers).',
+      result: { score: s, band: bandName, gaps: gaps.map(function (g) { return g.i + 1; }) }, onDone: function () { open(false); } }));
+    box.appendChild(CV.h('p', { class: 'qz-skip' }, CV.h('button', { type: 'button', onclick: function () { open(true); } }, 'Show me without emailing')));
+    return box;
+  }
   function renderResult() {
+    if (SA) { intro(false); entry(false); scale(score()); }
     var b = d.body; b.innerHTML = ''; var s = score(), bd = band(s);
     saved.done = true; save();
     b.appendChild(CV.h('div', { class: 'qz-result' },
       CV.h('div', { class: 'qz-score', 'aria-label': s + ' out of ' + Q.length }, CV.h('b', null, String(s)), CV.h('span', null, '/ ' + Q.length)),
       CV.h('div', null, CV.h('p', { class: 'cv-kicker' }, 'Your result'), CV.h(H, null, bd[0]), CV.h('p', null, bd[1]))));
     var gaps = CV.checkGaps();
+    var locked = SA && !!(CV.capture && CV.capture.enabled) && gaps.length > 1 && !saved.open;
     if (gaps.length) {
-      b.appendChild(CV.h(H, { class: 'qz-h' }, 'Your gaps, in order'));
+      b.appendChild(CV.h(H, { class: 'qz-h', tabindex: '-1' }, locked ? 'Your biggest gap' : 'Your gaps, in order'));
       var ol = CV.h('ol', { class: 'qz-gaps' });
-      gaps.forEach(function (g) {
+      gaps.forEach(function (g, gi) {
         var li = CV.h('li', null, CV.h('p', null, g.q.q + ' ', CV.h('span', { class: 'qz-ans qz-' + g.a }, g.a === 'no' ? 'No' : 'Not sure')));
-        if (g.q.bench) li.appendChild(CV.h('p', { class: 'qz-bench' }, g.q.bench + ' [1]'));
-        if (SA) { li.appendChild(standaloneGapRow(g)); ol.appendChild(li); return; }
-        var go = g.q.act ? CV.button('Show the action →', function () { d.close(); CV.goToAction(g.q.act); backPill(); })
-          : CV.button((g.q.goLabel || 'Go') + ' →', function () { d.close(); location.hash = g.q.go; backPill(); });
-        li.appendChild(CV.h('div', { class: 'cv-row' }, go));
+        if (g.q.bench) li.appendChild(SA ? figure(g.q.bench, gi === 0) : CV.h('p', { class: 'qz-bench' }, g.q.bench + ' [1]'));
+        if (SA) li.appendChild(standaloneGapRow(g));
+        else {
+          var go = g.q.act ? CV.button('Show the action →', function () { d.close(); CV.goToAction(g.q.act); backPill(); })
+            : CV.button((g.q.goLabel || 'Go') + ' →', function () { d.close(); location.hash = g.q.go; backPill(); });
+          li.appendChild(CV.h('div', { class: 'cv-row' }, go));
+        }
+        if (locked && gi > 0) li.hidden = true;
         ol.appendChild(li);
       });
       b.appendChild(ol);
+      if (locked) b.appendChild(gate(b, gaps, s, bd[0]));
     } else b.appendChild(CV.h('p', null, 'No gaps. Print the one-page plan and run a one-hour tabletop against it.'));
     b.appendChild(CV.h('div', { class: 'cv-row qz-nav' }, CV.button(SA ? 'Retake' : 'Start again', function () { saved = {}; save(); step = 0; focusQ = SA; renderQ(); }),
       SA ? CV.h('a', { class: 'tool', href: '../' }, 'Read the full report') : null));
     var rh = b.querySelector('.qz-result ' + H); if (rh) { rh.setAttribute('tabindex', '-1'); rh.focus(); }
-    CV.emit('check-result', { score: s, gaps: gaps });
+    CV.emit('check-result', { score: s, gaps: gaps, locked: locked });
   }
   // A standalone result has no report to jump around in: each gap links to where the report explains it, and can go in My plan.
   var planSyncs = [];
@@ -322,10 +387,6 @@ CV.ready(function () {
     }
     return row;
   }
-  function renderStart(partial) {
-    var b = d.body; b.innerHTML = ''; intro(true);
-    b.appendChild(CV.h('div', { class: 'cv-row qz-start' }, CV.button(partial ? 'Continue' : 'Start', function () { intro(false); focusQ = true; renderQ(); }, 'primary')));
-  }
   // Opening the check never throws away answers: a finished check shows its result, a half-finished one resumes.
   // Only "Start again" clears it.
   CV.openCheck = function () {
@@ -334,7 +395,7 @@ CV.ready(function () {
     if (saved.done) { d.open(); if (SA) intro(false); renderResult(); return; }
     var ans = answers(); step = 0; while (step < Q.length - 1 && ans[step]) step++;
     d.open();
-    if (SA) { renderStart(Object.keys(ans).length > 0); return; } // the page's own heading and intro sit above the Start button
+    if (SA) { quiet = true; resumed = Object.keys(ans).length > 0; }
     renderQ();
   };
   // After jumping from a gap to its fix, offer a way back that doesn't rely on the browser's Back button.
@@ -352,6 +413,8 @@ CV.ready(function () {
     if (card) { card.querySelector('b').textContent = 'Your exposure check'; card.querySelector('.p-sub').textContent = 'See your result and your gaps again.'; }
     var cc = CV.$('.cc-btn'); if (cc) cc.textContent = 'See your check result';
   }
+  // The cover carries the same scale: it fills as the check progresses and shows the score once it is done.
+  if (!SA) { var coverScale = function () { var s = CV.checkScore(); scale(s === null ? Object.keys(answers()).length : s); }; coverScale(); CV.on('check', coverScale); }
   if (!SA && location.hash === '#check') CV.openCheck();
   // Row ids are added above, after the browser has already looked for the target, so a link such as /#act-t3-1 needs a nudge.
   var hit = /^#act-(t\d+-\d+)$/.exec(location.hash);
@@ -528,9 +591,10 @@ CV.ready(function () {
         if (fresh.length) CV.toast(fresh.length + ' action' + (fresh.length === 1 ? '' : 's') + ' added to your plan');
         d.close(); CV.plan.open();
       }, 'primary'));
-      // On the report the next step sits above the gaps. On a page of its own it closes the result, above Retake and the link to the report.
-      var anchor = CV.standalone ? body.querySelector('.qz-nav') : body.querySelector('.qz-h');
-      body.insertBefore(box, anchor || null);
+      // The next step sits straight after the score, above the gaps, on the report and on a page of its own. It waits behind the
+      // soft gate (src/features/108) because it adds every gap to the plan.
+      if (r.locked) box.hidden = true;
+      body.insertBefore(box, body.querySelector('.qz-h') || null);
     }
   });
 });
@@ -3163,6 +3227,7 @@ CV.ready(function () {
       post(body).then(function () {
         form.replaceWith(CV.h('p', { class: 'cap-done', role: 'status', tabindex: '-1' }, 'Now check your inbox. We have sent a link to confirm your address, and nothing else is sent until you open it.'));
         var d = document.querySelector('.cap-done'); if (d) d.focus();
+        if (opts.onDone) opts.onDone();
       }, function () {
         go.disabled = false;
         status.textContent = 'That did not work, and nothing was sent. Your result is still on this page. Please try again later.';
@@ -3171,17 +3236,22 @@ CV.ready(function () {
     return form;
   };
 
-  // The check result by email, after the result is shown and only on /check/. The result is always free and fully visible first.
-  if (CV.standalone) CV.on('check-result', function (r) {
-    var body = document.querySelector('#check .cv-dialog-body'); if (!body) return;
-    var h = body.querySelector('.qz-result h2'), band = h ? h.textContent.trim() : '';
+  // The check result by email, only on /check/. Offered after the full result is showing: straight away when there is no soft gate,
+  // or once someone has chosen to see the rest without emailing. When the soft gate is up, its own form does this job instead.
+  function resultCard(r) {
+    var body = document.querySelector('#check .cv-dialog-body'); if (!body || body.querySelector('.cap')) return;
+    var h = body.querySelector('.qz-result h2'), band = r.band || (h ? h.textContent.trim() : '');
     var card = CV.h('section', { class: 'cap', 'aria-label': 'Email me my result' },
       CV.h('p', { class: 'cv-kicker' }, 'Optional'), CV.h('h2', { class: 'cap-h' }, 'Email me my result'),
       CV.capture.form({ source: '/check/', topics: ['result'], button: 'Email me my result',
         sends: 'your address, your score, your band and the numbers of the questions with a gap (not your answers).',
         result: { score: r.score, band: band, gaps: r.gaps.map(function (g) { return g.i + 1; }) } }));
     var nav = body.querySelector('.qz-nav'); body.insertBefore(card, nav || null);
-  });
+  }
+  if (CV.standalone) {
+    CV.on('check-result', function (r) { if (!r.locked) resultCard(r); });
+    CV.on('check-result-optional', resultCard);
+  }
 })();
 
 /* --- src/features/220-report-gate.js --- */

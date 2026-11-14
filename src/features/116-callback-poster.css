@@ -5,7 +5,7 @@
 .pst-rule { font: 600 1.15rem/1.35 var(--font-body); margin: 0; }
 .poster ol { margin: 0; padding-left: 1.3rem; display: grid; gap: 0.35rem; font-size: 0.95rem; }
 .pst-who { margin: 0; padding: 0.6rem 0.8rem; background: #f6ecd5; font-size: 0.95rem; }
-.pst-src { margin: 0; font-size: 0.7rem; color: #4a5960; }
+.pst-src { margin: 0; font-size: 0.75rem; color: #4a5960; }
 .pst-preview { max-height: 46vh; overflow: auto; }
 .cv-sheet { display: none; }
 @media print {

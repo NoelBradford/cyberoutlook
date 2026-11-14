@@ -16,9 +16,10 @@ CV.ready(function () {
         if (fresh.length) CV.toast(fresh.length + ' action' + (fresh.length === 1 ? '' : 's') + ' added to your plan');
         d.close(); CV.plan.open();
       }, 'primary'));
-      // On the report the next step sits above the gaps. On a page of its own it closes the result, above Retake and the link to the report.
-      var anchor = CV.standalone ? body.querySelector('.qz-nav') : body.querySelector('.qz-h');
-      body.insertBefore(box, anchor || null);
+      // The next step sits straight after the score, above the gaps, on the report and on a page of its own. It waits behind the
+      // soft gate (src/features/108) because it adds every gap to the plan.
+      if (r.locked) box.hidden = true;
+      body.insertBefore(box, body.querySelector('.qz-h') || null);
     }
   });
 });

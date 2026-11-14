@@ -6,6 +6,6 @@
 .ph-grid { display: grid; gap: 0.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr)); }
 .ph-tile { display: grid; gap: 0.15rem; text-align: left; padding: 0.8rem 0.85rem; border: 1px solid var(--rule); border-radius: 3px; background: var(--paper); color: var(--ink); cursor: pointer; font-family: var(--font-ui); }
 .ph-tile:hover, .ph-tile:focus-visible { border-color: var(--accent); }
-.ph-l { font: 600 0.68rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+.ph-l { font: 600 0.75rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
 .ph-tile b { font: 700 2rem/1 var(--font-head); font-variant-numeric: tabular-nums; }
 .ph-s { font-size: 0.76rem; color: var(--muted); }
