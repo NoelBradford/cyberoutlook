@@ -101,7 +101,10 @@ if not isinstance(manifest, list): fail('src/pages/pages.json must be a list')
 shell = rd(os.path.join(PAGES_DIR, 'shell.html'))
 m = re.search(r'<meta http-equiv="Content-Security-Policy" content="([^"]+)"', s)
 if not m: fail('could not find the Content-Security-Policy meta tag in index.html')
-CSP = m.group(1)   # taken from index.html, so every tool page carries exactly the report page policy
+CSP = m.group(1)   # taken from index.html, so every tool page carries the report page policy
+# The report embeds its fonts (#31); the tool pages still load them from Google Fonts, so they also allow those two hosts.
+CSP = CSP.replace("style-src 'self' 'unsafe-inline';", "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;", 1).replace('font-src data:;', 'font-src data: https://fonts.gstatic.com;', 1)
+if 'fonts.googleapis.com' not in CSP or 'fonts.gstatic.com' not in CSP: fail('could not widen the tool page policy for Google Fonts; the report policy changed shape')
 mc = re.search(r"const CACHE = '([^']+)'", rd(os.path.join(ROOT, 'sw.js')))
 if not mc: fail('could not find the CACHE name in sw.js')
 CACHE_NAME = mc.group(1)   # tool pages write into the service worker's cache, so the name comes from sw.js

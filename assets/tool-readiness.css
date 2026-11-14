@@ -16,6 +16,7 @@
   --font-head: "Barlow Condensed", "Barlow Fallback", sans-serif;
   --font-body: "Source Serif 4", Georgia, serif;
   --font-ui: "IBM Plex Sans", "Plex Fallback", sans-serif;
+  --focus: #0d5b60;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -26,6 +27,7 @@
     --accent: #62b8b5;
     --signal: #e6b043;
     --rule: #2b3a42;
+    --focus: #e6b043;
     color-scheme: dark;
   }
 }
@@ -36,6 +38,7 @@
   --accent: #62b8b5;
   --signal: #e6b043;
   --rule: #2b3a42;
+  --focus: #e6b043;
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
@@ -53,7 +56,7 @@ body {
 }
 a { color: var(--accent); text-underline-offset: 0.18em; text-decoration-thickness: 1px; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
 a:hover { text-decoration-thickness: 2px; text-decoration-color: currentColor; }
-:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; border-radius: 2px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
 h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.08; text-wrap: balance; margin: 0; font-weight: 700; letter-spacing: 0.005em; }
 p, li { text-wrap: pretty; }
 .skip { position: absolute; left: -9999px; }
@@ -186,7 +189,7 @@ a.tool { display: inline-block; text-decoration: none; }
 .cv-pre { font: 400 0.88rem/1.5 ui-monospace, "SFMono-Regular", Menlo, monospace; white-space: pre-wrap; background: color-mix(in srgb, var(--accent) 6%, var(--paper)); border: 1px solid var(--rule); padding: 0.8rem 0.9rem; border-radius: 2px; max-height: 40vh; overflow: auto; margin: 0; }
 @media print { .cv-dialog, .cv-noprint { display: none !important; } }
 .cv-dialog-head h2:focus { outline: none; }
-.cv-dialog-head h2:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
+.cv-dialog-head h2:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .follow { display: grid; gap: 0.45rem; margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px solid var(--rule); }
 .follow-k { margin: 0 !important; font: 600 0.75rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 
@@ -202,7 +205,7 @@ a.tool { display: inline-block; text-decoration: none; }
 .ce-o input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
 .ce-o label { display: inline-block; padding: 0.4rem 1rem; border: 2px solid var(--rule); border-radius: 999px; font: 600 0.85rem var(--font-ui); cursor: pointer; min-height: 38px; }
 .ce-o input:checked + label { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.ce-o input:focus-visible + label { outline: 3px solid var(--signal); outline-offset: 2px; }
+.ce-o input:focus-visible + label { outline: 3px solid var(--focus); outline-offset: 2px; }
 .ce-fix { font-size: 0.86rem; border-left: 3px solid var(--signal); padding-left: 0.6rem; }
 .ce-res { padding: 0.8rem 0.9rem; border-radius: 3px; }
 .ce-res.ok { background: color-mix(in srgb, var(--accent) 12%, var(--paper)); border-left: 6px solid var(--accent); }

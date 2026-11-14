@@ -39,6 +39,12 @@ CV.ready(function () {
   function renderQ() {
     var b = d.body; b.innerHTML = '';
     var item = Q[step], a = answers()[step];
+    var fresh = step === 0 && !Object.keys(answers()).length;
+    // On the page itself the intro sits above question 1 only, and question 1 is there on arrival: no Start gate.
+    if (SA) intro(fresh);
+    if (SA && fresh) b.appendChild(CV.h('p', { class: 'qz-promise' }, 'Your answers stay in this browser. Nothing is sent anywhere.'));
+    if (SA && resumed) b.appendChild(CV.h('p', { class: 'qz-promise' }, 'Picking up where you left off. ',
+      CV.button('Start again', function () { saved = {}; save(); step = 0; resumed = false; renderQ(); })));
     var bar = CV.h('div', { class: 'qz-bar', 'aria-hidden': 'true' }, CV.h('span', { style: 'width:' + (step / Q.length * 100) + '%' }));
     b.appendChild(CV.h('p', { class: 'cv-kicker' }, 'Question ' + (step + 1) + ' of ' + Q.length));
     b.appendChild(bar);
@@ -63,10 +69,11 @@ CV.ready(function () {
     nav.appendChild(nextBtn);
     b.appendChild(nav);
     // Focus the question itself so screen readers announce it; the answers follow in tab order.
-    if (focusQ) legend.focus(); else { var first = fs.querySelector('input:checked') || fs.querySelector('input'); if (first) first.focus(); }
-    focusQ = false;
+    // Arriving on the page is not an action, so leave focus where the browser put it; every later step moves it.
+    if (focusQ) legend.focus(); else if (!quiet) { var first = fs.querySelector('input:checked') || fs.querySelector('input'); if (first) first.focus(); }
+    focusQ = false; quiet = false; resumed = false;
   }
-  var focusQ = false;
+  var focusQ = false, quiet = false, resumed = false;
   function next() { if (!answers()[step]) return; if (step < Q.length - 1) { step++; focusQ = true; renderQ(); } else renderResult(); }
   function score() { var s = 0, ans = answers(); Object.keys(ans).forEach(function (k) { if (ans[k] === 'yes') s++; }); return s; }
   CV.checkScore = function () { var ans = answers(); return Object.keys(ans).length === Q.length ? score() : null; };
@@ -115,10 +122,6 @@ CV.ready(function () {
     }
     return row;
   }
-  function renderStart(partial) {
-    var b = d.body; b.innerHTML = ''; intro(true);
-    b.appendChild(CV.h('div', { class: 'cv-row qz-start' }, CV.button(partial ? 'Continue' : 'Start', function () { intro(false); focusQ = true; renderQ(); }, 'primary')));
-  }
   // Opening the check never throws away answers: a finished check shows its result, a half-finished one resumes.
   // Only "Start again" clears it.
   CV.openCheck = function () {
@@ -127,7 +130,7 @@ CV.ready(function () {
     if (saved.done) { d.open(); if (SA) intro(false); renderResult(); return; }
     var ans = answers(); step = 0; while (step < Q.length - 1 && ans[step]) step++;
     d.open();
-    if (SA) { renderStart(Object.keys(ans).length > 0); return; } // the page's own heading and intro sit above the Start button
+    if (SA) { quiet = true; resumed = Object.keys(ans).length > 0; }
     renderQ();
   };
   // After jumping from a gap to its fix, offer a way back that doesn't rely on the browser's Back button.

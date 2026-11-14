@@ -11,4 +11,4 @@
 @media (pointer: coarse) { .search-tool kbd { display: none; } }
 
 .sr-lab { display: block; font-weight: 600; margin: 0 0 0.35rem; }
-.sr-hit:focus { outline: 3px solid var(--signal); outline-offset: 4px; }
+.sr-hit:focus { outline: 3px solid var(--focus); outline-offset: 4px; }
