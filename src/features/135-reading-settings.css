@@ -2,7 +2,7 @@ html.rs-on main .prose, html.rs-on main .call, html.rs-on main .example, html.rs
 html.rs-on main .prose .lead { font-size: calc(1.3rem * var(--rs-size, 1)); }
 html[data-font="easy"] main .prose, html[data-font="easy"] main .call, html[data-font="easy"] main .example, html[data-font="easy"] main .box, html[data-font="easy"] .rs-sample, html[data-font="easy"] main td { font-family: "Atkinson Hyperlegible", var(--font-ui); letter-spacing: 0.01em; }
 html[data-font="sans"] main .prose, html[data-font="sans"] main .call, html[data-font="sans"] main .example, html[data-font="sans"] main .box, html[data-font="sans"] .rs-sample { font-family: var(--font-ui); }
-html.rs-on main .prose { max-width: 68ch; }
+html.rs-on main .prose { max-width: none; }
 .rs-row { display: grid; gap: 0.4rem; }
 .rs-seg { display: flex; flex-wrap: wrap; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; width: fit-content; max-width: 100%; }
 .rs-opt { font: 600 0.88rem var(--font-ui); padding: 0.55rem 0.9rem; min-height: 44px; background: transparent; color: var(--ink); border: 0; border-right: 1px solid var(--rule); cursor: pointer; }

@@ -468,7 +468,7 @@ html.rs-on main .prose, html.rs-on main .call, html.rs-on main .example, html.rs
 html.rs-on main .prose .lead { font-size: calc(1.3rem * var(--rs-size, 1)); }
 html[data-font="easy"] main .prose, html[data-font="easy"] main .call, html[data-font="easy"] main .example, html[data-font="easy"] main .box, html[data-font="easy"] .rs-sample, html[data-font="easy"] main td { font-family: "Atkinson Hyperlegible", var(--font-ui); letter-spacing: 0.01em; }
 html[data-font="sans"] main .prose, html[data-font="sans"] main .call, html[data-font="sans"] main .example, html[data-font="sans"] main .box, html[data-font="sans"] .rs-sample { font-family: var(--font-ui); }
-html.rs-on main .prose { max-width: 68ch; }
+html.rs-on main .prose { max-width: none; }
 .rs-row { display: grid; gap: 0.4rem; }
 .rs-seg { display: flex; flex-wrap: wrap; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; width: fit-content; max-width: 100%; }
 .rs-opt { font: 600 0.88rem var(--font-ui); padding: 0.55rem 0.9rem; min-height: 44px; background: transparent; color: var(--ink); border: 0; border-right: 1px solid var(--rule); cursor: pointer; }
@@ -863,7 +863,7 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
 .aw .wb-x { color: var(--ink); }
 
 /* --- src/features/173-listen-next.css --- */
-.lnx { margin: 1.8rem 0 0; max-width: 65ch; display: grid; gap: 0.5rem; font-family: var(--font-ui); }
+.lnx { margin: 1.8rem 0 0; max-width: none; display: grid; gap: 0.5rem; font-family: var(--font-ui); }
 .lnx ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
 .lnx a { display: grid; grid-template-columns: 2.4rem 1fr; gap: 0.7rem; align-items: center; padding: 0.6rem 0.7rem; border: 1px solid var(--rule); border-radius: 3px; text-decoration: none; color: var(--ink); }
 .lnx a:hover, .lnx a:focus-visible { border-color: var(--signal); }
@@ -1026,6 +1026,8 @@ figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em;
 .sn { display: none; }
 @media (min-width: 1500px) {
   body.sn-on .layout { max-width: 1480px; }
+  /* Text runs the full line, less the sidenote column, so text and notes together match the section rule */
+  body.sn-on main .prose, body.sn-on main .call, body.sn-on main .box, body.sn-on main .example, body.sn-on main .lnx { max-width: calc(100% - 230px - 2.4rem); }
   body.sn-on .sn { display: block; position: absolute; left: calc(100% + 2.4rem); width: 230px; margin-top: 0.2rem; font: 400 0.72rem/1.4 var(--font-ui); color: var(--muted); }
   body.sn-on .sn ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
   body.sn-on .sn li { margin: 0; padding-left: 0.6rem; border-left: 2px solid var(--rule); }

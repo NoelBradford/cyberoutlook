@@ -1,4 +1,4 @@
-.lnx { margin: 1.8rem 0 0; max-width: 65ch; display: grid; gap: 0.5rem; font-family: var(--font-ui); }
+.lnx { margin: 1.8rem 0 0; max-width: none; display: grid; gap: 0.5rem; font-family: var(--font-ui); }
 .lnx ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
 .lnx a { display: grid; grid-template-columns: 2.4rem 1fr; gap: 0.7rem; align-items: center; padding: 0.6rem 0.7rem; border: 1px solid var(--rule); border-radius: 3px; text-decoration: none; color: var(--ink); }
 .lnx a:hover, .lnx a:focus-visible { border-color: var(--signal); }
