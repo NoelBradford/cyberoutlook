@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-14T15:11:55.654Z",
+  "generatedAt": "2026-11-14T15:52:23.944Z",
   "title": "Design System: CyberOutlook",
   "extensions": {
     "colorMeta": {
@@ -263,7 +263,7 @@
       },
       {
         "name": "The Sixty-Five Rule",
-        "body": "Reading text stops at 65ch whatever the viewport.",
+        "body": "Reading text stops at 65ch whatever the viewport. *Pending: draft PR #33 removes this cap so text, titles and forecasts run the full width of the column (about 100 characters on wide screens). Until the owner merges it, 65ch is the shipped measure. Update this rule and the Layout section once #33's outcome is decided.*",
         "section": "typography"
       },
       {
