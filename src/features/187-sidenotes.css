@@ -1,7 +1,11 @@
 .sn { display: none; }
 @media (min-width: 1500px) {
   body.sn-on .layout { max-width: 1480px; }
-  body.sn-on .sn { display: block; position: absolute; left: calc(100% + 2.4rem); width: 230px; margin-top: 0.2rem; font: 400 0.72rem/1.4 var(--font-ui); color: var(--muted); }
+  /* Each note floats to the right of its own paragraph inside the text column. Only paragraphs with a
+     note give up the space; everything else runs the full width of the column, out to the section rule. */
+  body.sn-on .sn { display: block; float: right; clear: right; position: static; width: 230px; margin: 0.2rem 0 0.8rem 2.4rem; font: 400 0.72rem/1.4 var(--font-ui); color: var(--muted); }
+  body.sn-on .sn ~ p { display: flow-root; }
+  body.sn-on .sn.sn-off { display: none; }
   body.sn-on .sn ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
   body.sn-on .sn li { margin: 0; padding-left: 0.6rem; border-left: 2px solid var(--rule); }
   body.sn-on .sn a { font-weight: 700; color: var(--accent); text-decoration: none; margin-right: 0.2rem; }

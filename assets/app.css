@@ -468,7 +468,7 @@ html.rs-on main .prose, html.rs-on main .call, html.rs-on main .example, html.rs
 html.rs-on main .prose .lead { font-size: calc(1.3rem * var(--rs-size, 1)); }
 html[data-font="easy"] main .prose, html[data-font="easy"] main .call, html[data-font="easy"] main .example, html[data-font="easy"] main .box, html[data-font="easy"] .rs-sample, html[data-font="easy"] main td { font-family: "Atkinson Hyperlegible", var(--font-ui); letter-spacing: 0.01em; }
 html[data-font="sans"] main .prose, html[data-font="sans"] main .call, html[data-font="sans"] main .example, html[data-font="sans"] main .box, html[data-font="sans"] .rs-sample { font-family: var(--font-ui); }
-html.rs-on main .prose { max-width: 68ch; }
+html.rs-on main .prose { max-width: none; }
 .rs-row { display: grid; gap: 0.4rem; }
 .rs-seg { display: flex; flex-wrap: wrap; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; width: fit-content; max-width: 100%; }
 .rs-opt { font: 600 0.88rem var(--font-ui); padding: 0.55rem 0.9rem; min-height: 44px; background: transparent; color: var(--ink); border: 0; border-right: 1px solid var(--rule); cursor: pointer; }
@@ -659,12 +659,12 @@ canvas.pm { display: block; width: 100%; max-width: 640px; height: 150px; margin
 .section.opener { position: relative; padding-top: 4.5rem; }
 .op-num { position: absolute; right: 0; top: 0.6rem; font: 700 clamp(8rem, 22vw, 15rem)/0.8 var(--font-head); color: transparent; -webkit-text-stroke: 2px color-mix(in srgb, var(--accent) 40%, transparent); pointer-events: none; user-select: none; z-index: 0; }
 .op-4 .op-num { -webkit-text-stroke-color: color-mix(in srgb, var(--signal) 55%, transparent); }
-.section.opener > h2 { position: relative; z-index: 1; font-size: clamp(2.6rem, 6.5vw, 4.4rem); max-width: 14ch; line-height: 0.98; }
+.section.opener > h2 { position: relative; z-index: 1; font-size: clamp(2.6rem, 6.5vw, 4.4rem); max-width: none; line-height: 0.98; padding-right: calc(clamp(8rem, 22vw, 15rem) * 0.55 + 1.5rem); } /* title runs to the big number, so title + number fill the line */
 .section.opener > .sec-num { position: relative; z-index: 1; }
-.section.opener .forecast { position: relative; z-index: 1; font-size: clamp(1.8rem, 4.2vw, 2.6rem); max-width: 26ch; background: var(--paper); padding-top: 0.2rem; padding-bottom: 0.2rem; }
+.section.opener .forecast { position: relative; z-index: 1; font-size: clamp(1.8rem, 4.2vw, 2.6rem); max-width: none; background: var(--paper); padding-top: 0.2rem; padding-bottom: 0.2rem; }
 .section.opener::before { content: ""; position: absolute; left: 0; top: -2px; width: min(240px, 40%); height: 8px; background: var(--accent); }
 .section.op-4::before { background: var(--signal); }
-@media (max-width: 600px) { .op-num { top: 1.4rem; font-size: 7.5rem; } .section.opener { padding-top: 3.5rem; } }
+@media (max-width: 600px) { .op-num { top: 1.4rem; font-size: 7.5rem; } .section.opener { padding-top: 3.5rem; } .section.opener > h2 { padding-right: calc(7.5rem * 0.55 + 1rem); } }
 @media print { .op-num { display: none; } .section.opener::before { display: none; } }
 
 /* --- src/features/153-sources-explorer.css --- */
@@ -863,7 +863,7 @@ body[data-lens="facts"] main .prose p:not(.lens-fact), body[data-lens="calls"] m
 .aw .wb-x { color: var(--ink); }
 
 /* --- src/features/173-listen-next.css --- */
-.lnx { margin: 1.8rem 0 0; max-width: 65ch; display: grid; gap: 0.5rem; font-family: var(--font-ui); }
+.lnx { margin: 1.8rem 0 0; max-width: none; display: grid; gap: 0.5rem; font-family: var(--font-ui); }
 .lnx ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
 .lnx a { display: grid; grid-template-columns: 2.4rem 1fr; gap: 0.7rem; align-items: center; padding: 0.6rem 0.7rem; border: 1px solid var(--rule); border-radius: 3px; text-decoration: none; color: var(--ink); }
 .lnx a:hover, .lnx a:focus-visible { border-color: var(--signal); }
@@ -1026,7 +1026,11 @@ figure.pq figcaption { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em;
 .sn { display: none; }
 @media (min-width: 1500px) {
   body.sn-on .layout { max-width: 1480px; }
-  body.sn-on .sn { display: block; position: absolute; left: calc(100% + 2.4rem); width: 230px; margin-top: 0.2rem; font: 400 0.72rem/1.4 var(--font-ui); color: var(--muted); }
+  /* Each note floats to the right of its own paragraph inside the text column. Only paragraphs with a
+     note give up the space; everything else runs the full width of the column, out to the section rule. */
+  body.sn-on .sn { display: block; float: right; clear: right; position: static; width: 230px; margin: 0.2rem 0 0.8rem 2.4rem; font: 400 0.72rem/1.4 var(--font-ui); color: var(--muted); }
+  body.sn-on .sn ~ p { display: flow-root; }
+  body.sn-on .sn.sn-off { display: none; }
   body.sn-on .sn ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
   body.sn-on .sn li { margin: 0; padding-left: 0.6rem; border-left: 2px solid var(--rule); }
   body.sn-on .sn a { font-weight: 700; color: var(--accent); text-decoration: none; margin-right: 0.2rem; }

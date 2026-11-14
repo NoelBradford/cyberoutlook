@@ -13,7 +13,23 @@ CV.ready(function () {
       if (items.length) CV.margin.add(p, CV.h('aside', { class: 'sn', 'aria-hidden': 'true' }, CV.h('ol', null, items)));
     });
   }
-  function apply() { if (mq.matches) build(); document.body.classList.toggle('sn-on', mq.matches); CV.margin.place(); }
+  // A note floats beside its own paragraph. If something above (the author photo, or a long earlier note)
+  // pushes it below the end of that paragraph, it would sit beside the wrong text, so it is hidden there:
+  // the citation number stays in the text and the source stays in the Sources list.
+  function fit() {
+    var notes = CV.$$('main .sn');
+    notes.forEach(function (n) { n.classList.toggle('sn-off', false); });
+    if (!mq.matches) return;
+    notes.forEach(function (n) {
+      var p = n.nextElementSibling; while (p && p.tagName !== 'P') p = p.nextElementSibling;
+      if (!p || !n.offsetParent) return;
+      if (n.getBoundingClientRect().top > p.getBoundingClientRect().bottom - 4) n.classList.toggle('sn-off', true);
+    });
+  }
+  var t; function soon() { clearTimeout(t); t = setTimeout(fit, 120); }
+  function apply() { if (mq.matches) build(); document.body.classList.toggle('sn-on', mq.matches); CV.margin.place(); fit(); }
   if (mq.addEventListener) mq.addEventListener('change', apply);
+  window.addEventListener('resize', soon);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
   apply();
 });

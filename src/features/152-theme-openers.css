@@ -1,10 +1,10 @@
 .section.opener { position: relative; padding-top: 4.5rem; }
 .op-num { position: absolute; right: 0; top: 0.6rem; font: 700 clamp(8rem, 22vw, 15rem)/0.8 var(--font-head); color: transparent; -webkit-text-stroke: 2px color-mix(in srgb, var(--accent) 40%, transparent); pointer-events: none; user-select: none; z-index: 0; }
 .op-4 .op-num { -webkit-text-stroke-color: color-mix(in srgb, var(--signal) 55%, transparent); }
-.section.opener > h2 { position: relative; z-index: 1; font-size: clamp(2.6rem, 6.5vw, 4.4rem); max-width: 14ch; line-height: 0.98; }
+.section.opener > h2 { position: relative; z-index: 1; font-size: clamp(2.6rem, 6.5vw, 4.4rem); max-width: none; line-height: 0.98; padding-right: calc(clamp(8rem, 22vw, 15rem) * 0.55 + 1.5rem); } /* title runs to the big number, so title + number fill the line */
 .section.opener > .sec-num { position: relative; z-index: 1; }
-.section.opener .forecast { position: relative; z-index: 1; font-size: clamp(1.8rem, 4.2vw, 2.6rem); max-width: 26ch; background: var(--paper); padding-top: 0.2rem; padding-bottom: 0.2rem; }
+.section.opener .forecast { position: relative; z-index: 1; font-size: clamp(1.8rem, 4.2vw, 2.6rem); max-width: none; background: var(--paper); padding-top: 0.2rem; padding-bottom: 0.2rem; }
 .section.opener::before { content: ""; position: absolute; left: 0; top: -2px; width: min(240px, 40%); height: 8px; background: var(--accent); }
 .section.op-4::before { background: var(--signal); }
-@media (max-width: 600px) { .op-num { top: 1.4rem; font-size: 7.5rem; } .section.opener { padding-top: 3.5rem; } }
+@media (max-width: 600px) { .op-num { top: 1.4rem; font-size: 7.5rem; } .section.opener { padding-top: 3.5rem; } .section.opener > h2 { padding-right: calc(7.5rem * 0.55 + 1rem); } }
 @media print { .op-num { display: none; } .section.opener::before { display: none; } }
