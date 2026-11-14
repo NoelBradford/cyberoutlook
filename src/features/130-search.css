@@ -4,10 +4,10 @@
 .sr-res { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.3rem; max-height: 52vh; overflow: auto; }
 .sr-item { display: grid; gap: 0.2rem; width: 100%; text-align: left; padding: 0.6rem 0.7rem; background: transparent; border: 1px solid var(--rule); border-radius: 2px; color: var(--ink); cursor: pointer; font: 400 0.9rem/1.4 var(--font-ui); }
 .sr-item:hover, .sr-item:focus-visible { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--paper)); }
-.sr-sec { font: 600 0.68rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+.sr-sec { font: 600 0.75rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
 .sr-snip mark { background: color-mix(in srgb, var(--signal) 45%, transparent); color: inherit; padding: 0 1px; }
 .sr-hit { outline: 3px solid var(--signal); outline-offset: 4px; border-radius: 2px; transition: outline-color 0.6s; }
-.search-tool kbd { font: 600 0.7rem var(--font-ui); border: 1px solid var(--rule); border-radius: 2px; padding: 0 0.3rem; margin-left: 0.4rem; color: var(--muted); }
+.search-tool kbd { font: 600 0.75rem var(--font-ui); border: 1px solid var(--rule); border-radius: 2px; padding: 0 0.3rem; margin-left: 0.4rem; color: var(--muted); }
 @media (pointer: coarse) { .search-tool kbd { display: none; } }
 
 .sr-lab { display: block; font-weight: 600; margin: 0 0 0.35rem; }

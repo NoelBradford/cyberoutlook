@@ -81,7 +81,7 @@ main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 1rem; }
 .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px); opacity: 0; visibility: hidden; background: var(--ink); color: var(--paper); font: 500 0.88rem var(--font-ui); padding: 0.6rem 1rem; border-radius: 3px; z-index: 30; transition: transform 0.2s, opacity 0.2s, visibility 0.2s; max-width: calc(100vw - 32px); }
 .toast.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
 @media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
-.chip { display: inline-block; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 2px; border: 1px solid currentColor; }
+.chip { display: inline-block; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 2px; border: 1px solid currentColor; }
 .chip.none { color: var(--accent); }
 .chip.modest { color: var(--ink); background: #f3e2bd; background: color-mix(in srgb, var(--signal) 22%, transparent); border-color: var(--signal); }
 .chip.planned { color: var(--paper); background: var(--ink); border-color: var(--ink); }
@@ -182,13 +182,13 @@ html.cv-modal-open { overflow: hidden; }
 a.tool { display: inline-block; text-decoration: none; }
 .tool.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .tool.primary:hover { background: var(--accent); border-color: var(--accent); }
-.cv-kicker { font: 600 0.72rem var(--font-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0; }
+.cv-kicker { font: 600 0.75rem var(--font-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0; }
 .cv-pre { font: 400 0.88rem/1.5 ui-monospace, "SFMono-Regular", Menlo, monospace; white-space: pre-wrap; background: color-mix(in srgb, var(--accent) 6%, var(--paper)); border: 1px solid var(--rule); padding: 0.8rem 0.9rem; border-radius: 2px; max-height: 40vh; overflow: auto; margin: 0; }
 @media print { .cv-dialog, .cv-noprint { display: none !important; } }
 .cv-dialog-head h2:focus { outline: none; }
 .cv-dialog-head h2:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
 .follow { display: grid; gap: 0.45rem; margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px solid var(--rule); }
-.follow-k { margin: 0 !important; font: 600 0.72rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.follow-k { margin: 0 !important; font: 600 0.75rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 
 /* --- src/features/116-callback-poster.css --- */
 .poster { font-family: var(--font-ui); color: #15222b; background: #fff; border: 3px solid #15222b; padding: 1.4rem 1.4rem 1.1rem; display: grid; gap: 0.7rem; }
@@ -198,7 +198,7 @@ a.tool { display: inline-block; text-decoration: none; }
 .pst-rule { font: 600 1.15rem/1.35 var(--font-body); margin: 0; }
 .poster ol { margin: 0; padding-left: 1.3rem; display: grid; gap: 0.35rem; font-size: 0.95rem; }
 .pst-who { margin: 0; padding: 0.6rem 0.8rem; background: #f6ecd5; font-size: 0.95rem; }
-.pst-src { margin: 0; font-size: 0.7rem; color: #4a5960; }
+.pst-src { margin: 0; font-size: 0.75rem; color: #4a5960; }
 .pst-preview { max-height: 46vh; overflow: auto; }
 .cv-sheet { display: none; }
 @media print {

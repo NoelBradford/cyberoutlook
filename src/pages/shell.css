@@ -79,7 +79,7 @@ main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 1rem; }
 .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px); opacity: 0; visibility: hidden; background: var(--ink); color: var(--paper); font: 500 0.88rem var(--font-ui); padding: 0.6rem 1rem; border-radius: 3px; z-index: 30; transition: transform 0.2s, opacity 0.2s, visibility 0.2s; max-width: calc(100vw - 32px); }
 .toast.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
 @media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
-.chip { display: inline-block; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 2px; border: 1px solid currentColor; }
+.chip { display: inline-block; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 2px; border: 1px solid currentColor; }
 .chip.none { color: var(--accent); }
 .chip.modest { color: var(--ink); background: #f3e2bd; background: color-mix(in srgb, var(--signal) 22%, transparent); border-color: var(--signal); }
 .chip.planned { color: var(--paper); background: var(--ink); border-color: var(--ink); }

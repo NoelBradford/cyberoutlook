@@ -4,7 +4,7 @@
 .inc[hidden] { display: none; }
 .inc-head { display: flex; justify-content: space-between; align-items: start; gap: 1rem; max-width: 820px; width: 100%; margin: 0 auto; }
 .inc-head h2 { font: 700 clamp(1.9rem, 6vw, 3rem)/1 var(--font-head); text-transform: uppercase; margin: 0.2rem 0 0; color: #e2e9e9; }
-.inc-k { margin: 0; font: 600 0.72rem var(--font-ui); letter-spacing: 0.14em; text-transform: uppercase; color: #e6b043; }
+.inc-k { margin: 0; font: 600 0.75rem var(--font-ui); letter-spacing: 0.14em; text-transform: uppercase; color: #e6b043; }
 .inc-x { width: 48px; height: 48px; font-size: 1.8rem; border: 1px solid #2b3a42; border-radius: 3px; background: none; color: #e2e9e9; cursor: pointer; }
 .inc-list { list-style: none; margin: 0 auto; padding: 0; display: grid; gap: 0.5rem; max-width: 820px; width: 100%; }
 .inc-list li { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr) auto; gap: 0.8rem; align-items: center; padding: 0.8rem; border: 1px solid #2b3a42; border-radius: 3px; }

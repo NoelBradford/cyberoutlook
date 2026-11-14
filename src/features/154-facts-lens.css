@@ -1,5 +1,5 @@
 .lens-bar { position: sticky; top: 60px; z-index: 5; display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; padding: 0.55rem 0.6rem; margin: 1rem 0 1.4rem; background: var(--paper); border: 2px solid var(--ink); border-radius: 3px; font-family: var(--font-ui); max-width: 65ch; }
-.lens-t { font: 600 0.7rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 0.3rem; }
+.lens-t { font: 600 0.75rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 0.3rem; }
 .lens-b { font: 600 0.8rem var(--font-ui); padding: 0.4rem 0.7rem; min-height: 36px; border-radius: 999px; border: 1px solid var(--rule); background: transparent; color: var(--ink); cursor: pointer; }
 .lens-b[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .lens-n { font-size: 0.78rem; color: var(--muted); margin-left: auto; }

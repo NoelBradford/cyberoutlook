@@ -1,5 +1,5 @@
 .sec-num { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.9rem; }
-.tts-start { font: 600 0.68rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); background: transparent; border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); border-radius: 999px; padding: 0.25rem 0.65rem; min-height: 28px; cursor: pointer; }
+.tts-start { font: 600 0.75rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); background: transparent; border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); border-radius: 999px; padding: 0.25rem 0.65rem; min-height: 28px; cursor: pointer; }
 .tts-start:hover, .tts-start:focus-visible { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
 .tts { position: fixed; z-index: 30; left: 50%; transform: translateX(-50%); top: 64px; display: flex; align-items: center; gap: 0.3rem; max-width: calc(100vw - 24px); padding: 0.4rem 0.5rem 0.4rem 0.8rem; background: var(--ink); color: var(--paper); border-radius: 999px; box-shadow: 0 12px 30px rgba(0,0,0,0.3); font-family: var(--font-ui); }
 .tts[hidden] { display: none; }
