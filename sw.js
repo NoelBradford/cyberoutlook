@@ -1,6 +1,8 @@
 /* CyberOutlook service worker: network first, cached copy when offline. Same-origin files only. */
-const CACHE = 'cyberoutlook-v3';
+const CACHE = 'cyberoutlook-v4';
 const CORE = ['./', 'index.html', 'assets/app.js', 'assets/app.css', 'assets/icon-192.png', 'favicon.ico'];
+// Pages under their own folders (for example /check/) are not precached. Each one stores itself and its files in this
+// cache after the first visit (see src/pages/shell.html), and the fetch handler below refreshes them on every visit.
 // PDFs are not precached: the fetch handler below keeps a copy once a reader opens one.
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE)).then(() => self.skipWaiting()));

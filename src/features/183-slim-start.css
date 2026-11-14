@@ -4,5 +4,6 @@
 .ss .tool { color: var(--paper); border-color: color-mix(in srgb, var(--paper) 35%, transparent); }
 .ss .tool.primary { background: var(--signal); color: var(--ink); border-color: var(--signal); }
 .start.slim { padding-top: 1rem; padding-bottom: 1rem; }
-.start.slim .start-inner > *:not(.ss):not(.aw) { display: none; }
+.start.slim .start-inner > *:not(.ss):not(.aw):not(.wb) { display: none; }
 .start:not(.slim) .ss { padding-bottom: 1rem; border-bottom: 1px solid color-mix(in srgb, var(--paper) 18%, transparent); }
+.start:has(.ss) .start-things { display: none; }

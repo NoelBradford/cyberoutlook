@@ -35,7 +35,11 @@ CV.ready(function () {
   CV.addTool(tb, true);
   function syncTool() { var n = CV.plan.count(); tb.querySelector('.plan-count').textContent = n; tb.setAttribute('aria-label', 'My plan, ' + n + ' action' + (n === 1 ? '' : 's')); }
   // Dialog
-  var dlg = CV.dialog({ id: 'plan', title: 'My plan', wide: true, note: 'Your plan stays in this browser and nothing is sent anywhere. Browsers can clear it if you don’t visit for a while (Safari after seven days), so print it or add the dates to your calendar to keep a copy.', onopen: render });
+  // True only on the plan page itself (/plan/): the plan is drawn inline there, with a list of the report's actions to add from.
+  // On another tool page (for example /check/) it stays a dialog, opened by that page's next step.
+  var SA = !!CV.standalone && ((CV.$('#main') || document.body).getAttribute('data-slug') === 'plan');
+  var PLAN_NOTE = 'Your plan stays in this browser and nothing is sent anywhere. Browsers can clear it if you don’t visit for a while (Safari after seven days), so print it or add the dates to your calendar to keep a copy.';
+  var dlg = SA ? CV.inlineHost({ id: 'plan', label: 'My plan', note: PLAN_NOTE, onopen: render }) : CV.dialog({ id: 'plan', title: 'My plan', wide: true, note: PLAN_NOTE, onopen: render });
   CV.planDialog = dlg;
   // Re-rendering replaces the list, so remember where focus was and put it back afterwards.
   var focusNext = null;
@@ -49,9 +53,10 @@ CV.ready(function () {
       b.appendChild(CV.h('div', { class: 'plan-empty' },
         CV.h('p', null, 'Your plan is empty. Add actions from the three theme tables, or take the exposure check and add your gaps in one go.'),
         CV.h('div', { class: 'cv-row' },
-          CV.button('Go to Theme 1 actions', function () { dlg.close(); CV.goToAction('t1-1'); }, 'primary'),
-          CV.openCheck ? CV.button('Take the exposure check', function () { dlg.close(); CV.openCheck(); }) : null)));
+          SA ? null : CV.button('Go to Theme 1 actions', function () { dlg.close(); CV.goToAction('t1-1'); }, 'primary'),
+          SA ? CV.h('a', { class: 'tool primary', href: '../check/' }, 'Take the exposure check') : (CV.openCheck ? CV.button('Take the exposure check', function () { dlg.close(); CV.openCheck(); }) : null))));
       CV.emit('plan-render', { body: b, empty: true });
+      if (SA) b.appendChild(picker());
       return;
     }
     var done = items.filter(function (x) { return x.meta.done; }).length;
@@ -60,7 +65,7 @@ CV.ready(function () {
       CV.h('p', null, CV.h('b', null, done + ' of ' + items.length), ' actions done')));
     // One list in the order actions were added. The check adds your gaps most important first, so the top item is the one to do first.
     [items].forEach(function (group) {
-      b.appendChild(CV.h('h3', { class: 'plan-theme' }, 'Your actions'));
+      b.appendChild(CV.h(SA ? 'h2' : 'h3', { class: 'plan-theme' }, 'Your actions'));
       b.appendChild(CV.h('p', { class: 'plan-order' }, 'Most important first, in the order you added them.'));
       var ul = CV.h('ul', { class: 'plan-list' });
       group.forEach(function (x) {
@@ -78,7 +83,27 @@ CV.ready(function () {
       b.appendChild(ul);
     });
     CV.emit('plan-render', { body: b, empty: false });
+    if (SA) b.appendChild(picker());
   }
+  // On a page of its own the report's action tables are not on screen, so the actions are listed here to add from.
+  var pickOpen = false;
+  function picker() {
+    var det = CV.h('details', { class: 'plan-pick' }, CV.h('summary', null, 'Add an action from the report'));
+    det.open = pickOpen; det.addEventListener('toggle', function () { pickOpen = det.open; }); // stays open while you add several
+    [1, 2, 3].forEach(function (t) {
+      det.appendChild(CV.h('h2', { class: 'plan-pick-h' }, CV.themeLabel(t)));
+      var ul = CV.h('ul', { class: 'plan-pick-list' });
+      A.filter(function (a) { return a.theme === t; }).forEach(function (a) {
+        var on = CV.plan.has(a.id);
+        var btn = CV.h('button', { type: 'button', class: 'tool', 'aria-pressed': on ? 'true' : 'false', 'aria-label': (on ? 'Remove from my plan: ' : 'Add to my plan: ') + a.text }, on ? '✓ In my plan' : '+ Add');
+        btn.addEventListener('click', function () { if (CV.plan.has(a.id)) CV.plan.remove(a.id); else CV.plan.add(a.id, true); focusNext = null; render(); });
+        ul.appendChild(CV.h('li', null, CV.h('span', null, a.text), btn));
+      });
+      det.appendChild(ul);
+    });
+    return det;
+  }
+  if (SA) CV.on('plan', function () { if (!dlg.dialog.hidden) render(); });
   CV.plan.render = render;
   CV.on('plan', function () { syncRows(); syncTool(); });
   syncRows(); syncTool();

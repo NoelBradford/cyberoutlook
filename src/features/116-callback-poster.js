@@ -11,7 +11,9 @@ CV.ready(function () {
   };
   window.addEventListener('afterprint', function () { document.body.classList.remove('print-sheet'); });
   var saved = CV.store.get('poster', {});
-  var d = CV.dialog({ id: 'poster', title: 'Call-back rule poster', note: 'The rule is the one in this report: no change to bank details or urgent payment goes through without a phone call to a number you already hold.' });
+  var SA = !!CV.standalone; // a page of its own (/call-back-poster/)
+  var NOTE = 'The rule is the one in this report: no change to bank details or urgent payment goes through without a phone call to a number you already hold.';
+  var d = SA ? CV.inlineHost({ id: 'poster', label: 'Call-back rule poster', note: NOTE }) : CV.dialog({ id: 'poster', title: 'Call-back rule poster', note: NOTE });
   var firm = CV.h('input', { type: 'text', autocomplete: 'organization', placeholder: 'Your business' }); firm.value = saved.firm || '';
   var who = CV.h('input', { type: 'text', placeholder: 'e.g. Priya in accounts, 01234 567890' }); who.value = saved.who || '';
   var word = CV.h('input', { type: 'checkbox', id: 'pst-word' }); word.checked = !!saved.word;
@@ -36,7 +38,8 @@ CV.ready(function () {
   d.body.appendChild(CV.h('div', { class: 'cv-grid2' }, CV.field('Business name', firm), CV.field('Who to ask if unsure', who)));
   d.body.appendChild(CV.h('div', { class: 'qz-opt-inline' }, word, CV.h('label', { for: 'pst-word' }, 'We also use a code word for urgent payment requests')));
   d.body.appendChild(prev);
-  d.body.appendChild(CV.h('div', { class: 'cv-row' }, CV.button('Print the poster', function () { CV.printSheet(build()); }, 'primary')));
+  d.body.appendChild(CV.h('div', { class: 'cv-row' }, CV.button('Print the poster', function () { CV.printSheet(build()); }, 'primary'),
+    SA ? CV.h('a', { class: 'tool', href: '../#theme-3' }, 'Read why the rule matters') : null));
   refresh();
   CV.openPoster = function () { d.open(); };
   var h = CV.$('#h-what-to-do-3'), tbl = h && h.closest('section').querySelector('.table-wrap');

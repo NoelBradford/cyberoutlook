@@ -1,10 +1,12 @@
 // @msg MFA rollout tracker: list your cloud services and mark each one off, from no MFA to passkeys, with email first as the report advises
 // @sel #h-what-to-do-3
 CV.ready(function () {
-  var h = CV.$('#h-what-to-do-3'); if (!h) return;
+  var SA = !!CV.standalone; // a page of its own (/mfa-tracker/)
+  var h = CV.$('#h-what-to-do-3'); if (!h && !SA) return;
   var LV = [['none', 'Not on'], ['sms', 'Text message code'], ['app', 'Authenticator app'], ['key', 'Passkey or security key']];
   var s = CV.store.get('mfa', { list: [{ name: 'Email', lv: 'none' }, { name: 'Accounting software', lv: 'none' }, { name: 'Bank', lv: 'none' }] });
-  var d = CV.dialog({ id: 'mfa', title: 'MFA rollout tracker', wide: true, note: 'From Theme 3: MFA is the floor for every account. Passkeys or security keys are stronger than codes by text message. Never switch MFA off because it’s inconvenient.' });
+  var NOTE = 'From Theme 3: MFA is the floor for every account. Passkeys or security keys are stronger than codes by text message. Never switch MFA off because it’s inconvenient.';
+  var d = SA ? CV.inlineHost({ id: 'mfa', label: 'MFA rollout tracker', note: NOTE }) : CV.dialog({ id: 'mfa', title: 'MFA rollout tracker', wide: true, note: NOTE });
   function save() { CV.store.set('mfa', s); render(); }
   function render() {
     var b = d.body; b.innerHTML = '';
@@ -21,11 +23,13 @@ CV.ready(function () {
     });
     b.appendChild(ul);
     b.appendChild(CV.h('div', { class: 'cv-row' }, CV.button('+ Add a service', function () { s.list.push({ name: '', lv: 'none' }); save(); var ins = CV.$$('#mfa .mfa-list input'); ins[ins.length - 1].focus(); }),
-      CV.plan ? CV.button('Add "MFA everywhere" to my plan', function () { CV.plan.add('t3-1'); }) : null));
+      CV.plan ? CV.button('Add "MFA everywhere" to my plan', function () { CV.plan.add('t3-1'); }) : null,
+      SA ? CV.h('a', { class: 'tool', href: '../#theme-3' }, 'Read why MFA comes first') : null));
     var email = s.list.filter(function (x) { return /mail|outlook|gmail|365/i.test(x.name); })[0];
     if (email && email.lv === 'none') b.appendChild(CV.h('p', { class: 'ce-fix' }, CV.h('b', null, 'Start with email. '), 'Whoever controls your email can reset almost every other password.'));
   }
   CV.openMfa = function () { render(); d.open(); };
+  if (SA) return; // the call to action card is for the report
   var tw = h.closest('section').querySelector('.table-wrap');
   var host = h.parentNode.querySelector('p:last-of-type') || h;
   host.after(CV.h('div', { class: 'cta-card cv-noprint' }, CV.h('div', null, CV.h('p', { class: 'cv-kicker' }, 'Tool'), CV.h('p', { class: 'cta-title' }, 'Track your MFA rollout'), CV.h('p', { class: 'cta-sub' }, 'List every cloud service and mark it off, from no MFA to passkeys.')), CV.button('Start tracking', CV.openMfa, 'primary')));

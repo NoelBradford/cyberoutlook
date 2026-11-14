@@ -6,15 +6,95 @@ The report itself is `index.html`. Everything interactive (the exposure check, M
 
 - `src/core.js` and `src/core.css`: the shared `CV` helper (saved state, dialogs, downloads, calendar files, the toolbar) and base styles.
 - `src/features/NNN-name.js` and `.css`: one file pair per feature, numbered by the iteration that added it. They load in number order.
-- `tools/build.py`: joins everything into `assets/app.js` and `assets/app.css` and stamps `index.html` with a version so browsers fetch the new files.
+- `tools/build.py`: joins everything into `assets/app.js` and `assets/app.css`, stamps `index.html` with a version so browsers fetch the new files, and builds the tool pages (see below).
+- `src/pages/`: the standalone tool pages (see below). Nothing here goes into `assets/app.js` or `assets/app.css`.
 - `tools/check.js`: the smoke test GitHub runs on every push (see `.github/workflows/check.yml`).
 
 Features start in small slices when the browser is idle (`CV.ready`), so the page stays responsive while they load.
 
+## Standalone tool pages
+
+A tool can have its own page at `/<slug>/` as well as (or instead of) opening as a dialog over the report. The pages are:
+`/check/`, `/readiness/`, `/it-provider-email/`, `/call-back-poster/` and the hub `/tools/`.
+
+### The manifest
+
+`src/pages/pages.json` is a list, one entry per page. Fields:
+
+| Field | Meaning |
+|---|---|
+| `slug` | Lower case letters, digits and single hyphens. `assets`, `src`, `docs`, `linkedin` and `index` are reserved. `tools` is allowed (the hub). |
+| `title`, `description` | Page title and heading, meta description and social preview text. Unique across pages and the report (the build fails on a repeat). |
+| `intro` | Optional sentence under the `h1`. |
+| `features` | Three-digit ids of the `src/features` files the page needs, for example `["108", "109"]`. The build fails if an id matches no file. |
+| `open` | Optional dotted function called once the interactive layer is ready, for example `CV.openCheck`. |
+| `reportParts` | Optional list of parts of the report the tool reads from the page, lifted from `index.html` at build time into a hidden block: `actions` (the three action tables, read by `CV.actions()`) and `it-questions` (the four IT provider questions). The build fails if the report no longer has them. |
+| `card` | `promise` and `time` for the page's card on the hub. |
+| `hub` | Only on the hub entry: `order` (slugs, in order) and `reportTools` (tools that have no page yet: `key`, `name`, `promise`; `key` must be a route in `171-tool-links.js`). The list is plain HTML links. |
+| `hashKey` | The old `/#key` link this page replaces. `/#key` redirects to the page. It must be a route in `171-tool-links.js`. |
+| `ogImage` | A path inside the repo, a 1200 by 630 PNG. Render them with `node tools/og.js`. |
+| `lastmod` | Date for `sitemap.xml`, kept by hand so a build is the same every day. Update it when the page changes. |
+
+`src/pages/sitemap.json` holds the entries that are not pages (the report and the two PDFs).
+
+### What the build does
+
+`python3 tools/build.py` writes, for each entry, `<slug>/index.html`, `assets/tool-<slug>.js` and `assets/tool-<slug>.css`, prints their sizes, and regenerates `sitemap.xml` and `tools/pages.txt` (the list CI runs the tool profile on). It also writes the redirect for old hash links into the `<head>` of `index.html` and `CV.pageRoutes` into the report bundle, both from `hashKey`.
+
+- A tool bundle is `src/pages/shell.css`, `src/core.*`, `src/pages/standalone.js` and only the listed features, in number order.
+- `src/pages/shell.html` is the shared template. `src/pages/shell.css` holds the design tokens and page chrome, copied from the inline style in `index.html`: if the report's tokens change, change them there too.
+- The Content-Security-Policy is read from `index.html` at build time, so a tool page can never carry a different policy. The service worker's cache name is read from `sw.js`.
+- Pages use `../`-relative URLs, because the policy sets `base-uri 'none'`.
+- Each page stores itself and its bundles in the service worker's cache after the first visit, so it opens offline.
+- The build removes generated files for pages no longer in the manifest. It never removes a folder.
+
+### Adding a page
+
+1. If the tool is a feature that opens a dialog on the report, make it render inline when `CV.standalone` is set (see below) and keep its report behaviour.
+2. Add an entry to `src/pages/pages.json` (and a `card`, and its slug to the hub's `order`, if it belongs on `/tools/`). Set `ogImage` to `assets/og-<slug>.png` and run `node tools/og.js <slug>`.
+3. Run `python3 tools/build.py`, then `node tools/check.js http://127.0.0.1:8080/ --profile tool --path /<slug>/` against `python3 -m http.server 8080`.
+4. Commit the source and everything the build changed or added.
+
+### `CV.standalone`
+
+On a tool page the build sets `CV.standalone = true` straight after `src/core.js` (core assigns `window.CV` as a whole, so it cannot be set earlier). On the report it is undefined. `CV.inlineHost({ id, label, note })` (in `src/pages/standalone.js`, tool pages only) returns a host with the same shape as `CV.dialog`, rendered in the page's `<main>`; use `CV.standalone ? CV.inlineHost(...) : CV.dialog(...)`. The report is not there on a tool page, so a feature that needs report anchors (a heading such as `#rules`, the cover toolbar, the Start Here card) must skip quietly instead of failing:
+
+```js
+CV.ready(function () {
+  var rules = CV.$('#rules');
+  if (!rules) return; // no report behind this page (CV.standalone), nothing to attach to
+  // ... attach to the report here
+});
+```
+
+Check for the anchor you need rather than for `CV.standalone`; use the flag only where behaviour should differ on a tool page, such as rendering inline instead of in a dialog. A feature failing inside `CV.ready` shows up as a `CV feature failed` warning, which the tool profile of `tools/check.js` treats as a failure.
+
+### Returning-visitor messages
+
+Only one message shows at a time: a message asks `CV.notice.claim(key)` before it shows itself (first to ask wins), and a dismissal is stored with `CV.notice.dismiss(key, token)` (saved as `cv:dismissed`). Messages sit in the flow of Start here, never fixed over the page.
+
+### Optional email capture and the PDF gate (off by default)
+
+`src/pages/config.json` holds the switch. While `captureEndpoint` is empty (as shipped) nothing is drawn and nothing is sent, and the PDF links work as before. To switch it on, set all of:
+
+- `captureEndpoint`: a path on this site such as `/api` (the Worker answers at `/api/subscribe`). `tools/build.py` refuses anything else, so the Content-Security-Policy (`connect-src 'self'`) never has to be widened.
+- `privacyUrl`: a path on this site to the privacy notice, linked beside every form. The build refuses an endpoint without it.
+- `wording.newsletter` and `wording.updates`: each `{ "id": "...", "text": "..." }`, the exact text shown beside an **unticked** box. The id is stored with each consent, so change it whenever the text changes. These need an adviser's approval before they are set.
+
+What it does when on: `219-email-capture.js` adds an optional "Email me my result" form under the result on `/check/` (after the result is shown), and `220-report-gate.js` makes a click on a link to either PDF (the cover, the Tools menu, the Share hub) open a short form instead. Each form sends only the address, the topics asked for, the page, and for the result the score, the band and the numbers of the questions with a gap, never the answers, in one request with no cookies and no retry. A failed request shows a plain message and the page is unchanged. `tools/capture-check.js` tests all of this against a mock endpoint (and that it does nothing when off). It runs in CI.
+
+The gate only stops the links on the page. `node tools/stage-site.js <outDir>` builds the folder that is deployed to Cloudflare and, while the capture is on, leaves the two PDFs out of it (and `tools/build.py` leaves them out of the sitemap), so the deployed site cannot serve them and the Worker's single-use link from private storage is the only way to them. The copies in the GitHub repo, and on GitHub Pages while it still serves the repo, are untouched: removing them from the repo and its history is a separate decision for the owner. `tools/capture-check.js` tests the staging and the sitemap.
+
+Measurement (UX-13): there is no code on the pages that measures visitors. Signup numbers come from the Worker's `counts` table (`worker/stats.sql`), and visit numbers from Cloudflare's own dashboard once the site is there. If that ever changes, the privacy statements below must change with it.
+
+### Privacy
+
+The promise is unchanged: nothing a reader enters leaves their browser, with no accounts, cookies or analytics. The tool profile of `tools/check.js` fails on any request to another site (web fonts excepted). Email capture and measurement (UX-12 and UX-13) have not been decided, so nothing here sends data anywhere.
+
 ## Making a change
 
 1. Edit a file in `src/`. Don't edit `assets/app.js` or `assets/app.css` directly.
-2. Run `python3 tools/build.py`.
+2. Run `python3 tools/build.py` (on Windows without a `python3` command, `python tools/build.py` gives the same output).
 3. Check it: `python3 -m http.server 8080` in the repo root, open http://localhost:8080, then run `npm install` once and `npm run check`.
 4. Commit `src/`, `assets/app.*` and `index.html` together. GitHub fails the check if the bundle wasn’t rebuilt.
 
@@ -36,6 +116,7 @@ Keys are stored as `cv:<key>` (plus a few older `cv-` keys from before the inter
 - `cv:ce`
 - `cv:cert`
 - `cv:check`
+- `cv:dismissed`
 - `cv:fivefive`
 - `cv:hires`
 - `cv:inclog`
@@ -54,6 +135,7 @@ Keys are stored as `cv:<key>` (plus a few older `cv-` keys from before the inter
 - `cv:readpct`
 - `cv:restores`
 - `cv:role`
+- `cv:seen-new`
 - `cv:short`
 - `cv:simple`
 - `cv:snap`

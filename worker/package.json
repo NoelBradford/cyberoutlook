@@ -1,0 +1,6 @@
+{
+  "name": "cyberoutlook-email-worker",
+  "private": true,
+  "type": "module",
+  "description": "Email Worker (not deployed). Run the tests with: node --test worker/test/*.test.js"
+}

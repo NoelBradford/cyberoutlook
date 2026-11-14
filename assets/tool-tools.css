@@ -1,0 +1,191 @@
+/* Built by tools/build.py. Edit src/, not this file. */
+/* --- src/pages/shell.css --- */
+/* Page chrome for standalone tool pages. Design tokens and base rules are copied from the inline <style> in
+   index.html, because the report keeps them there and not in src/core.css. If the report's tokens change,
+   change them here too. This file is added to each tool-<slug>.css before src/core.css and never to app.css. */
+@font-face { font-family: "Barlow Fallback"; src: local("Arial"), local("Helvetica"), local("Liberation Sans"), local("Roboto"); size-adjust: 72%; }
+@font-face { font-family: "Barlow Fallback"; font-weight: 700; src: local("Arial Bold"), local("Arial-BoldMT"), local("Helvetica Bold"), local("Liberation Sans Bold"), local("Roboto Bold"); size-adjust: 73%; }
+@font-face { font-family: "Plex Fallback"; src: local("Arial"), local("Helvetica"), local("Liberation Sans"), local("Roboto"); size-adjust: 94%; }
+:root {
+  --paper: #f3f6f5;
+  --ink: #15222b;
+  --muted: #56656d;
+  --accent: #0d5b60;
+  --signal: #c68a0c;
+  --rule: #c7d1d0;
+  --font-head: "Barlow Condensed", "Barlow Fallback", sans-serif;
+  --font-body: "Source Serif 4", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Plex Fallback", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e161b;
+    --ink: #e2e9e9;
+    --muted: #9aa9ae;
+    --accent: #62b8b5;
+    --signal: #e6b043;
+    --rule: #2b3a42;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e161b;
+  --ink: #e2e9e9;
+  --muted: #9aa9ae;
+  --accent: #62b8b5;
+  --signal: #e6b043;
+  --rule: #2b3a42;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.62;
+  font-optical-sizing: auto;
+  overflow-wrap: break-word;
+}
+a { color: var(--accent); text-underline-offset: 0.18em; text-decoration-thickness: 1px; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
+a:hover { text-decoration-thickness: 2px; text-decoration-color: currentColor; }
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; border-radius: 2px; }
+h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.08; text-wrap: balance; margin: 0; font-weight: 700; letter-spacing: 0.005em; }
+p, li { text-wrap: pretty; }
+.skip { position: absolute; left: -9999px; }
+.skip:focus { left: 16px; top: 16px; background: var(--paper); padding: 0.5rem 0.75rem; z-index: 10; }
+.theme-toggle, .tool { font: 500 0.78rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); background: transparent; border: 1px solid var(--rule); padding: 0.45rem 0.8rem; border-radius: 2px; cursor: pointer; }
+.theme-toggle:hover, .tool:hover { border-color: var(--ink); }
+@media (pointer: coarse) { .tool, .theme-toggle { min-height: 44px; } }
+
+/* Standalone page chrome */
+.page-head { border-bottom: 3px solid var(--ink); padding: 0 max(16px, 4vw); }
+.page-head-in { max-width: 1240px; margin: 0 auto; padding: 0.85rem 0; display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; align-items: center; justify-content: space-between; }
+.page-brand { display: inline-flex; align-items: center; gap: 0.6rem; color: var(--ink); text-decoration: none; font: 700 1.15rem var(--font-head); letter-spacing: 0.02em; text-transform: uppercase; }
+.page-brand img { border-radius: 4px; }
+.page-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; font: 500 0.92rem var(--font-ui); }
+/* The content column is as wide as the header's and footer's (1240px), so its left edge lines up with the logo above it. */
+main { max-width: calc(1240px + 2 * max(16px, 4vw)); margin: 0 auto; padding: 2rem max(16px, 4vw) 3rem; min-height: 50vh; }
+main:focus { outline: none; }
+main > h1 { font-size: clamp(2rem, 6vw, 3.4rem); margin-bottom: 1rem; }
+.page-foot { border-top: 1px solid var(--rule); padding: 0 max(16px, 4vw); font: 0.92rem var(--font-ui); color: var(--muted); }
+.page-foot-in { max-width: 1240px; margin: 0 auto; padding: 1.25rem 0 2rem; }
+.page-foot p { margin: 0 0 0.4rem; }
+@media print { .page-head nav, .skip, .theme-toggle { display: none !important; } }
+
+/* Copied from the inline style in index.html: status messages, the chips used in My plan, high contrast and print. */
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px); opacity: 0; visibility: hidden; background: var(--ink); color: var(--paper); font: 500 0.88rem var(--font-ui); padding: 0.6rem 1rem; border-radius: 3px; z-index: 30; transition: transform 0.2s, opacity 0.2s, visibility 0.2s; max-width: calc(100vw - 32px); }
+.toast.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
+@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+.chip { display: inline-block; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 2px; border: 1px solid currentColor; }
+.chip.none { color: var(--accent); }
+.chip.modest { color: var(--ink); background: #f3e2bd; background: color-mix(in srgb, var(--signal) 22%, transparent); border-color: var(--signal); }
+.chip.planned { color: var(--paper); background: var(--ink); border-color: var(--ink); }
+.page-intro { font-size: 1.2rem; max-width: 40rem; margin: 0.8rem 0 1.4rem; }
+@media (prefers-contrast: more) {
+  :root { --muted: #3b474e; --rule: #8a9897; }
+  :root[data-theme="dark"] { --muted: #c3cfd2; --rule: #5b6d74; }
+}
+@media print {
+  :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
+    --paper: #ffffff; --ink: #15222b; --muted: #4a5960; --accent: #0d5b60; --signal: #c68a0c; --rule: #c7d1d0;
+    color-scheme: light;
+  }
+  @page { size: A4; margin: 18mm 16mm 20mm 16mm; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-size: 10.5pt; line-height: 1.45; background: #fff; color: var(--ink); }
+  a { text-decoration: none; }
+  .toast { display: none !important; }
+  /* A printed result has no use for buttons or next-step prompts, and each item stays whole across a page break. */
+  .cv-inline .cv-row, .qz-plan { display: none !important; }
+  .cv-inline li { break-inside: avoid; }
+  main { min-height: 0; }
+  main .cv-inline { border: 0; max-width: none; }
+  /* A poster printed on a tool page uses the darker gold too, so "Call back." stays readable in black and white. */
+  body.standalone .cv-sheet.poster h2 span { color: #8f6200; }
+}
+
+/* Exposure check on its own page: h2 where the report's dialog uses h3, and the same look. */
+.qz-result h2 { font: 700 1.9rem/1 var(--font-head); text-transform: uppercase; margin: 0.2rem 0 0.4rem; }
+.qz-result h2:focus { outline: none; }
+.cv-inline { max-width: 46rem; border: 1px solid var(--rule); border-radius: 3px; }
+.qz-start { padding: 0.2rem 0; }
+
+/* The poster preview sits on white in both themes. The report's gold on white is just under 3:1 for large text, so on a tool page the
+   preview uses a darker gold. The printed sheet keeps the report's colours. */
+.cv-inline .poster h2 span { color: #8f6200; }
+
+/* The tools hub: a list of plain links. */
+.hub-list { list-style: none; margin: 0 0 2rem; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); }
+.hub-card { border: 1px solid var(--rule); border-radius: 3px; padding: 1rem 1.1rem; display: grid; gap: 0.35rem; align-content: start; }
+.hub-card h2, .hub-card h3 { font: 700 1.5rem/1.1 var(--font-head); margin: 0; }
+.hub-card p { margin: 0; font-family: var(--font-ui); font-size: 0.95rem; }
+.hub-card a { color: var(--ink); }
+.hub-meta { color: var(--muted); font-size: 0.8rem !important; letter-spacing: 0.06em; text-transform: uppercase; }
+.hub-sub { font-size: clamp(1.5rem, 4vw, 2rem); margin: 2rem 0 0.4rem; }
+@media print {
+  .hub-list { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+  .hub-card { break-inside: avoid; padding: 0.5rem 0.7rem; }
+  .hub-card h2, .hub-card h3 { font-size: 1.1rem; }
+  .hub-card p { font-size: 0.8rem; }
+  .hub-sub { margin-top: 1rem; }
+}
+
+/* Printing a generated sheet (the five-and-five map, the AI register): the sheet is shown, everything else on the page is hidden. */
+.cv-sheet { display: none; }
+@media print { body.print-sheet > *:not(.cv-sheet) { display: none !important; } }
+
+/* UI pass: on a page of its own the email preview shows in full (no inner scroll), and on a phone the header's second row
+   puts the report link on the left and the theme toggle on the right, level with the content edges. */
+.cv-inline .cv-pre { max-height: none; overflow: visible; }
+@media (max-width: 560px) { .page-nav { width: 100%; justify-content: space-between; } }
+
+/* Rules that a tool borrows from another tool's feature file. A tool page only carries the features it lists, so they are copied here.
+   If the originals change, change these too. */
+.qz-h { font: 700 1.3rem var(--font-head); text-transform: uppercase; margin: 0.4rem 0 0; }
+.qz-opt-inline { display: grid; grid-template-columns: 1.6rem 1fr; align-items: start; gap: 0.3rem; }
+.qz-opt-inline input { width: 1.2rem; height: 1.2rem; margin: 0.15rem 0 0; accent-color: var(--accent); }
+.ce-fix { font-size: 0.86rem; border-left: 3px solid var(--signal); padding-left: 0.6rem; }
+.plan-sum { display: grid; gap: 0.4rem; }
+.plan-sum p { font-size: 0.95rem; }
+.plan-bar { height: 8px; background: var(--rule); border-radius: 4px; overflow: hidden; }
+.plan-bar span { display: block; height: 100%; background: var(--accent); }
+.plan-rm { width: 44px; height: 36px; font: 400 1.4rem/1 var(--font-ui); color: var(--muted); background: none; border: 1px solid transparent; border-radius: 2px; cursor: pointer; }
+.plan-rm:hover { border-color: var(--rule); color: var(--ink); }
+
+/* --- src/core.css --- */
+/* Shared styles for the interactive layer. Uses the report's own tokens. */
+.cv-offscreen { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.cv-dialog { width: min(640px, calc(100vw - 32px)); max-height: calc(100vh - 48px); padding: 0; border: 2px solid var(--ink); border-radius: 3px; background: var(--paper); color: var(--ink); box-shadow: 0 24px 60px rgba(0,0,0,0.35); overflow: auto; }
+.cv-dialog.wide { width: min(920px, calc(100vw - 32px)); }
+.cv-dialog::backdrop { background: rgba(14, 22, 27, 0.6); }
+.cv-dialog-head { position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.25rem 0.8rem; background: var(--paper); border-bottom: 2px solid var(--ink); }
+.cv-dialog-head h2 { font-family: var(--font-head); font-size: 1.7rem; text-transform: uppercase; letter-spacing: 0.01em; margin: 0; }
+.cv-x { font: 400 1.8rem/1 var(--font-ui); background: none; border: 0; color: var(--ink); cursor: pointer; width: 44px; height: 44px; border-radius: 2px; }
+.cv-x:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+.cv-dialog-body { padding: 1.1rem 1.25rem 1.3rem; font-family: var(--font-ui); font-size: 0.95rem; line-height: 1.5; display: grid; gap: 1rem; }
+.cv-dialog-body p { margin: 0; }
+.cv-dialog-note { margin: 0; padding: 0.7rem 1.25rem 1rem; font: 400 0.78rem/1.45 var(--font-ui); color: var(--muted); border-top: 1px solid var(--rule); }
+html.cv-modal-open { overflow: hidden; }
+.cv-field { display: grid; gap: 0.3rem; }
+.cv-field label { font: 600 0.75rem var(--font-ui); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.cv-field input, .cv-field textarea, .cv-field select, .cv-input { font: 400 1rem var(--font-ui); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 2px; padding: 0.55rem 0.65rem; min-height: 44px; width: 100%; }
+.cv-field textarea { min-height: 7rem; resize: vertical; line-height: 1.45; }
+.cv-field input:focus, .cv-field textarea:focus, .cv-field select:focus, .cv-input:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+.cv-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.cv-grid2 { display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+/* A link that looks like a button ("Open in my email app", "Read why...") is not underlined like a text link. */
+a.tool { display: inline-block; text-decoration: none; }
+.tool.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tool.primary:hover { background: var(--accent); border-color: var(--accent); }
+.cv-kicker { font: 600 0.72rem var(--font-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0; }
+.cv-pre { font: 400 0.88rem/1.5 ui-monospace, "SFMono-Regular", Menlo, monospace; white-space: pre-wrap; background: color-mix(in srgb, var(--accent) 6%, var(--paper)); border: 1px solid var(--rule); padding: 0.8rem 0.9rem; border-radius: 2px; max-height: 40vh; overflow: auto; margin: 0; }
+@media print { .cv-dialog, .cv-noprint { display: none !important; } }
+.cv-dialog-head h2:focus { outline: none; }
+.cv-dialog-head h2:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
+.follow { display: grid; gap: 0.45rem; margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px solid var(--rule); }
+.follow-k { margin: 0 !important; font: 600 0.72rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }

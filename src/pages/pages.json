@@ -1,0 +1,193 @@
+[
+  {
+    "slug": "check",
+    "title": "Two-minute exposure check",
+    "description": "Ten quick questions for UK firms with five to 50 staff. Get a score out of 10 and your cyber security gaps in order. Your answers stay in your browser.",
+    "intro": "Ten quick questions, about two minutes, for UK firms with five to 50 staff. You get a score out of 10 and your gaps in order, with a way to turn them into a plan.",
+    "features": [
+      "108",
+      "109",
+      "110",
+      "111",
+      "219"
+    ],
+    "open": "CV.openCheck",
+    "reportParts": [
+      "actions"
+    ],
+    "card": {
+      "promise": "Ten questions, a score out of 10 and your gaps in order.",
+      "time": "About two minutes"
+    },
+    "hashKey": "check",
+    "ogImage": "assets/og-check.png",
+    "lastmod": "2026-11-11"
+  },
+  {
+    "slug": "readiness",
+    "title": "Cyber Essentials readiness check",
+    "description": "Five questions based on the Cyber Essentials v3.3 changes. See what to fix before you book an assessment.",
+    "intro": "Five questions, about a minute, based on the Cyber Essentials changes described in the report. See what to fix before you book an assessment.",
+    "features": [
+      "164"
+    ],
+    "open": "CV.openCE",
+    "card": {
+      "promise": "Five questions on the Cyber Essentials changes. See what to fix before you book an assessment.",
+      "time": "About a minute"
+    },
+    "hashKey": "readiness",
+    "ogImage": "assets/og-readiness.png",
+    "lastmod": "2026-11-11"
+  },
+  {
+    "slug": "it-provider-email",
+    "title": "Email your IT provider",
+    "description": "The four questions every small business should ask its IT provider, plus a fifth about backups, turned into an email you can copy or open in your own mail app.",
+    "intro": "Add your IT provider's name and your own, then copy the email or open it in your mail app. The questions come from the report. Nothing is sent from this page.",
+    "features": [
+      "115"
+    ],
+    "open": "CV.openItMail",
+    "reportParts": [
+      "it-questions"
+    ],
+    "card": {
+      "promise": "The four questions for your IT provider, plus one about backups, as an email you can copy or open in your mail app.",
+      "time": "About 30 seconds"
+    },
+    "hashKey": "itmail",
+    "ogImage": "assets/og-it-provider-email.png",
+    "lastmod": "2026-11-11"
+  },
+  {
+    "slug": "call-back-poster",
+    "title": "Call-back rule poster",
+    "description": "Print an A4 poster for the office wall: no change to bank details or urgent payment without a phone call to a number you already hold.",
+    "intro": "Add your business name and who to ask, then print an A4 poster for everyone who touches payments. The rule is the one in the report. Nothing leaves your browser.",
+    "features": [
+      "116",
+      "169"
+    ],
+    "open": "CV.openPoster",
+    "card": {
+      "promise": "A printable A4 poster for the call-back rule, with your business name and who to ask.",
+      "time": "Prints on one A4 page"
+    },
+    "hashKey": "poster",
+    "ogImage": "assets/og-call-back-poster.png",
+    "lastmod": "2026-11-11"
+  },
+  {
+    "slug": "plan",
+    "title": "My plan",
+    "description": "Pick actions from the report, give each an owner and a date, then copy, print or add the dates to your calendar. Your plan stays in your browser.",
+    "intro": "Add actions from the report, give each an owner and a date, then print your plan or put the dates in your calendar. Everything stays in this browser.",
+    "features": [
+      "109",
+      "110",
+      "112",
+      "113"
+    ],
+    "open": "CV.plan.open",
+    "reportParts": [
+      "actions"
+    ],
+    "hashKey": "plan",
+    "card": {
+      "promise": "Add actions from the report, give each an owner and a date, and put the dates in your calendar.",
+      "time": "Saved in your browser"
+    },
+    "ogImage": "assets/og-plan.png",
+    "lastmod": "2026-11-11"
+  },
+  {
+    "slug": "mfa-tracker",
+    "title": "MFA rollout tracker",
+    "description": "List your cloud services and mark each one off, from no MFA to passkeys, starting with email.",
+    "intro": "List your cloud services and mark each one off, from no MFA to passkeys. The report advises starting with email.",
+    "features": [
+      "168"
+    ],
+    "open": "CV.openMfa",
+    "hashKey": "mfa",
+    "card": {
+      "promise": "List your cloud services and mark each one off, from no MFA to passkeys.",
+      "time": "Saved in your browser"
+    },
+    "ogImage": "assets/og-mfa-tracker.png",
+    "lastmod": "2026-11-11"
+  },
+  {
+    "slug": "five-and-five",
+    "title": "Five-and-five map",
+    "description": "List your five key suppliers and five key customers, rate what stops if each disappears for two weeks, and see your weak spots.",
+    "intro": "List your five key suppliers and five key customers and rate what stops if each disappears for two weeks. You can print the map.",
+    "features": [
+      "117"
+    ],
+    "open": "CV.openFiveFive",
+    "hashKey": "fivefive",
+    "card": {
+      "promise": "List your key suppliers and customers, rate what stops for two weeks, and see your weak spots.",
+      "time": "Prints as a one-page map"
+    },
+    "ogImage": "assets/og-five-and-five.png",
+    "lastmod": "2026-11-11"
+  },
+  {
+    "slug": "ai-tool-register",
+    "title": "AI tool register",
+    "description": "List your team's AI tools and flag any that can read your data, process outside content and send messages out all at once.",
+    "intro": "List the AI tools your team uses, tick what each can do, and spot any with all three risky abilities at once. You can print the register.",
+    "features": [
+      "118"
+    ],
+    "open": "CV.openAiTools",
+    "hashKey": "aitools",
+    "card": {
+      "promise": "List your team's AI tools and flag any that has all three risky abilities at once.",
+      "time": "Prints as a register"
+    },
+    "ogImage": "assets/og-ai-tool-register.png",
+    "lastmod": "2026-11-11"
+  },
+  {
+    "slug": "tools",
+    "title": "All tools",
+    "description": "Tools from the UK Small Business Cyber Outlook 2027: a two-minute exposure check, a Cyber Essentials readiness check, an IT provider email, a call-back rule poster, My plan, an MFA tracker, a five-and-five map and an AI tool register.",
+    "intro": "Short tools that turn the report into something you can use. Start with the exposure check. Nothing you enter leaves your browser.",
+    "features": [],
+    "hub": {
+      "order": [
+        "check",
+        "readiness",
+        "it-provider-email",
+        "call-back-poster",
+        "plan",
+        "mfa-tracker",
+        "five-and-five",
+        "ai-tool-register"
+      ],
+      "reportTools": [
+        {
+          "key": "restore",
+          "name": "Restore-test log",
+          "promise": "Record each time you get files back from backup, and get reminders for the next quarterly test."
+        },
+        {
+          "key": "incident",
+          "name": "It's happening now",
+          "promise": "Turn your one-page plan into a calm incident card with tap-to-call contacts and a timestamped log."
+        },
+        {
+          "key": "toolkit",
+          "name": "Toolkit: print and present",
+          "promise": "Print a team pack or everything you have filled in, present the report to your team, and get calendar reminders."
+        }
+      ]
+    },
+    "ogImage": "assets/og-tools.png",
+    "lastmod": "2026-11-11"
+  }
+]

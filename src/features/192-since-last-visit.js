@@ -13,7 +13,10 @@ CV.ready(function () {
   var newEps = CV.EPISODES.filter(function (e) { var d = CV.parseDate(e.date).getTime(); return d > prev.at && d <= CV.today().getTime(); });
   var days = Math.max(1, Math.round((Date.now() - prev.at) / 86400000));
   if (!gains.length && !newEps.length) return;
+  var token = String(prev.at);
+  if (CV.notice.dismissed('slv', token) || !CV.notice.claim('slv')) return;
   var box = CV.h('div', { class: 'slv' },
+    CV.h('button', { type: 'button', class: 'wb-x slv-x', 'aria-label': 'Dismiss', onclick: function () { CV.notice.dismiss('slv', token); box.remove(); } }, '×'),
     CV.h('p', { class: 'cv-kicker' }, 'Since your last visit, ' + days + ' day' + (days === 1 ? '' : 's') + ' ago'),
     gains.length ? CV.h('p', null, CV.h('b', null, gains.join(', ') + '.'), ' Good progress.') : null,
     newEps.length ? CV.h('p', null, 'New on the podcast: ', newEps.map(function (e) { return 'Ep ' + e.n + ', “' + e.title + '”'; }).join('; '), '. ', CV.h('a', { href: CV.PODCAST, rel: 'noopener', target: '_blank' }, 'Listen')) : null);

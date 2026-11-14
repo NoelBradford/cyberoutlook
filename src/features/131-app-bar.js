@@ -11,6 +11,14 @@ CV.ready(function () {
     check: 'M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z'
   };
   function btn(label, icon, fn, extra) { var b = CV.h('button', { type: 'button', class: 'ab-b', 'aria-label': label, onclick: fn, html: ico(icon) + '<span class="ab-l">' + label + '</span>' }); if (extra) b.appendChild(extra); return b; }
+  // The check is a page of its own now, so the bar links to it. After the check is finished the same item reads "Your result".
+  function checkItem() {
+    var lab = CV.h('span', { class: 'ab-l' }, 'Check');
+    var a = CV.h('a', { class: 'ab-b', href: 'check/' }, CV.h('span', { class: 'ab-i', 'aria-hidden': 'true', html: ico(I.check) }), lab);
+    function sync() { var done = !!CV.store.get('check', {}).done; lab.textContent = done ? 'Your result' : 'Check'; }
+    CV.on('check', sync); sync();
+    return a;
+  }
   var count = CV.h('span', { class: 'ab-badge', 'aria-hidden': 'true' });
   var where = CV.h('span', { class: 'ab-where' });
   var pct = CV.h('span', { class: 'ab-pct', 'aria-hidden': 'true' });
@@ -18,7 +26,7 @@ CV.ready(function () {
     CV.h('a', { class: 'ab-title', href: '#top' }, CV.h('b', null, 'Cyber Outlook 2027'), where),
     CV.h('div', { class: 'ab-tools' },
       btn('Contents', I.toc, function () { var t = CV.$('#toc-h'); var tg = CV.$('.toc-toggle'); if (tg && tg.getAttribute('aria-expanded') === 'false') tg.click(); t.scrollIntoView({ behavior: CV.reduced() ? 'auto' : 'smooth' }); t.focus({ preventScroll: true }); }),
-      CV.openCheck ? btn('Check', I.check, function () { CV.openCheck(); }) : null,
+      checkItem(),
       btn('My plan', I.plan, function () { CV.plan && CV.plan.open(); }, count),
       btn('Search', I.search, function () { CV.openSearch && CV.openSearch(); }),
       btn('Share', I.share, function () { CV.openShare && CV.openShare(); })),

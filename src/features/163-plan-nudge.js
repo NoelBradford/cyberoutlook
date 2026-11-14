@@ -4,7 +4,7 @@ CV.ready(function () {
   // Inline, never fixed: it sits in the reading flow and can't cover the text or other buttons.
   function eligible() { return !CV.store.get('nudged', false) && !(CV.plan && CV.plan.count()) && !(CV.checkScore && CV.checkScore() != null); }
   if (!eligible()) return;
-  var host = CV.$$('#theme-3 .table-wrap').pop(); if (!host) return;
+  var host = CV.$$('#theme-3 .table-wrap').pop(); if (!host || !CV.notice.claim('nudge')) return;
   var card = CV.h('div', { class: 'nudge cv-noprint' },
     CV.h('p', { class: 'nudge-t' }, 'Turn what you’ve read into a plan'),
     CV.h('p', { class: 'nudge-s' }, 'Ten questions, about two minutes. Your gaps become actions you can give an owner and a date.'),

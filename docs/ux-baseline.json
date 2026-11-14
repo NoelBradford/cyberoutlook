@@ -1,0 +1,99 @@
+{
+  "tool": "tools/measure.js",
+  "url": "http://127.0.0.1:8080/",
+  "label": "release 167da54 (Iteration 233), served by python http.server on Windows, Playwright 1.48.2 Chromium",
+  "measuredAt": "2026-11-11T10:24:54.779Z",
+  "playwright": "1.48.2",
+  "viewports": {
+    "desktop": {
+      "width": 1366,
+      "height": 900,
+      "documentHeightPx": 46523,
+      "firstViewportControls": 12,
+      "skipLinks": 2,
+      "buttonsInMain": 185,
+      "transfer": [
+        {
+          "path": "/",
+          "type": "document",
+          "status": 200,
+          "bytes": 259238,
+          "gzipBytes": 118373
+        },
+        {
+          "path": "/assets/app.css",
+          "type": "stylesheet",
+          "status": 200,
+          "bytes": 100422,
+          "gzipBytes": 18988
+        },
+        {
+          "path": "/assets/app.js",
+          "type": "script",
+          "status": 200,
+          "bytes": 238812,
+          "gzipBytes": 70291
+        }
+      ],
+      "fixedMidReport": {
+        "count": 1,
+        "coveredPx": 52,
+        "viewportHeightPx": 900,
+        "elements": [
+          {
+            "element": "nav.ab.show",
+            "top": 0,
+            "bottom": 52,
+            "heightPx": 52,
+            "widthPx": 1366
+          }
+        ]
+      }
+    },
+    "phone": {
+      "width": 390,
+      "height": 844,
+      "documentHeightPx": 67137,
+      "firstViewportControls": 11,
+      "skipLinks": 2,
+      "buttonsInMain": 185,
+      "transfer": [
+        {
+          "path": "/",
+          "type": "document",
+          "status": 200,
+          "bytes": 259238,
+          "gzipBytes": 118373
+        },
+        {
+          "path": "/assets/app.css",
+          "type": "stylesheet",
+          "status": 200,
+          "bytes": 100422,
+          "gzipBytes": 18988
+        },
+        {
+          "path": "/assets/app.js",
+          "type": "script",
+          "status": 200,
+          "bytes": 238812,
+          "gzipBytes": 70291
+        }
+      ],
+      "fixedMidReport": {
+        "count": 1,
+        "coveredPx": 94,
+        "viewportHeightPx": 844,
+        "elements": [
+          {
+            "element": "nav.ab.show",
+            "top": 750,
+            "bottom": 844,
+            "heightPx": 94,
+            "widthPx": 390
+          }
+        ]
+      }
+    }
+  }
+}

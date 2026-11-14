@@ -18,6 +18,8 @@ html.cv-modal-open { overflow: hidden; }
 .cv-field input:focus, .cv-field textarea:focus, .cv-field select:focus, .cv-input:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
 .cv-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
 .cv-grid2 { display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+/* A link that looks like a button ("Open in my email app", "Read why...") is not underlined like a text link. */
+a.tool { display: inline-block; text-decoration: none; }
 .tool.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .tool.primary:hover { background: var(--accent); border-color: var(--accent); }
 .cv-kicker { font: 600 0.72rem var(--font-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0; }

@@ -2,9 +2,9 @@
 // @sel .cover
 CV.ready(function () {
   var bar = CV.$('.cover .tools'); if (!bar) return;
-  var keep = ['My plan', 'Share', 'Search'];
+  var keep = ['My plan', 'Share']; // Search lives in the Tools menu and in the bar that appears once you scroll
   // The menu is deliberately short. Anything not listed here is either in the Toolkit or reachable from where it's used.
-  var MENU = { 'It’s happening now': 'In an incident', 'All tools': 'Your work', 'Your data': 'Your work',
+  var MENU = { 'It’s happening now': 'In an incident', 'All tools': 'Your work', 'Search': 'Your work', 'Your data': 'Your work',
     'Listen from here': 'Reading', 'Simple mode (just the report)': 'Reading', 'Reading settings': 'Reading', 'Glossary': 'Reading', 'Download the full PDF': 'Save' };
   var TOOLKIT = { 'Print a team pack': 'One copy per person: the five things, the call-back rule and who to call.',
     'Print my toolkit': 'Everything you have filled in, printed together.', 'Present to my team': 'The report as slides for a short team meeting.',
@@ -58,6 +58,6 @@ CV.ready(function () {
   CV.toolsMenu = { add: function (label, fn) { return add(label, fn); } };
   if (CV.openGlossary) add('Glossary', CV.openGlossary);
   if (CV.present) add('Present to my team', CV.present);
-  add('All tools', function () { CV.openToolkit && CV.openToolkit(); });
+  add('All tools', function () { location.href = 'tools/'; }); // the hub page; the Toolkit is still reachable at /#toolkit
   add('Listen from here', function () { if (CV.listenHere) CV.listenHere(); else CV.toast('Your browser can’t read aloud'); });
 });

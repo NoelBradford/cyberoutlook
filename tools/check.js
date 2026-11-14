@@ -1,9 +1,27 @@
-// Page smoke test. Usage: node tools/check.js <baseUrl> [shotDir] [label] [selector]
-// Loads the page at desktop and phone widths and fails on script errors, CSP violations,
-// sideways scrolling, broken in-page links, duplicate ids or a broken theme toggle.
+// Page smoke test.
+// Usage: node tools/check.js <baseUrl> [shotDir] [label] [selector] [--profile report|tool] [--path /check/]
+//
+// Loads the page at desktop and phone widths. Two profiles:
+//   report (default)  the full report page: script errors, CSP violations, sideways scrolling, fewer than 14
+//                     sections, missing window.CV, broken in-page links, duplicate ids, a broken theme toggle.
+//   tool              a standalone tool page: no script error, no CSP violation or "CV feature failed" warning,
+//                     no sideways scrolling, window.CV present, exactly one h1 and no skipped heading levels, a
+//                     non-empty title, a <main> landmark, a skip link that reaches it, the tool's content visible
+//                     without any click, nothing animating under prefers-reduced-motion, in-page anchors that
+//                     resolve, same-site links that resolve, unique social tags, and no 4xx or 5xx from same-origin
+//                     requests or request to another site (web fonts excepted).
+// --path is resolved against baseUrl, so `check.js http://127.0.0.1:8080/ --profile tool --path /check/` tests /check/.
 const { chromium } = require('playwright');
 (async () => {
-  const [base, shotDir, label, sel] = process.argv.slice(2);
+  const argv = process.argv.slice(2);
+  const flag = n => { const i = argv.indexOf(n); if (i < 0) return undefined; const v = argv[i + 1]; argv.splice(i, 2); return v; };
+  const profile = flag('--profile') || 'report';
+  const path = flag('--path');
+  if (!['report', 'tool'].includes(profile)) { console.error(`Unknown profile "${profile}". Use report or tool.`); process.exit(2); }
+  const [base, shotDir, label, sel] = argv;
+  if (!base) { console.error('Usage: node tools/check.js <baseUrl> [shotDir] [label] [selector] [--profile report|tool] [--path /check/]'); process.exit(2); }
+  const target = path ? new URL(path, base).href : base;
+  const origin = new URL(base).origin;
   const b = await chromium.launch();
   const problems = [];
   for (const [w, h] of [[1280, 860], [390, 844]]) {
@@ -11,29 +29,98 @@ const { chromium } = require('playwright');
     const p = await ctx.newPage();
     p.on('pageerror', e => problems.push(`${w}: pageerror ${e.message}`));
     p.on('console', m => { if ((m.type() === 'error' || (m.type() === 'warning' && /CV feature failed|Content Security Policy|Refused/.test(m.text())))) problems.push(`${w}: console ${m.type()} ${m.text().slice(0, 220)}`); });
-    p.on('response', r => { if (r.status() >= 400 && r.url().startsWith(base)) problems.push(`${w}: HTTP ${r.status()} ${r.url()}`); });
-    await p.goto(base, { waitUntil: 'networkidle' });
+    p.on('response', r => { if (r.status() >= 400 && r.url().startsWith(origin)) problems.push(`${w}: HTTP ${r.status()} ${r.url()}`); });
+    // Tool profile only: nothing a reader types may leave the browser, so no request may go to another site (web fonts excepted).
+    if (profile === 'tool') p.on('request', r => { const u = r.url(); if (/^https?:/.test(u) && !u.startsWith(origin) && !/^https:\/\/fonts\.(googleapis|gstatic)\.com\//.test(u)) problems.push(`${w}: request to another site ${u.slice(0, 80)}`); });
+    const nav = await p.goto(target, { waitUntil: 'networkidle' });
+    if (profile === 'tool' && nav && nav.status() >= 400) problems.push(`${w}: HTTP ${nav.status()} ${target}`);
     await p.waitForTimeout(400);
     await p.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 1400) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 10)); } window.scrollTo(0, 0); });
     await p.waitForTimeout(200);
-    const r = await p.evaluate(() => {
-      const ids = new Set([...document.querySelectorAll('[id]')].map(e => e.id));
-      const dup = {}; document.querySelectorAll('[id]').forEach(e => dup[e.id] = (dup[e.id] || 0) + 1);
-      return {
-        overflow: document.documentElement.scrollWidth - window.innerWidth,
-        sections: document.querySelectorAll('main section.section').length,
-        cv: !!window.CV,
-        broken: [...document.querySelectorAll('a[href^="#"]')].map(a => a.getAttribute('href').slice(1)).filter(id => id && !id.includes('=') && !ids.has(id)),
-        dupIds: Object.keys(dup).filter(k => dup[k] > 1),
-      };
-    });
-    if (r.overflow > 1) problems.push(`${w}: horizontal overflow ${r.overflow}px`);
-    if (r.sections < 14) problems.push(`${w}: sections=${r.sections}`);
-    if (!r.cv) problems.push(`${w}: CV core missing`);
-    if (r.broken.length) problems.push(`${w}: broken anchors ${[...new Set(r.broken)].join(',')}`);
-    if (r.dupIds.length) problems.push(`${w}: duplicate ids ${r.dupIds.join(',')}`);
-    const t = await p.evaluate(() => { const b = document.getElementById('themeToggle'); const a = getComputedStyle(document.body).backgroundColor; b.click(); const c = getComputedStyle(document.body).backgroundColor; b.click(); return a !== c; });
-    if (!t) problems.push(`${w}: theme toggle broken`);
+    if (profile === 'tool') {
+      const r = await p.evaluate(() => {
+        const main = document.querySelector('main, [role="main"]');
+        let visible = false;
+        if (main) {
+          const cs = getComputedStyle(main), box = main.getBoundingClientRect();
+          const hiddenAncestor = main.closest('[aria-hidden="true"], [hidden], dialog:not([open])');
+          // Text alone is not enough: a page whose tool only opens in a dialog also has an intro. Something to press or fill in must be on screen.
+          const control = [...main.querySelectorAll('button, input:not([type=hidden]), select, textarea, a[href]')].some(e => { const r = e.getBoundingClientRect(), c = getComputedStyle(e); return r.width > 0 && r.height > 0 && c.visibility !== 'hidden' && c.display !== 'none' && !e.closest('[hidden], dialog:not([open])'); });
+          visible = cs.display !== 'none' && cs.visibility !== 'hidden' && box.width > 0 && box.height > 0 && !hiddenAncestor && main.innerText.trim().length >= 40 && control;
+        }
+        return {
+          overflow: document.documentElement.scrollWidth - window.innerWidth,
+          cv: !!window.CV,
+          h1: document.querySelectorAll('h1').length,
+          title: document.title.trim(),
+          desc: ((document.querySelector('meta[name="description"]') || {}).content || '').trim(),
+          canonical: (document.querySelector('link[rel="canonical"]') || {}).href || '',
+          ogImage: (document.querySelector('meta[property="og:image"]') || {}).content || '',
+          twImage: (document.querySelector('meta[name="twitter:image"]') || {}).content || '',
+          pathname: location.pathname,
+          hasMain: !!main,
+          visible,
+        };
+      });
+      const q = await p.evaluate(() => {
+        const shown = e => e.getClientRects().length > 0 && getComputedStyle(e).visibility !== 'hidden';
+        const levels = [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')].filter(shown).map(h => +h.tagName[1]);
+        let skipped = null; for (let i = 1; i < levels.length; i++) if (levels[i] > levels[i - 1] + 1) { skipped = `h${levels[i - 1]} then h${levels[i]}`; break; }
+        const skip = document.querySelector('a.skip');
+        const skipTarget = skip ? document.getElementById((skip.getAttribute('href') || '').slice(1)) : null;
+        return {
+          skipped, hasSkip: !!skip, skipOk: !!skipTarget && skipTarget.tagName === 'MAIN',
+          running: document.getAnimations().filter(a => a.playState === 'running').map(a => (a.effect && a.effect.target ? a.effect.target.className || a.effect.target.tagName : '?') + ':' + (a.animationName || a.transitionProperty || 'animation')),
+          brokenAnchors: [...new Set([...document.querySelectorAll('a[href^="#"]')].map(a => a.getAttribute('href').slice(1)).filter(id => id && !id.includes('=') && !document.getElementById(id)))],
+        };
+      });
+      if (q.skipped) problems.push(`${w}: skipped heading level (${q.skipped})`);
+      if (!q.hasSkip) problems.push(`${w}: no skip link`); else if (!q.skipOk) problems.push(`${w}: the skip link does not point at <main>`);
+      if (q.running.length) problems.push(`${w}: animating under prefers-reduced-motion: ${q.running.slice(0, 3).join(', ')}`);
+      if (q.brokenAnchors.length) problems.push(`${w}: in-page anchors with no target: ${q.brokenAnchors.join(', ')}`);
+      if (r.overflow > 1) problems.push(`${w}: horizontal overflow ${r.overflow}px`);
+      if (!r.cv) problems.push(`${w}: CV core missing`);
+      if (r.h1 !== 1) problems.push(`${w}: expected exactly one h1, found ${r.h1}`);
+      if (!r.title) problems.push(`${w}: empty title`);
+      if (!r.desc) problems.push(`${w}: empty meta description`);
+      // Social preview: the canonical address is this page's own, and the image is an absolute address of a 1200 by 630 PNG in the repo.
+      if (new URL(r.canonical || 'http://x/').pathname !== r.pathname) problems.push(`${w}: canonical ${r.canonical} is not this page (${r.pathname})`);
+      if (!/^https:\/\/cyberoutlook\.sbcsg\.uk\/assets\/[\w.-]+\.png$/.test(r.ogImage)) problems.push(`${w}: og:image is not an absolute site address: ${r.ogImage}`);
+      if (r.twImage !== r.ogImage) problems.push(`${w}: twitter:image differs from og:image`);
+      if (/^https:\/\/cyberoutlook\.sbcsg\.uk\//.test(r.ogImage)) {
+        const img = await ctx.request.get(new URL(new URL(r.ogImage).pathname, origin).href).catch(() => null);
+        if (!img || img.status() !== 200) problems.push(`${w}: og:image file missing (${r.ogImage})`);
+        else { const b = await img.body(); if (b.length < 24 || b.readUInt32BE(16) !== 1200 || b.readUInt32BE(20) !== 630) problems.push(`${w}: og:image is not 1200 by 630`); }
+      }
+      // Every same-site link on the page must resolve (fragments are ignored, mailto and other schemes are skipped).
+      const hrefs = await p.evaluate(() => [...new Set([...document.querySelectorAll('a[href]')].map(a => a.href))]);
+      for (const href of hrefs) {
+        if (!/^https?:/.test(href) || !href.startsWith(origin)) continue;
+        const res = await ctx.request.get(href.split('#')[0]).catch(() => null);
+        if (!res || res.status() >= 400) problems.push(`${w}: broken link ${href} (${res ? res.status() : 'no response'})`);
+      }
+      if (!r.hasMain) problems.push(`${w}: no main landmark`);
+      else if (!r.visible) problems.push(`${w}: tool content not visible without a click (main is hidden, empty, has nothing to press or fill in, or is inside a closed dialog)`);
+    } else {
+      const r = await p.evaluate(() => {
+        const ids = new Set([...document.querySelectorAll('[id]')].map(e => e.id));
+        const dup = {}; document.querySelectorAll('[id]').forEach(e => dup[e.id] = (dup[e.id] || 0) + 1);
+        return {
+          overflow: document.documentElement.scrollWidth - window.innerWidth,
+          sections: document.querySelectorAll('main section.section').length,
+          cv: !!window.CV,
+          broken: [...document.querySelectorAll('a[href^="#"]')].map(a => a.getAttribute('href').slice(1)).filter(id => id && !id.includes('=') && !ids.has(id)),
+          dupIds: Object.keys(dup).filter(k => dup[k] > 1),
+        };
+      });
+      if (r.overflow > 1) problems.push(`${w}: horizontal overflow ${r.overflow}px`);
+      if (r.sections < 14) problems.push(`${w}: sections=${r.sections}`);
+      if (!r.cv) problems.push(`${w}: CV core missing`);
+      if (r.broken.length) problems.push(`${w}: broken anchors ${[...new Set(r.broken)].join(',')}`);
+      if (r.dupIds.length) problems.push(`${w}: duplicate ids ${r.dupIds.join(',')}`);
+      const t = await p.evaluate(() => { const b = document.getElementById('themeToggle'); const a = getComputedStyle(document.body).backgroundColor; b.click(); const c = getComputedStyle(document.body).backgroundColor; b.click(); return a !== c; });
+      if (!t) problems.push(`${w}: theme toggle broken`);
+    }
     if (shotDir) {
       if (sel) { const ok = await p.evaluate(s => { const e = document.querySelector(s); if (!e) return false; e.scrollIntoView({ block: 'start' }); window.scrollBy(0, -12); return true; }, sel); if (!ok) problems.push(`${w}: selector ${sel} not found`); await p.waitForTimeout(250); }
       await p.screenshot({ path: `${shotDir}/${label}-${w}.jpg`, type: 'jpeg', quality: 60 });

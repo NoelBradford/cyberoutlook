@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!-- Built by tools/build.py from src/pages/shell.html. Edit src/pages/, not this file. -->
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Five-and-five map</title>
+<meta name="description" content="List your five key suppliers and five key customers, rate what stops if each disappears for two weeks, and see your weak spots.">
+<meta name="author" content="Noel Bradford">
+<link rel="canonical" href="https://cyberoutlook.sbcsg.uk/five-and-five/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Small Business Cyber Security Guy">
+<meta property="og:title" content="Five-and-five map">
+<meta property="og:description" content="List your five key suppliers and five key customers, rate what stops if each disappears for two weeks, and see your weak spots.">
+<meta property="og:url" content="https://cyberoutlook.sbcsg.uk/five-and-five/">
+<meta property="og:locale" content="en_GB">
+<meta property="og:image" content="https://cyberoutlook.sbcsg.uk/assets/og-five-and-five.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Five-and-five map">
+<meta name="twitter:description" content="List your five key suppliers and five key customers, rate what stops if each disappears for two weeks, and see your weak spots.">
+<meta name="twitter:image" content="https://cyberoutlook.sbcsg.uk/assets/og-five-and-five.png">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../assets/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
+<meta name="theme-color" content="#f3f6f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e161b" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="format-detection" content="telephone=no">
+<script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&amp;display=swap">
+<link rel="stylesheet" href="../assets/tool-five-and-five.css?v=cc9f9f5d2e">
+</head>
+<body class="standalone">
+<a class="skip" href="#main">Skip to the tool</a>
+<header class="page-head">
+  <div class="page-head-in">
+    <a class="page-brand" href="../"><img src="../assets/icon-192.png" width="28" height="28" alt=""><span>UK Small Business Cyber Outlook 2027</span></a>
+    <nav class="page-nav" aria-label="Site">
+      <a class="page-report" href="../">Read the full report</a>
+      <button class="theme-toggle" type="button" id="themeToggle">Dark mode</button>
+    </nav>
+  </div>
+</header>
+<main id="main" data-open="CV.openFiveFive" data-slug="five-and-five" tabindex="-1">
+<h1>Five-and-five map</h1>
+<p class="page-intro">List your five key suppliers and five key customers and rate what stops if each disappears for two weeks. You can print the map.</p>
+<div id="tool-root"></div>
+</main>
+
+<footer class="page-foot">
+  <div class="page-foot-in">
+    <p>By <a href="https://thesmallbusinesscybersecurityguy.co.uk">Noel Bradford, The Small Business Cyber Security Guy</a>. Nothing you enter on this page leaves your browser.</p>
+    <p><a href="../">Read the full report</a> &middot; <a href="../tools/">All tools</a></p>
+  </div>
+</footer>
+<script src="../assets/tool-five-and-five.js?v=cc9f9f5d2e" defer></script>
+<script>
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById('themeToggle');
+  var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  function isDark() {
+    var t = root.getAttribute('data-theme');
+    if (t) return t === 'dark';
+    return !!(mq && mq.matches);
+  }
+  function label() {
+    var d = isDark();
+    btn.innerHTML = d ? '<span aria-hidden="true">\u2600</span> Light mode' : '<span aria-hidden="true">\u263e</span> Dark mode';
+    btn.setAttribute('aria-pressed', d ? 'true' : 'false');
+    if (root.getAttribute('data-theme')) document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute('content', d ? '#0e161b' : '#f3f6f5'); });
+  }
+  btn.addEventListener('click', function () {
+    root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
+    try { localStorage.setItem('theme', root.getAttribute('data-theme')); } catch (e) {}
+    label();
+  });
+  if (mq && mq.addEventListener) mq.addEventListener('change', function () { if (!root.getAttribute('data-theme')) label(); });
+  label();
+})();
+// Short status messages, as on the report (CV.toast calls window.cvToast).
+window.cvToast = (function () {
+  var el = document.createElement('div');
+  el.className = 'toast'; el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite');
+  document.body.appendChild(el);
+  var t;
+  return function (msg) { el.textContent = msg; el.classList.add('show'); clearTimeout(t); t = setTimeout(function () { el.classList.remove('show'); }, 2400); };
+})();
+// Open the tool named in data-open once the interactive layer is ready. The tool code lives in the bundle above.
+(function () {
+  var main = document.getElementById('main');
+  var path = main && main.getAttribute('data-open');
+  function start() {
+    if (!window.CV) return;
+    CV.ready(function () {
+      if (!path) return;
+      var fn = path.split('.').reduce(function (o, k) { return o && o[k]; }, window);
+      if (typeof fn === 'function') fn();
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+// Offline: register the shared service worker (at the site root) and keep this page and its files for next time.
+// The page writes into the worker's cache itself, because on a first visit the worker is not controlling the page yet.
+(function () {
+  if (!('serviceWorker' in navigator) || location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') return;
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('../sw.js').then(function () { return navigator.serviceWorker.ready; }).then(function () {
+      if (!window.caches) return;
+      var urls = [location.pathname].concat([].map.call(document.querySelectorAll('link[rel=stylesheet][href^="../assets/"], script[src^="../assets/"]'), function (n) { return new URL(n.getAttribute('href') || n.getAttribute('src'), location.href).pathname; }));
+      return caches.open('cyberoutlook-v4').then(function (c) { return c.addAll(urls); });
+    }).catch(function () {});
+  });
+})();
+</script>
+</body>
+</html>

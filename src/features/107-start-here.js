@@ -5,8 +5,9 @@ CV.ready(function () {
   function render() {
     var now = CV.today(), jan = new Date(2027, 0, 1), done = count();
     var days = Math.round((jan - now) / 86400000);
-    if (days > 0) el.innerHTML = '<b>' + days + '</b> days to January. ' + (done === 5 ? 'All five things done.' : done + ' of 5 things done.');
-    else el.textContent = done === 5 ? 'All five things done.' : 'It’s 2027. ' + done + ' of the five things done.';
+    // The count of things done is in its own span: once the progress line is on screen (a returning reader) it hides, so it is said once.
+    if (days > 0) el.innerHTML = '<b>' + days + '</b> days to January.<span class="start-things"> ' + (done === 5 ? 'All five things done.' : done + ' of 5 things done.') + '</span>';
+    else el.innerHTML = 'It’s 2027.<span class="start-things"> ' + (done === 5 ? 'All five things done.' : done + ' of the five things done.') + '</span>';
   }
   render();
   document.addEventListener('change', function (e) { if (e.target.closest && e.target.closest('#five')) render(); });

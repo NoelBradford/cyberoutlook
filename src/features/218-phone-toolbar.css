@@ -1,0 +1,8 @@
+/* The cover toolbar (My plan, Share, Tools, Dark mode) is one row on phones, down to 360px. Dark mode shows only its icon there. */
+@media (max-width: 560px) {
+  .cover .tools { flex-wrap: nowrap; gap: 6px; min-height: 44px; }
+  html:not(.cv-ready) .cover .tools { height: 44px; }
+  .cover .tools .tool, .cover .tools .theme-toggle { padding: 0.45rem 0.6rem; letter-spacing: 0.03em; white-space: nowrap; flex: 0 1 auto; }
+  .cover .tools .theme-toggle { font-size: 0; padding: 0.45rem 0.7rem; }
+  .cover .tools .theme-toggle span { font-size: 1.05rem; line-height: 1; }
+}
