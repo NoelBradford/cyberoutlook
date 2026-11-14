@@ -18,6 +18,8 @@
           text at 12px or larger (apart from superscript citations and heading links), three panel roles with a
           legend in section 2, stronger stat-grid rules, spend tiers set in the UI face, a wider "Name and number"
           column on the one-page plan, and the decorative cover wave removed.
+        - Cover logo is capped at its native 360px so it is never upscaled (#20), and in dark mode its black
+          background drops out so only the glow shows.
         - Fonts are embedded (subset WOFF2) so the report no longer calls Google Fonts and renders the same
           offline (#31). The tool pages still load fonts from Google Fonts.
         - No changes to report wording, headings, figures or section order.
@@ -213,7 +215,7 @@ sup.cite a { text-decoration: none; }
 .cover-meta dd { margin: 0.1rem 0 0; }
 @media (min-width: 900px) {
   .cover-grid { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: start; }
-  .cover-side .brand { width: 100%; }
+  .cover-side .brand { width: 100%; max-width: 360px; }
   /* The title's capitals start level with the top of the logo (the side column has the same 1rem under its rule). */
   .cover-grid > div:first-child { padding-top: 1rem; }
   .cover h1 { margin-top: -0.14em; }
@@ -350,6 +352,9 @@ ol.sources a { overflow-wrap: anywhere; }
 
 /* Brand images */
 .brand { display: block; width: 200px; height: auto; max-width: 100%; aspect-ratio: 1; border-radius: 6px; margin-bottom: 0.4rem; }
+/* Logo art sits on pure black: in dark mode, screen-blend it so the black drops out and only the glow remains */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .brand { mix-blend-mode: screen; border-radius: 0; } }
+:root[data-theme="dark"] .brand { mix-blend-mode: screen; border-radius: 0; }
 .portrait { float: right; width: 168px; margin: 0.2rem 0 1rem 1.5rem; }
 .portrait img { display: block; width: 100%; height: auto; border-bottom: 3px solid var(--accent); }
 .portrait figcaption { margin-top: 0.4rem; font-size: 0.8rem; }
@@ -533,6 +538,7 @@ ol.five.all-done ~ .five-foot .five-bar span { background: var(--signal); }
   .a4 td { height: 10mm; }
   ol.sources a { text-decoration: underline; }
   .c-track { fill: #e6e6e6; }
+  .brand { mix-blend-mode: normal !important; border-radius: 4px !important; }
   .backrefs { display: none; }
   .h-anchor { display: none !important; }
   .toast { display: none !important; }
