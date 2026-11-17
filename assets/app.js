@@ -12,7 +12,7 @@ window.CV = (function () {
   var FOLLOW = [
     // badge: official artwork, used unmodified (Apple Podcasts Identity Guidelines). Text links for the rest until their badges are added.
     { name: 'Apple Podcasts', url: 'https://podcasts.apple.com/gb/podcast/the-small-business-cyber-security-guy-uk/id1818093678', badge: 'assets/badges/listen-on-apple-podcasts.svg', alt: 'Listen on Apple Podcasts' },
-    { name: 'Spotify', url: 'https://open.spotify.com/show/6mjqBHR7Af1iHM1TkIu9PL' },
+    { name: 'Spotify', url: 'https://open.spotify.com/show/6mjqBHR7Af1iHM1TkIu9PL', logo: { light: 'assets/badges/spotify-logo-black.png', dark: 'assets/badges/spotify-logo-white.png' }, alt: 'Listen on Spotify' },
     { name: 'Amazon Music', url: 'https://music.amazon.co.uk/podcasts/416edfe9-80b3-4933-9d64-084a63d7914c/the-small-business-cyber-security-guy--cybersecurity-for-smb--startups', badge: 'assets/badges/listen-on-amazon-music.png', alt: 'Listen on Amazon Music', w: 165 },
     { name: 'Podcast Index', url: 'https://podcastindex.org/podcast/7499896' },
     { name: 'RSS feed', url: 'https://podcast.thesmallbusinesscybersecurityguy.co.uk/@SmallBizCyberGuyMain/feed.xml' }
@@ -22,7 +22,14 @@ window.CV = (function () {
     var now = today(), up = EPISODES.filter(function (e) { return parseDate(e.date) >= now; });
     var row = h('div', { class: 'follow' }, h('p', { class: 'follow-k' }, 'Follow the podcast'));
     var links = h('div', { class: 'cv-row' });
-    FOLLOW.filter(function (f) { return f.url; }).sort(function (a, b) { return (b.badge ? 1 : 0) - (a.badge ? 1 : 0); }).forEach(function (f) {
+    FOLLOW.filter(function (f) { return f.url; }).sort(function (a, b) { return (b.badge || b.logo ? 1 : 0) - (a.badge || a.logo ? 1 : 0); }).forEach(function (f) {
+      if (f.logo) {
+        // Both colourways are in the page; the row's background decides which one shows.
+        links.appendChild(h('a', { class: 'follow-badge follow-logo', href: f.url, rel: 'noopener', target: '_blank', 'aria-label': f.alt },
+          h('img', { class: 'fl-light', src: f.logo.light, alt: '', width: '102', height: '28', loading: 'lazy', decoding: 'async' }),
+          h('img', { class: 'fl-dark', src: f.logo.dark, alt: '', width: '102', height: '28', loading: 'lazy', decoding: 'async' })));
+        return;
+      }
       links.appendChild(f.badge
         ? h('a', { class: 'follow-badge', href: f.url, rel: 'noopener', target: '_blank' }, h('img', { src: f.badge, alt: f.alt || f.name, width: String(f.w || 126), height: '40', loading: 'lazy', decoding: 'async' }))
         : h('a', { class: 'tool', href: f.url, rel: 'noopener', target: '_blank' }, f.name));
@@ -32,6 +39,17 @@ window.CV = (function () {
       ics(up.map(function (e) { return { title: 'New episode: ' + e.title, date: parseDate(e.date), description: 'The Small Business Cyber Security Guy, episode ' + e.n + '. Companion to the ' + TITLE + '.', url: PODCAST }; }), 'cyber-outlook-episodes.ics');
     }));
     row.appendChild(links);
+    // Pick the logo colourway from the real background behind the row, now and whenever the theme changes.
+    function tone() {
+      var el = row, bg = '';
+      while (el && el.nodeType === 1) { bg = getComputedStyle(el).backgroundColor; if (bg && !/rgba\(.*, 0\)|transparent/.test(bg)) break; el = el.parentNode; bg = ''; }
+      var m = (bg || getComputedStyle(document.body).backgroundColor).match(/\d+(\.\d+)?/g) || [255, 255, 255];
+      var l = (0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2]) / 255;
+      row.classList.toggle('on-dark', l < 0.5);
+    }
+    requestAnimationFrame(tone);
+    new MutationObserver(tone).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
+    if (window.matchMedia) { var mq = matchMedia('(prefers-color-scheme: dark)'); if (mq.addEventListener) mq.addEventListener('change', tone); }
     return row;
   }
 
