@@ -39,6 +39,10 @@ html.cv-modal-open { overflow: hidden; }
 .follow-logo img { height: 28px; width: auto; }
 .follow .fl-dark, .follow.on-dark .fl-light { display: none; }
 .follow.on-dark .fl-dark { display: block; }
+/* Podcast Index: its icon and wordmark, side by side as on its own site. */
+.follow-lockup { gap: 8px; }
+.follow-lockup .pi-icon { height: 26px; width: auto; }
+.follow-lockup .pi-text { height: 15px; width: auto; }
 
 /* --- src/features/107-start-here.css --- */
 .start { background: var(--ink); color: var(--paper); padding: 2.2rem max(16px, 4vw) 2.4rem; }

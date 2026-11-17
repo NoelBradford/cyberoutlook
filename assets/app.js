@@ -14,7 +14,8 @@ window.CV = (function () {
     { name: 'Apple Podcasts', url: 'https://podcasts.apple.com/gb/podcast/the-small-business-cyber-security-guy-uk/id1818093678', badge: 'assets/badges/listen-on-apple-podcasts.svg', alt: 'Listen on Apple Podcasts' },
     { name: 'Spotify', url: 'https://open.spotify.com/show/6mjqBHR7Af1iHM1TkIu9PL', logo: { light: 'assets/badges/spotify-logo-black.png', dark: 'assets/badges/spotify-logo-white.png' }, alt: 'Listen on Spotify' },
     { name: 'Amazon Music', url: 'https://music.amazon.co.uk/podcasts/416edfe9-80b3-4933-9d64-084a63d7914c/the-small-business-cyber-security-guy--cybersecurity-for-smb--startups', badge: 'assets/badges/listen-on-amazon-music.png', alt: 'Listen on Amazon Music', w: 165 },
-    { name: 'Podcast Index', url: 'https://podcastindex.org/podcast/7499896' },
+    // Podcast Index: icon + wordmark side by side, as in its own site header (github.com/Podcastindex-org/web-ui, MIT licence).
+    { name: 'Podcast Index', url: 'https://podcastindex.org/podcast/7499896', lockup: ['assets/badges/podcastindex-icon.svg', 'assets/badges/podcastindex-text.svg'], alt: 'Find it on Podcast Index' },
     { name: 'RSS feed', url: 'https://podcast.thesmallbusinesscybersecurityguy.co.uk/@SmallBizCyberGuyMain/feed.xml' }
   ];
   // A "Follow the podcast" row: the apps that have links, the podcast site, and every upcoming episode as a calendar reminder.
@@ -22,7 +23,13 @@ window.CV = (function () {
     var now = today(), up = EPISODES.filter(function (e) { return parseDate(e.date) >= now; });
     var row = h('div', { class: 'follow' }, h('p', { class: 'follow-k' }, 'Follow the podcast'));
     var links = h('div', { class: 'cv-row' });
-    FOLLOW.filter(function (f) { return f.url; }).sort(function (a, b) { return (b.badge || b.logo ? 1 : 0) - (a.badge || a.logo ? 1 : 0); }).forEach(function (f) {
+    FOLLOW.filter(function (f) { return f.url; }).sort(function (a, b) { return (b.badge || b.logo || b.lockup ? 1 : 0) - (a.badge || a.logo || a.lockup ? 1 : 0); }).forEach(function (f) {
+      if (f.lockup) {
+        links.appendChild(h('a', { class: 'follow-badge follow-logo follow-lockup', href: f.url, rel: 'noopener', target: '_blank', 'aria-label': f.alt },
+          h('img', { class: 'pi-icon', src: f.lockup[0], alt: '', width: '25', height: '26', loading: 'lazy', decoding: 'async' }),
+          h('img', { class: 'pi-text', src: f.lockup[1], alt: '', width: '116', height: '15', loading: 'lazy', decoding: 'async' })));
+        return;
+      }
       if (f.logo) {
         // Both colourways are in the page; the row's background decides which one shows.
         links.appendChild(h('a', { class: 'follow-badge follow-logo', href: f.url, rel: 'noopener', target: '_blank', 'aria-label': f.alt },
