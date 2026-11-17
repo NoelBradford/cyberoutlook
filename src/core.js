@@ -8,9 +8,10 @@ window.CV = (function () {
   var AUTHOR_SITE = 'https://thesmallbusinesscybersecurityguy.co.uk';
   // Where to follow the podcast. Fill in a URL to show its button; empty ones are hidden.
   var FOLLOW = [
-    { name: 'Apple Podcasts', url: '' },
-    { name: 'Spotify', url: '' },
-    { name: 'RSS feed', url: '' }
+    { name: 'Apple Podcasts', url: 'https://podcasts.apple.com/gb/podcast/the-small-business-cyber-security-guy-uk/id1818093678' },
+    { name: 'Spotify', url: 'https://open.spotify.com/show/6mjqBHR7Af1iHM1TkIu9PL' },
+    { name: 'Podcast Index', url: 'https://podcastindex.org/podcast/7499896' },
+    { name: 'RSS feed', url: 'https://podcast.thesmallbusinesscybersecurityguy.co.uk/@SmallBizCyberGuyMain/feed.xml' }
   ];
   // A "Follow the podcast" row: the apps that have links, the podcast site, and every upcoming episode as a calendar reminder.
   function followRow() {
