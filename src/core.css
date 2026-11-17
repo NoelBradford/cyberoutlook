@@ -27,3 +27,8 @@ html.cv-modal-open { overflow: hidden; }
 .cv-dialog-head h2:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
 .follow { display: grid; gap: 0.45rem; margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px solid var(--rule); }
 .follow-k { margin: 0 !important; font: 600 0.72rem var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+/* Official badges: shown at their own proportions, never recoloured, with clear space around them. */
+.follow-badge { display: inline-flex; align-items: center; padding: 2px; margin-right: 0.4rem; border-radius: 6px; line-height: 0; }
+.follow-badge img { display: block; height: 40px; width: auto; }
+.follow-badge:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
+.follow-badge::after { content: none !important; display: none !important; }
