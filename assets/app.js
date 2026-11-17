@@ -13,7 +13,7 @@ window.CV = (function () {
     // badge: official artwork, used unmodified (Apple Podcasts Identity Guidelines). Text links for the rest until their badges are added.
     { name: 'Apple Podcasts', url: 'https://podcasts.apple.com/gb/podcast/the-small-business-cyber-security-guy-uk/id1818093678', badge: 'assets/badges/listen-on-apple-podcasts.svg', alt: 'Listen on Apple Podcasts' },
     { name: 'Spotify', url: 'https://open.spotify.com/show/6mjqBHR7Af1iHM1TkIu9PL' },
-    { name: 'Amazon Music', url: 'https://music.amazon.co.uk/podcasts/416edfe9-80b3-4933-9d64-084a63d7914c/the-small-business-cyber-security-guy--cybersecurity-for-smb--startups' },
+    { name: 'Amazon Music', url: 'https://music.amazon.co.uk/podcasts/416edfe9-80b3-4933-9d64-084a63d7914c/the-small-business-cyber-security-guy--cybersecurity-for-smb--startups', badge: 'assets/badges/listen-on-amazon-music.png', alt: 'Listen on Amazon Music', w: 165 },
     { name: 'Podcast Index', url: 'https://podcastindex.org/podcast/7499896' },
     { name: 'RSS feed', url: 'https://podcast.thesmallbusinesscybersecurityguy.co.uk/@SmallBizCyberGuyMain/feed.xml' }
   ];
@@ -22,9 +22,9 @@ window.CV = (function () {
     var now = today(), up = EPISODES.filter(function (e) { return parseDate(e.date) >= now; });
     var row = h('div', { class: 'follow' }, h('p', { class: 'follow-k' }, 'Follow the podcast'));
     var links = h('div', { class: 'cv-row' });
-    FOLLOW.filter(function (f) { return f.url; }).forEach(function (f) {
+    FOLLOW.filter(function (f) { return f.url; }).sort(function (a, b) { return (b.badge ? 1 : 0) - (a.badge ? 1 : 0); }).forEach(function (f) {
       links.appendChild(f.badge
-        ? h('a', { class: 'follow-badge', href: f.url, rel: 'noopener', target: '_blank' }, h('img', { src: f.badge, alt: f.alt || f.name, width: '126', height: '40', loading: 'lazy', decoding: 'async' }))
+        ? h('a', { class: 'follow-badge', href: f.url, rel: 'noopener', target: '_blank' }, h('img', { src: f.badge, alt: f.alt || f.name, width: String(f.w || 126), height: '40', loading: 'lazy', decoding: 'async' }))
         : h('a', { class: 'tool', href: f.url, rel: 'noopener', target: '_blank' }, f.name));
     });
     links.appendChild(h('a', { class: 'tool primary', href: PODCAST, rel: 'noopener', target: '_blank' }, FOLLOW.some(function (f) { return f.url; }) ? 'Podcast site' : 'Follow on the podcast site'));
