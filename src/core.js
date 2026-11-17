@@ -10,6 +10,7 @@ window.CV = (function () {
   var FOLLOW = [
     { name: 'Apple Podcasts', url: 'https://podcasts.apple.com/gb/podcast/the-small-business-cyber-security-guy-uk/id1818093678' },
     { name: 'Spotify', url: 'https://open.spotify.com/show/6mjqBHR7Af1iHM1TkIu9PL' },
+    { name: 'Amazon Music', url: 'https://music.amazon.co.uk/podcasts/416edfe9-80b3-4933-9d64-084a63d7914c/the-small-business-cyber-security-guy--cybersecurity-for-smb--startups' },
     { name: 'Podcast Index', url: 'https://podcastindex.org/podcast/7499896' },
     { name: 'RSS feed', url: 'https://podcast.thesmallbusinesscybersecurityguy.co.uk/@SmallBizCyberGuyMain/feed.xml' }
   ];
